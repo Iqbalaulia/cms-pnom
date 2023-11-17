@@ -28,32 +28,27 @@ const ProductPage = () => {
         const calculatedIndex = (current - 1) * pageSize + index + 1; // Hitung nomor "No"
         return calculatedIndex;
       },
+      width:'5%'
     },
     {
-      title: 'Name',
+      title: 'Nama Produk',
       dataIndex: 'name',
       sorter: true,
       render: (name) => `${name.first} ${name.last}`,
       width: '20%',
     },
     {
-      title: 'Gender',
-      dataIndex: 'gender',
-      filters: [
-        {
-          text: 'Male',
-          value: 'male',
-        },
-        {
-          text: 'Female',
-          value: 'female',
-        },
-      ],
+      title: 'Jenis',
+      dataIndex: 'Jenis',
       width: '20%',
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
+      title: 'Tipe',
+      dataIndex: 'Tipe',
+    },
+    {
+      title: 'Stok',
+      dataIndex: 'Stok',
     },
     {
       title: 'Actions',
@@ -116,16 +111,16 @@ const ProductPage = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const result = await ApiGetRequest(`api?${qs.stringify(getRandomuserParams(tableParams))}`)
-      setData(result.data.results)
-      setLoading(false)
-      setTableParams({
-        ...tableParams,
-        pagination: {
-          ...tableParams.pagination,
-          total: 200,
-        },
-      });     
+      // const result = await ApiGetRequest(`api?${qs.stringify(getRandomuserParams(tableParams))}`)
+      // setData(result.data.results)
+      // setLoading(false)
+      // setTableParams({
+      //   ...tableParams,
+      //   pagination: {
+      //     ...tableParams.pagination,
+      //     total: 200,
+      //   },
+      // });     
     } catch (error) {
       PnomNotification({
         type: 'error',
@@ -157,6 +152,7 @@ const ProductPage = () => {
                   bordered={false}
                   className="criclebox mb-24 font-weight-bold"
                 >
+                    <h2 className='font-bold'>Data Produk</h2>
                     <Row className='mb-2'>
                       <Col md={{span: 6}}>
                         <Input
