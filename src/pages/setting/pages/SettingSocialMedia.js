@@ -38,7 +38,7 @@ const SettingSocialMedia = () => {
             title: 'Link',
             dataIndex: 'link',
             render: (link) => (
-              <a href='#'>{link}</a>
+              <a href='/'>{link}</a>
             )
           },
           {

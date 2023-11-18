@@ -3,7 +3,6 @@ import Home from "./components/template/Home";
 import Tables from "./components/template/Tables";
 import Billing from "./components/template/Billing";
 import Rtl from "./components/template/Rtl";
-import Profile from "./components/template/Profile";
 import SignUp from "./components/template/SignUp";
 import SignIn from "./components/template/SignIn";
 import Main from "./components/layout/Main";

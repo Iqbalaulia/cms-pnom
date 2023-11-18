@@ -5,12 +5,12 @@ import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/ic
 import { adminModel, roleModel } from '../data/setting';
 import { jenisKelaminModel, paginationModel } from 'composables/useSetting';
 
-import { ApiGetRequest } from 'utils/api/config';
+// import { ApiGetRequest } from 'utils/api/config';
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
 import PnomConfirm from 'components/layout/ConfirmDialog';
-import qs from 'qs';
+// import qs from 'qs';
 
 const ProductPage = () => {
   const { Content } = Layout
@@ -131,15 +131,15 @@ const ProductPage = () => {
       setLoading(false)
     }
   };
-  const onChangeForm = e => {
-    const { name, value } = e.target
-    setFormData(prevState => ({...prevState, [name]: value}) )
-  }
-  const getRandomuserParams = (params) => ({
-    results: params.pagination?.pageSize,
-    page: params.pagination?.current,
-    ...params,
-  });
+  // const onChangeForm = e => {
+  //   const { name, value } = e.target
+  //   setFormData(prevState => ({...prevState, [name]: value}) )
+  // }
+  // const getRandomuserParams = (params) => ({
+  //   results: params.pagination?.pageSize,
+  //   page: params.pagination?.current,
+  //   ...params,
+  // });
   const resetField = () => {
     setFormData({...adminModel})
   }

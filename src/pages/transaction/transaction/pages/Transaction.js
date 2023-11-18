@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
 
-import { Typography, DatePicker, Card, Table, Col, Button, Space, Form, Input, Row, Layout } from 'antd';
+import { Typography, DatePicker, Card, Table, Col, Button, Space, Input, Row } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
 import { paginationModel } from 'composables/useSetting';
 
-import PnomConfirm from 'components/layout/ConfirmDialog';
-import PnomModal from 'components/layout/Modal';
-import PnomNotification from 'components/layout/Notification';
+// import PnomConfirm from 'components/layout/ConfirmDialog';
+// import PnomModal from 'components/layout/Modal';
+// import PnomNotification from 'components/layout/Notification';
 
 const Transaction = () => {
-    const { Content } = Layout
+    // const { Content } = Layout
     const { RangePicker } = DatePicker
     const { Title } = Typography;
 
-    const [dataTable, setDataTable] = useState()
-    const [tableParams, setTableParams] = useState(paginationModel)
-    const [isModalShow, setIsModalShow] = useState(false)
-    const [loading, setLoading] = useState(false)
+    // const [dataTable, setDataTable] = useState()
+    // const [tableParams, setTableParams] = useState(paginationModel)
+
+    const [dataTable] = useState()
+    const [tableParams] = useState(paginationModel)
+    // const [isModalShow, setIsModalShow] = useState(false)
+    // const [loading, setLoading] = useState(false)
+    const [loading] = useState(false)
 
     const columnsCustomer = [
         {

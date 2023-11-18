@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import { Image, Select, Table, Col, Card, Button, Space,Form,Input,Row,Layout } from 'antd';
+import { Image, Table, Col, Card, Button, Space,Form,Input,Row,Layout } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined, InboxOutlined } from '@ant-design/icons';
 import { DatePicker, Upload  } from 'antd';
 
 import { paginationModel } from 'composables/useSetting';
-import { bannerModel } from '../data/setting';
+// import { bannerModel } from '../data/setting';
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
@@ -17,7 +17,7 @@ function EventBanner() {
     const [ loading, setLoading ] = useState(false)
     const [ isModalForm, setIsModalForm ] = useState(false)
     const [ tableParams, setTableParams ] = useState(paginationModel)
-    const [ formData, setFormData ] = useState(bannerModel)
+    // const [ formData, setFormData ] = useState(bannerModel)
 
     const columns = [
         {
@@ -88,7 +88,7 @@ function EventBanner() {
     }, []);
 
     const resetField = () => {
-        setFormData({...bannerModel})
+        // setFormData({...bannerModel})
     }
 
     const handleCancelSubmit = () => {
@@ -147,11 +147,11 @@ function EventBanner() {
         console.log('Delete canceled'); 
     }
 
-    const getParams = (params) => ({
-        results: params.pagination?.pageSize,
-        page: params.pagination?.current,
-        ...params,
-    })
+    // const getParams = (params) => ({
+    //     results: params.pagination?.pageSize,
+    //     page: params.pagination?.current,
+    //     ...params,
+    // })
 
     const getFetchData = async () => {
         try {

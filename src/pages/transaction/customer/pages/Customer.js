@@ -1,4 +1,4 @@
-import React, { useEffect, useState, } from 'react';
+import React, { useState, } from 'react';
 import { Col, Card, Tabs } from 'antd';
 
 import CustomerList from './CustomerList'

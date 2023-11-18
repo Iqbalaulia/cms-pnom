@@ -1,11 +1,11 @@
 import React, { useEffect, useState, } from 'react';
 import { DatePicker, Switch, Table, Col, Button, Space, Form, Input, Row, Layout } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { PlusCircleOutlined } from '@ant-design/icons';
 
 import { paginationModel } from 'composables/useSetting';
 import { paymentMethodModel } from '../data/setting';
 
-import PnomConfirm from 'components/layout/ConfirmDialog';
+// import PnomConfirm from 'components/layout/ConfirmDialog';
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
 
@@ -60,23 +60,23 @@ const SettingPaymentMethod = () => {
       fetchDataSocialMedia()
     }, [])
 
-    const handleDeleteData = () => {
-        PnomConfirm({
-          onOkConfirm: handleOkDelete,
-          onCancelConfirm: handleCancelDelete,
-          content: 'Your confirmation message here'
-        })
-    }
+    // const handleDeleteData = () => {
+    //     PnomConfirm({
+    //       onOkConfirm: handleOkDelete,
+    //       onCancelConfirm: handleCancelDelete,
+    //       content: 'Your confirmation message here'
+    //     })
+    // }
     const handleShowForm = () => {
        setIsModalShow(true)
        resetField()
     }
-    const handleOkDelete = () => {
-        console.log('Delete confirmed');
-    }  
-    const handleCancelDelete = () => {
-        console.log('Delete canceled');
-    }
+    // const handleOkDelete = () => {
+    //     console.log('Delete confirmed');
+    // }  
+    // const handleCancelDelete = () => {
+    //     console.log('Delete canceled');
+    // }
     const handleSubmit = () => {
       setIsModalShow(false)
       resetField()

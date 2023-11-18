@@ -5,7 +5,8 @@ import { aboutModel } from '../data/setting';
 
 const SettingAbout = () => {
     const { TextArea } = Input;
-    const [ formAbout, setFormAbout ] = useState(aboutModel)
+    // const [ formAbout, setFormAbout ] = useState(aboutModel)
+    const [ formAbout ] = useState(aboutModel)
 
     useEffect(() => {
       

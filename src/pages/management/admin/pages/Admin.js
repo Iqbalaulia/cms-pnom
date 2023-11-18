@@ -136,10 +136,10 @@ const AdminPage = () => {
       setLoading(false)
     }
   };
-  const onChangeForm = e => {
-    const { name, value } = e.target
-    setFormData(prevState => ({...prevState, [name]: value}) )
-  }
+  // const onChangeForm = e => {
+  //   const { name, value } = e.target
+  //   setFormData(prevState => ({...prevState, [name]: value}) )
+  // }
   const getRandomuserParams = (params) => ({
     results: params.pagination?.pageSize,
     page: params.pagination?.current,
