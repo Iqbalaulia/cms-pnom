@@ -3,28 +3,28 @@ import { DatePicker, Switch, Table, Col, Button, Space, Form, Input, Row, Layout
 import { PlusCircleOutlined } from '@ant-design/icons';
 
 import { paginationModel } from 'composables/useSetting';
-import { paymentMethodModel } from '../data/setting';
 
-// import PnomConfirm from 'components/layout/ConfirmDialog';
+import PnomConfirm from 'components/layout/ConfirmDialog';
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
 
 const SettingPaymentMethod = () => {
     const { Content } = Layout
     const { RangePicker } = DatePicker
+    const { TextArea } = Input;
+
     const [tableParams, setTableParams] = useState(paginationModel);
     const [dataTable, setDataTable] = useState();
     const [isModalShow, setIsModalShow] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [formPaymentMethod, setFormPaymentMethod] = useState(paymentMethodModel);
     const columnsPayment = [
         {
             title: 'No',
             width: '5%',
             render: (text, record, index) => {
-              const current = tableParams.pagination.current; // Nomor halaman saat ini
-              const pageSize = tableParams.pagination.pageSize; // Item per halaman
-              const calculatedIndex = (current - 1) * pageSize + index + 1; // Hitung nomor "No"
+              const current = tableParams.pagination.current; 
+              const pageSize = tableParams.pagination.pageSize;
+              const calculatedIndex = (current - 1) * pageSize + index + 1;
               return calculatedIndex;
             },
           },
@@ -50,7 +50,7 @@ const SettingPaymentMethod = () => {
             width: '20%',
             render: (status) => (
               <Space size={8}>
-                  <Switch checked={status}/>
+                  <Switch onChange={handleNonActive(status)} checked={status}/>
               </Space>        
             )
           },
@@ -60,23 +60,23 @@ const SettingPaymentMethod = () => {
       fetchDataSocialMedia()
     }, [])
 
-    // const handleDeleteData = () => {
-    //     PnomConfirm({
-    //       onOkConfirm: handleOkDelete,
-    //       onCancelConfirm: handleCancelDelete,
-    //       content: 'Your confirmation message here'
-    //     })
-    // }
+    const handleNonActive = (status) => {
+        PnomConfirm({
+          onOkConfirm: handleOkDelete,
+          onCancelConfirm: handleCancelDelete,
+          content: 'Your confirmation message here'
+        })
+    }
     const handleShowForm = () => {
        setIsModalShow(true)
        resetField()
     }
-    // const handleOkDelete = () => {
-    //     console.log('Delete confirmed');
-    // }  
-    // const handleCancelDelete = () => {
-    //     console.log('Delete canceled');
-    // }
+    const handleOkDelete = () => {
+        console.log('Delete confirmed');
+    }  
+    const handleCancelDelete = () => {
+        console.log('Delete canceled');
+    }
     const handleSubmit = () => {
       setIsModalShow(false)
       resetField()
@@ -107,12 +107,8 @@ const SettingPaymentMethod = () => {
     }
 
     const resetField = () => {
-      setFormPaymentMethod({...paymentMethodModel})
     }
-    // const onChangeForm = e => {
-    //   const { name, value } = e.target
-    //   setFormPaymentMethod(prevState => ({...prevState, [name]: value}) )
-    // }
+
     return(
         <>
             <div className='setting-payment'>
@@ -167,12 +163,11 @@ const SettingPaymentMethod = () => {
                         <Col md={{ span: 12 }}>
                           <Form.Item
                             className="username mb-0"
-                            label="Nama Pembayaran"
-                            name="paymentName"
+                            label="Nama"
+                            name="name"
                             >
                             <Input 
-                              value={formPaymentMethod.social_name}
-                              placeholder="Masukkan Nama Pembayaran" 
+                              placeholder="Masukkan Nama" 
                             />
                           </Form.Item>
                         </Col>
@@ -183,9 +178,38 @@ const SettingPaymentMethod = () => {
                             name="paymentStatus"
                             >
                             <Input
-                              value={formPaymentMethod.link} 
                               placeholder="" 
                             />
+                          </Form.Item>
+                        </Col>
+                        <Col md={{ span: 12}}>
+                          <Form.Item
+                            className="username mb-0"
+                            label="No Telp"
+                            name="telp"
+                            >
+                            <Input
+                            type='number'
+                              placeholder="" 
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col md={{ span: 12}}>
+                          <Form.Item
+                            className="username mb-0"
+                            label="Tanggal Bergabung"
+                            name="created_at"
+                            >
+                              <DatePicker placeholder='Tanggal Bergabung' />
+                          </Form.Item>
+                        </Col>
+                        <Col md={{ span: 24}}>
+                          <Form.Item
+                            className="username mb-0"
+                            label="Alamat"
+                            name="address"
+                            >
+                              <TextArea placeholder='Alamat' rows={8} />
                           </Form.Item>
                         </Col>
                       </Row>
