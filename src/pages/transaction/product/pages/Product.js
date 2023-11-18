@@ -202,55 +202,27 @@ const ProductPage = () => {
                         className="username mb-0"
                         label="Nama"
                         name="name"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Input data nama!",
-                          },
-                        ]}>
+                        >
                         <Input 
-                          value={form.name} 
-                          onChange={e => setFormData(
-                            {
-                              ...form,
-                              name: e.target.value
-                            }
-                          )} 
-                          placeholder="Nama" 
+                          placeholder="Nama Produk" 
                         />
                       </Form.Item>
                       <Form.Item
                         className="username mb-2"
-                        label="Email"
+                        label="Stok"
                         name="email"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Input data email!",
-                          },
-                        ]}>
+                       >
                         <Input 
-                          value={form.email}
-                          onChange={e => setFormData(
-                            {
-                              ...form,
-                              email: e.target.value
-                            }
-                          )}  
-                          placeholder="Email" />
+                          type='number'
+                          placeholder="Stok" />
                       </Form.Item>
                     </Col>
                     <Col md={{ span: 12 }}>
                       <Form.Item
                         className="username"
-                        label="Role"
+                        label="Jenis"
                         name="role"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Input data role!",
-                          },
-                        ]}>
+                        >
 
                         <Select
                           value={form.role}
@@ -265,8 +237,8 @@ const ProductPage = () => {
                       </Form.Item>
                       <Form.Item
                         className="username"
-                        label="Jenis Kelamin"
-                        name="gender"
+                        label="Tipe"
+                        name="type"
                         rules={[
                           {
                             required: true,
@@ -275,15 +247,7 @@ const ProductPage = () => {
                         ]}>
 
                         <Select
-                          value={form.gender}
-                          onSelect={value => setFormData(
-                            {
-                              ...form,
-                              gender: value
-                            }
-                          )} 
-                          placeholder="Jenis Kelamin"
-                          options={jenisKelaminModel}
+                          
                         />
                       </Form.Item>
                     </Col>
