@@ -23,6 +23,7 @@ import "antd/dist/antd.css";
 import "./assets/styles/main.css";
 import "./assets/styles/responsive.css";
 import './assets/styles/override.css';
+import './assets/styles/loading.css';
 
 function App() {
 

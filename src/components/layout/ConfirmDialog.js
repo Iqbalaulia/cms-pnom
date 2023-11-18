@@ -4,7 +4,11 @@ import { Modal } from 'antd';
 
 const { confirm } = Modal;
 const PnomConfirm = (props) => {
-    const { onOkConfirm, onCancelConfirm, content } = props
+    const { 
+        onOkConfirm, 
+        onCancelConfirm, 
+        content 
+    } = props
 
     confirm({
       title: 'Apakah kamu yakin akan menghapus ini?',

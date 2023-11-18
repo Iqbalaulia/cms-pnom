@@ -3,14 +3,36 @@ import { Col, Button ,Form ,Input} from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
 import { aboutModel } from '../data/setting';
 
+import PnomNotification from 'components/layout/Notification';
+
 const SettingAbout = () => {
     const { TextArea } = Input;
-    // const [ formAbout, setFormAbout ] = useState(aboutModel)
-    const [ formAbout ] = useState(aboutModel)
+    const [ formAbout, setFormAbout ] = useState(aboutModel)
+    const [ isLoading, setLoading ] = useState(false);
 
     useEffect(() => {
+      getDataAbout()
+    }, [])
+
+    const handleSubmit = () => {
+      setLoading(true)
+     
+      PnomNotification({
+        type: 'success',
+        message: 'Simpan Data',
+        description:'Data berhasil tersimpan.',
+      })
+      console.log(isLoading)
+    }
+
+
+    const getDataAbout = () => {
+      setLoading(true)
+     
       
-    })
+      setLoading(false)
+    }
+
     return(
         <>
             <div className='setting-about'>
@@ -22,12 +44,21 @@ const SettingAbout = () => {
                             label="Apa itu PNOM"
                             name="whatIs"
                           >
-                            <TextArea value={formAbout.description} rows={4}/>
-
+                            <TextArea 
+                              value={formAbout.description} 
+                              rows={4}
+                              onChange={
+                                e => setFormAbout({
+                                  ...formAbout,
+                                  description: e.target.value
+                                })
+                              }
+                            />
                           </Form.Item>
                       </Col>
                       <Col md={24} className='d-flex justify-end'>
                         <Button
+                          onClick={handleSubmit}
                           type='primary'
                           icon={<SaveOutlined/>}
                           className='w-50'
