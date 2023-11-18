@@ -1,3 +1,6 @@
+
+
+
 import React, { useEffect, useState, } from 'react';
 import { Col, Button ,Form ,Input} from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
@@ -9,22 +12,29 @@ const SettingAbout = () => {
     const { TextArea } = Input;
     const [ formAbout, setFormAbout ] = useState(aboutModel)
     const [ isLoading, setLoading ] = useState(false);
-
+    
     useEffect(() => {
       getDataAbout()
     }, [])
-
+   
     const handleSubmit = () => {
       setLoading(true)
-     
-      PnomNotification({
-        type: 'success',
-        message: 'Simpan Data',
-        description:'Data berhasil tersimpan.',
-      })
-      console.log(isLoading)
+      try {
+        PnomNotification({
+          type: 'success',
+          message: 'Simpan Data',
+          description:'Data berhasil tersimpan.',
+        })
+        getDataAbout()
+        console.log(isLoading)
+      } catch (error) {
+        PnomNotification({
+          type: 'danger',
+          message: 'Simpan Data',
+          description:'Data berhasil tersimpan.',
+        })
+      }
     }
-
 
     const getDataAbout = () => {
       setLoading(true)
