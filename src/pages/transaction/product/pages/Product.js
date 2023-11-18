@@ -3,7 +3,7 @@ import { Select, Table, Col, Card, Button, Space,Form,Input,Row,Layout } from 'a
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 import { adminModel, roleModel } from '../data/setting';
-import { jenisKelaminModel, paginationModel } from 'composables/useSetting';
+import { paginationModel } from 'composables/useSetting';
 
 // import { ApiGetRequest } from 'utils/api/config';
 

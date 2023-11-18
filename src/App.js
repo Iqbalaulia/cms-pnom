@@ -1,4 +1,6 @@
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
+// import { Switch, Route, Redirect } from "react-router-dom";
+
 import Home from "./components/template/Home";
 import Tables from "./components/template/Tables";
 import Billing from "./components/template/Billing";
@@ -74,7 +76,7 @@ function App() {
                 )
               })
             }
-          <Redirect from="*" to="/dashboard" />
+          {/* <Redirect from="*" to="/sign-in" /> */}
         </Main>
       </Switch>
     </div>
