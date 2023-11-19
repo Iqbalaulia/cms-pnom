@@ -28,7 +28,7 @@ function EventBanner() {
               const calculatedIndex = (current - 1) * pageSize + index + 1; // Hitung nomor "No"
               return calculatedIndex;
             },
-            width: '20%'
+            width: '5%'
           },
           {
             title: 'Nama Event',

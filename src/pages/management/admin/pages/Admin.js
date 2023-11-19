@@ -22,6 +22,7 @@ const AdminPage = () => {
   const columns = [
     {
       title: 'No',
+      width:'5%',
       render: (text, record, index) => {
         const current = tableParams.pagination.current; // Nomor halaman saat ini
         const pageSize = tableParams.pagination.pageSize; // Item per halaman
