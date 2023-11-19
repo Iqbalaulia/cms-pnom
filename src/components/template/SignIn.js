@@ -11,7 +11,7 @@ import {
   Input,
   Switch,
 } from "antd";
-import signinbg from "../../assets/images/img-signin.jpg";
+import signinbg from "assets/images/png/img-signin.png";
 
 
 const SignIn = () => {
@@ -44,9 +44,9 @@ const SignIn = () => {
               lg={{ span: 6, offset: 2 }}
               md={{ span: 12 }}
             >
-              <Title className="mb-15">Sign In</Title>
+              <Title className="mb-15">PNOM Dashboard</Title>
               <Title className="font-regular text-muted" level={5}>
-                Enter your email and password to sign in
+                Masukkan username dan password dengan benar
               </Title>
               <Form
                 onFinish={onFinish}
@@ -56,7 +56,7 @@ const SignIn = () => {
               >
                 <Form.Item
                   className="username"
-                  label="Email"
+                  label="Usernname"
                   name="email"
                   rules={[
                     {
@@ -65,7 +65,7 @@ const SignIn = () => {
                     },
                   ]}
                 >
-                  <Input placeholder="Email" />
+                  <Input placeholder="Username" />
                 </Form.Item>
   
                 <Form.Item
