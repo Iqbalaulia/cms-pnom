@@ -3,7 +3,7 @@
 import { Menu } from "antd";
 import { NavLink, useLocation } from "react-router-dom";
 import icons from '../../composables/useIcon'
-import logo from "../../assets/images/logo.png";
+import logo from "assets/images/svg/logo-pnom.svg";
 
 function Sidenav({ color }) {
   const { pathname } = useLocation();
