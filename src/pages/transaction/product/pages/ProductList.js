@@ -1,18 +1,18 @@
 import React, { useEffect, useState, } from 'react';
-import { Select, Table, Col,  Button, Space,Form,Input,Row,Layout } from 'antd';
+import { Select, Table, Col, Button, Space,Form,Input,Row,Layout } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
-import { adminModel, selectRole } from '../data/setting';
-import { jenisKelaminModel, paginationModel } from 'composables/useSetting';
+import { adminModel, roleModel } from '../data/setting';
+import { paginationModel } from 'composables/useSetting';
 
-import { ApiGetRequest } from 'utils/api/config';
+// import { ApiGetRequest } from 'utils/api/config';
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
 import PnomConfirm from 'components/layout/ConfirmDialog';
-import qs from 'qs';
+// import qs from 'qs';
 
-const DataAdmin = () => {
+const ProductList = () => {
   const { Content } = Layout
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
@@ -22,39 +22,33 @@ const DataAdmin = () => {
   const columns = [
     {
       title: 'No',
-      width:'5%',
       render: (text, record, index) => {
         const current = tableParams.pagination.current; 
         const pageSize = tableParams.pagination.pageSize; 
         const calculatedIndex = (current - 1) * pageSize + index + 1; 
         return calculatedIndex;
       },
+      width:'5%'
     },
     {
-      title: 'Name',
+      title: 'Nama Produk',
       dataIndex: 'name',
       sorter: true,
       render: (name) => `${name.first} ${name.last}`,
       width: '20%',
     },
     {
-      title: 'Gender',
-      dataIndex: 'gender',
-      filters: [
-        {
-          text: 'Male',
-          value: 'male',
-        },
-        {
-          text: 'Female',
-          value: 'female',
-        },
-      ],
+      title: 'Jenis',
+      dataIndex: 'Jenis',
       width: '20%',
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
+      title: 'Tipe',
+      dataIndex: 'Tipe',
+    },
+    {
+      title: 'Stok',
+      dataIndex: 'Stok',
     },
     {
       title: 'Actions',
@@ -117,16 +111,16 @@ const DataAdmin = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const result = await ApiGetRequest(`api?${qs.stringify(getRandomuserParams(tableParams))}`)
-      setData(result.data.results)
-      setLoading(false)
-      setTableParams({
-        ...tableParams,
-        pagination: {
-          ...tableParams.pagination,
-          total: 200,
-        },
-      });     
+      // const result = await ApiGetRequest(`api?${qs.stringify(getRandomuserParams(tableParams))}`)
+      // setData(result.data.results)
+      // setLoading(false)
+      // setTableParams({
+      //   ...tableParams,
+      //   pagination: {
+      //     ...tableParams.pagination,
+      //     total: 200,
+      //   },
+      // });     
     } catch (error) {
       PnomNotification({
         type: 'error',
@@ -141,52 +135,55 @@ const DataAdmin = () => {
   //   const { name, value } = e.target
   //   setFormData(prevState => ({...prevState, [name]: value}) )
   // }
-  const getRandomuserParams = (params) => ({
-    results: params.pagination?.pageSize,
-    page: params.pagination?.current,
-    ...params,
-  });
+  // const getRandomuserParams = (params) => ({
+  //   results: params.pagination?.pageSize,
+  //   page: params.pagination?.current,
+  //   ...params,
+  // });
   const resetField = () => {
     setFormData({...adminModel})
   }
 
   return (
     <div className='admin-table'>
-         <Row className='mb-2'>
-            <Col md={{span: 6}}>
-                <Input
-                    placeholder="Pencarian..."
-                />
+        <row gutter={[24,0]}>
+            <Col xs="24" xl={24}>
+                <Row className='mb-2'>
+                      <Col md={{span: 6}}>
+                        <Input
+                          placeholder="Pencarian..."
+                        />
+                      </Col>
+                      <Col md={{span: 18}} className='d-flex justify-end'>
+                        <Space align='start'>
+                          <Button  
+                            type="primary" 
+                            icon={<PlusCircleOutlined />} 
+                            className='w-50'
+                            onClick={handleShowForm} 
+                            size={'default'} >
+                            Tambah Data
+                          </Button>
+                        </Space>
+                      </Col>
+                </Row>
+                <Row>
+                    <Col md={{span: 24}}>
+                        <Table
+                        size={'middle'}
+                        bordered={true}
+                        columns={columns}
+                        rowKey={(record) => record.login.uuid}
+                        dataSource={data}
+                        pagination={tableParams.pagination}
+                        loading={loading}
+                        onChange={handleTableChange}
+                        className='ant-border-space'
+                        />
+                    </Col>
+                </Row>
             </Col>
-            <Col md={{span: 18}} className='d-flex justify-end'>
-              <Space align='start'>
-                <Button  
-                    type="primary" 
-                    icon={<PlusCircleOutlined />} 
-                    className='w-50'
-                    onClick={handleShowForm} 
-                    size={'default'} >
-                    Tambah Data
-                </Button>
-             </Space>
-            </Col>          
-        </Row>
-
-        <Row>
-            <Col xs={24} xl={24}>
-                <Table
-                    size={'middle'}
-                    bordered={true}
-                    columns={columns}
-                    rowKey={(record) => record.login.uuid}
-                    dataSource={data}
-                    pagination={tableParams.pagination}
-                    loading={loading}
-                    onChange={handleTableChange}
-                    className='ant-border-space'
-               />      
-            </Col>
-        </Row>   
+        </row>
 
 
         <PnomModal 
@@ -203,55 +200,27 @@ const DataAdmin = () => {
                         className="username mb-0"
                         label="Nama"
                         name="name"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Input data nama!",
-                          },
-                        ]}>
+                        >
                         <Input 
-                          value={form.name} 
-                          onChange={e => setFormData(
-                            {
-                              ...form,
-                              name: e.target.value
-                            }
-                          )} 
-                          placeholder="Nama" 
+                          placeholder="Nama Produk" 
                         />
                       </Form.Item>
                       <Form.Item
                         className="username mb-2"
-                        label="Email"
+                        label="Stok"
                         name="email"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Input data email!",
-                          },
-                        ]}>
+                       >
                         <Input 
-                          value={form.email}
-                          onChange={e => setFormData(
-                            {
-                              ...form,
-                              email: e.target.value
-                            }
-                          )}  
-                          placeholder="Email" />
+                          type='number'
+                          placeholder="Stok" />
                       </Form.Item>
                     </Col>
                     <Col md={{ span: 12 }}>
                       <Form.Item
                         className="username"
-                        label="Role"
+                        label="Jenis"
                         name="role"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Input data role!",
-                          },
-                        ]}>
+                        >
 
                         <Select
                           value={form.role}
@@ -261,13 +230,13 @@ const DataAdmin = () => {
                               role: value
                             }
                           )} 
-                          options={selectRole}
+                          options={roleModel}
                         />
                       </Form.Item>
                       <Form.Item
                         className="username"
-                        label="Jenis Kelamin"
-                        name="gender"
+                        label="Tipe"
+                        name="type"
                         rules={[
                           {
                             required: true,
@@ -276,15 +245,7 @@ const DataAdmin = () => {
                         ]}>
 
                         <Select
-                          value={form.gender}
-                          onSelect={value => setFormData(
-                            {
-                              ...form,
-                              gender: value
-                            }
-                          )} 
-                          placeholder="Jenis Kelamin"
-                          options={jenisKelaminModel}
+                          
                         />
                       </Form.Item>
                     </Col>
@@ -295,4 +256,4 @@ const DataAdmin = () => {
     </div>
   );
 };
-export default DataAdmin;
+export default ProductList;

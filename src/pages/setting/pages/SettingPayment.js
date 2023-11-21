@@ -21,9 +21,9 @@ const SettingPaymentMethod = () => {
             title: 'No',
             width: '5%',
             render: (text, record, index) => {
-              const current = tableParams.pagination.current; // Nomor halaman saat ini
-              const pageSize = tableParams.pagination.pageSize; // Item per halaman
-              const calculatedIndex = (current - 1) * pageSize + index + 1; // Hitung nomor "No"
+              const current = tableParams.pagination.current; 
+              const pageSize = tableParams.pagination.pageSize; 
+              const calculatedIndex = (current - 1) * pageSize + index + 1; 
               return calculatedIndex;
             },
           },

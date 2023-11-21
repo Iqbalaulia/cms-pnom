@@ -1,43 +1,45 @@
 import React, { useEffect, useState, } from 'react';
-import { Switch, Select, Table, Col,  Button, Space,Form,Input,Row,Layout } from 'antd';
-import { PlusCircleOutlined } from '@ant-design/icons';
+import { Table, Col, Button, Space,Form,Input,Row,Layout } from 'antd';
+import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
-import { adminModel, roleModel, selectStatusRole } from '../data/setting';
+// import { adminModel } from '../data/setting';
 import { paginationModel } from 'composables/useSetting';
+
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
 import PnomConfirm from 'components/layout/ConfirmDialog';
 
-const RoleAdmin = () => {
+const ProductCategory = () => {
   const { Content } = Layout
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
   const [isModalShow, setIsModalForm] = useState(false)
   const [tableParams, setTableParams] = useState(paginationModel);
-  const [form, setFormData] = useState(roleModel)
+//   const [form, setFormData] = useState(adminModel)
   const columns = [
     {
       title: 'No',
-      width:'5%',
       render: (text, record, index) => {
         const current = tableParams.pagination.current; 
         const pageSize = tableParams.pagination.pageSize; 
         const calculatedIndex = (current - 1) * pageSize + index + 1; 
         return calculatedIndex;
       },
+      width:'5%'
     },
     {
-      title: 'Role',
-      dataIndex: 'role',
+      title: 'Nama Kategori',
+      dataIndex: 'name',
       sorter: true,
       render: (name) => `${name.first} ${name.last}`,
     },
     {
-      title: 'Status',
-      render: (status) => (
+      title: 'Actions',
+      render: () => (
         <Space size={8}>
-            <Switch onChange={handleNonActive(status)} checked={status}/>
+          <Button onClick={handleDeleteData} type="danger" danger ghost icon={<DeleteOutlined />} size={'large'} />
+          <Button onClick={handleShowForm} type="primary" icon={<EditOutlined />} size={'large'} />
         </Space>        
       )
     },
@@ -65,7 +67,7 @@ const RoleAdmin = () => {
     setIsModalForm(false);
     resetField()
   };
-  const handleNonActive = (status) => {
+  const handleDeleteData = () => {
     PnomConfirm({
       onOkConfirm: handleOkDelete,
       onCancelConfirm: handleCancelDelete,
@@ -92,9 +94,6 @@ const RoleAdmin = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-        
-      setLoading(false)
-    
     } catch (error) {
       PnomNotification({
         type: 'error',
@@ -105,48 +104,50 @@ const RoleAdmin = () => {
       setLoading(false)
     }
   };
-
   const resetField = () => {
-    setFormData({...adminModel})
+    // setFormData({...adminModel})
   }
 
   return (
     <div className='admin-table'>
-         <Row className='mb-2'>
-            <Col md={{span: 6}}>
-                <Input
-                    placeholder="Pencarian..."
-                />
+        <row gutter={[24,0]}>
+            <Col xs="24" xl={24}>
+                <Row className='mb-2'>
+                      <Col md={{span: 6}}>
+                        <Input
+                          placeholder="Pencarian..."
+                        />
+                      </Col>
+                      <Col md={{span: 18}} className='d-flex justify-end'>
+                        <Space align='start'>
+                          <Button  
+                            type="primary" 
+                            icon={<PlusCircleOutlined />} 
+                            className='w-50'
+                            onClick={handleShowForm} 
+                            size={'default'} >
+                            Tambah Data
+                          </Button>
+                        </Space>
+                      </Col>
+                </Row>
+                <Row>
+                    <Col md={{span: 24}}>
+                        <Table
+                        size={'middle'}
+                        bordered={true}
+                        columns={columns}
+                        rowKey={(record) => record.login.uuid}
+                        dataSource={data}
+                        pagination={tableParams.pagination}
+                        loading={loading}
+                        onChange={handleTableChange}
+                        className='ant-border-space'
+                        />
+                    </Col>
+                </Row>
             </Col>
-            <Col md={{span: 18}} className='d-flex justify-end'>
-              <Space align='start'>
-                <Button  
-                    type="primary" 
-                    icon={<PlusCircleOutlined />} 
-                    className='w-50'
-                    onClick={handleShowForm} 
-                    size={'default'} >
-                    Tambah Data
-                </Button>
-             </Space>
-            </Col>          
-        </Row>
-
-        <Row>
-            <Col xs={24} xl={24}>
-                <Table
-                    size={'middle'}
-                    bordered={true}
-                    columns={columns}
-                    rowKey={(record) => record.login.uuid}
-                    dataSource={data}
-                    pagination={tableParams.pagination}
-                    loading={loading}
-                    onChange={handleTableChange}
-                    className='ant-border-space'
-               />      
-            </Col>
-        </Row>   
+        </row>
 
 
         <PnomModal 
@@ -161,39 +162,15 @@ const RoleAdmin = () => {
                     <Col md={{ span: 24 }}>
                       <Form.Item
                         className="username mb-0"
-                        label="Role"
-                        name="role"
+                        label="Nama"
+                        name="name"
                         >
                         <Input 
-                          value={form.name} 
-                          placeholder="Role" 
+                          placeholder="Nama Kategori" 
                         />
                       </Form.Item>
                     </Col>
-                    <Col md={{ span: 24 }}>
-                      <Form.Item
-                        className="username"
-                        label="Status"
-                        name="status"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Input data role!",
-                          },
-                        ]}>
-
-                        <Select
-                          value={form.role}
-                          onSelect={value => setFormData(
-                            {
-                              ...form,
-                              status: value
-                            }
-                          )} 
-                          options={selectStatusRole}
-                        />
-                      </Form.Item>
-                    </Col>
+                    
                   </Row>
               </Form>
             </Content>
@@ -201,4 +178,4 @@ const RoleAdmin = () => {
     </div>
   );
 };
-export default RoleAdmin;
+export default ProductCategory;
