@@ -74,7 +74,7 @@ const CustomerList = () => {
                 </Row>
                 <Row>
                     <Col xs={24} xl={24}>
-                        <Table
+                         <Table
                             className='ant-border-space'
                             size={'middle'}
                             bordered={true}

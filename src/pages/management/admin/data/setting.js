@@ -5,7 +5,12 @@ const adminModel = {
     gender:''
 }
 
-const roleModel = [
+const roleModel = {
+    name:'',
+    status:''
+}
+
+const selectRole = [
     {
         value:"Admin",
         label:'Admin'
@@ -16,7 +21,20 @@ const roleModel = [
     }
 ]
 
+const selectStatusRole = [
+    {
+        value:"active",
+        label:'Aktif'
+    },
+    {
+        value:"non-active",
+        label:'Tidak Aktif'
+    },
+]
+
 export {
     adminModel,
-    roleModel
+    roleModel,
+    selectRole,
+    selectStatusRole
 }
