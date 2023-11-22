@@ -30,7 +30,7 @@ body {
   position: fixed;
   left: 0;
   z-index: 99;
-  /* height: 100vh; */
+  height: 100vh;
   overflow: auto;
   margin: 0;
   padding: 33px 20px;
