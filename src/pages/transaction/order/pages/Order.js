@@ -3,7 +3,7 @@ import { Row, Col, Card, Tabs } from 'antd';
 
 import NewOrder from './NewOrder';
 import ProductionOrder from './ProductionOrder';
-// import ShippingOrder from './ShippingOrder';
+import ShippingOrder from './ShippingOrder';
 
 const OrderPage = () => {
     const { TabPane } = Tabs
@@ -45,7 +45,7 @@ const OrderPage = () => {
                                     tab="Pengiriman"
                                     key="3"
                                 >
-                                    {/* <ShippingOrder/> */}
+                                    <ShippingOrder/>
                                 </TabPane>
                             </Tabs>
 

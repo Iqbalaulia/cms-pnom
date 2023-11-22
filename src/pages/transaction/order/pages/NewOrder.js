@@ -158,7 +158,7 @@ const NewOrder = () => {
                 </Row>
                 <Row gutter={[24,0]} className='mb-2'>
                     <Col md={6}>
-                        <Input placeholder='Pencairan' />
+                        <Input placeholder='Pencarian...' />
                     </Col>
                     <Col md={6}>
                         <RangePicker />
