@@ -71,6 +71,7 @@ const DataAdmin = () => {
   
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleShowForm = () => {
@@ -138,7 +139,10 @@ const DataAdmin = () => {
       setLoading(false)
     }
   };
-
+  // const onChangeForm = e => {
+  //   const { name, value } = e.target
+  //   setFormData(prevState => ({...prevState, [name]: value}) )
+  // }
   const getRandomuserParams = (params) => ({
     results: params.pagination?.pageSize,
     page: params.pagination?.current,
@@ -150,7 +154,7 @@ const DataAdmin = () => {
 
   return (
     <div className='admin-table'>
-        <Row className='mb-2'>
+         <Row className='mb-2'>
             <Col md={{span: 6}}>
                 <Input
                     placeholder="Pencarian..."

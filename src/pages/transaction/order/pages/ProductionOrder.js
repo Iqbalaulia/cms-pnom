@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Upload, DatePicker, Select, Table, Col, Button, Space, Form, Input, Row, Layout } from 'antd';
-import { InboxOutlined, CloudDownloadOutlined, CloudUploadOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { InboxOutlined, CloudDownloadOutlined, CloudUploadOutlined } from '@ant-design/icons';
 
 import { paginationModel } from 'composables/useSetting';
 
