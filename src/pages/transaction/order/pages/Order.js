@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Row, Col, Card, Tabs } from 'antd';
 
 import NewOrder from './NewOrder';
-// import ProductionOrder from './ProductionOrder';
+import ProductionOrder from './ProductionOrder';
 // import ShippingOrder from './ShippingOrder';
 
 const OrderPage = () => {
@@ -39,7 +39,7 @@ const OrderPage = () => {
                                     tab="Produksi"
                                     key="2"
                                 >
-                                    {/* <ProductionOrder/> */}
+                                    <ProductionOrder/>
                                 </TabPane>
                                 <TabPane
                                     tab="Pengiriman"

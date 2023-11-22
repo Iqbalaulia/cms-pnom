@@ -54,6 +54,10 @@ const NewOrder = () => {
         },
         {
             title:'Status',
+            dataIndex: 'status'
+        },
+        {
+            title:'Actions',
             width: '20%',
             render: () => (
                 <Space size={8}>
