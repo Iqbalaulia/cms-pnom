@@ -7,6 +7,9 @@ body {
   line-height: 1.6;
   font-weight: 400;
   font-family: open sans, Helvetica, Arial, sans-serif;
+  -moz-transform: scale(0.8, 0.8); 
+  zoom: 0.8; 
+  zoom: 80%;
 }
 .ant-layout.ant-layout-has-sider {
   flex-direction: row;
@@ -27,7 +30,7 @@ body {
   position: fixed;
   left: 0;
   z-index: 99;
-  height: 100vh;
+  /* height: 100vh; */
   overflow: auto;
   margin: 0;
   padding: 33px 20px;

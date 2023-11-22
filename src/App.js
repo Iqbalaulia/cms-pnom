@@ -20,6 +20,7 @@ import Setting from './pages/setting/pages/Setting'
 import TransactionCustomer from './pages/transaction/customer/pages/Customer'
 import TransactionProduct from './pages/transaction/product/pages/Product'
 import TransactionData from './pages/transaction/transaction/pages/Transaction'
+import TransactionOrder from './pages/transaction/order/pages/Order'
 
 import "antd/dist/antd.css";
 import "./assets/styles/main.css";
@@ -57,6 +58,10 @@ function App() {
     {
       routerLink:'/transaction',
       component: TransactionData
+    },
+    {
+      routerLink:'/order',
+      component: TransactionOrder
     }
   ]
 
