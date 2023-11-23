@@ -4,7 +4,7 @@ import { EditOutlined, DeleteOutlined, PlusCircleOutlined, InboxOutlined } from 
 import { DatePicker, Upload  } from 'antd';
 
 import { paginationModel } from 'composables/useSetting';
-// import { bannerModel } from '../data/setting';
+import { bannerModel, mockDataBanner } from '../data/setting';
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
@@ -17,7 +17,7 @@ function EventBanner() {
     const [ loading, setLoading ] = useState(false)
     const [ isModalForm, setIsModalForm ] = useState(false)
     const [ tableParams, setTableParams ] = useState(paginationModel)
-    // const [ formData, setFormData ] = useState(bannerModel)
+    const [ formData, setFormData ] = useState(bannerModel)
 
     const columns = [
         {
@@ -84,11 +84,11 @@ function EventBanner() {
     
     useEffect(() => {
         getFetchData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const resetField = () => {
-        // setFormData({...bannerModel})
+        setFormData({...bannerModel})
     }
 
     const handleCancelSubmit = () => {
@@ -138,7 +138,6 @@ function EventBanner() {
       console.log(date, dateString);
     };
 
-
     const handleOkDelete = () => {
         console.log('Delete confirmed');
     }
@@ -156,7 +155,7 @@ function EventBanner() {
     const getFetchData = async () => {
         try {
             setLoading(true)
-
+            setDataTable(mockDataBanner)
             setLoading(false)
         } catch (error) {
             PnomNotification({
@@ -241,6 +240,7 @@ function EventBanner() {
                           },
                         ]}>
                         <Input 
+                          value={formData.name}
                           placeholder="Nama Event" 
                         />
                       </Form.Item>
@@ -254,7 +254,10 @@ function EventBanner() {
                             message: "Masukkan tanggal mulai!",
                           },
                         ]}>
-                          <DatePicker onChange={handleChangeStartDate} />
+                          <DatePicker
+                             value={formData.start_date}
+                             onChange={handleChangeStartDate} 
+                          />
                       </Form.Item>
                       <Form.Item
                         className="username mb-2"
@@ -266,7 +269,10 @@ function EventBanner() {
                             message: "Masukkan tanggal akhir!",
                           },
                         ]}>
-                          <DatePicker  onChange={handleChangeEndtDate} />
+                          <DatePicker  
+                            value={formData.end_date}  
+                            onChange={handleChangeEndtDate} 
+                          />
                       </Form.Item>
                     </Col>
                     <Col md={{ span: 12 }}>

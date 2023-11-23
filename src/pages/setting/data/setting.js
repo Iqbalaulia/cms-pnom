@@ -129,7 +129,7 @@ const mockDataTableContact = [{
     "id": 20,
     "name": "AT",
     "description": "Unspecified physeal fracture of unspecified metatarsal, subsequent encounter for fracture with nonunion"
-  }]
+}]
 
 const mockDataTableSosmed = [{
     "id": 1,
@@ -151,7 +151,8 @@ const mockDataTableSosmed = [{
     "id": 5,
     "name": "Onfroi",
     "link": "Luscott"
-  }]
+}]
+
 export {
     socialMediaModel,
     contactModel,

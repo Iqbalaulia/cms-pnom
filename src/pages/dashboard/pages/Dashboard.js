@@ -1,13 +1,13 @@
 
 import React from 'react';
-import { Row, Tabs, Col, Card, Typography, DatePicker } from 'antd';
+import { Row, Col, Card, Typography, DatePicker } from 'antd';
 
 import Echart from "components/chart/EChart";
 import LineChart from "components/chart/LineChart";
 
 
 const Dashboard = () => {
-    const { Title, Text } = Typography
+    const { Title } = Typography
 
     return(
         <>
