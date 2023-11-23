@@ -1,7 +1,7 @@
 import { Switch, Route } from "react-router-dom";
 // import { Switch, Route, Redirect } from "react-router-dom";
 
-import Home from "./components/template/Home";
+// import Home from "./components/template/Home";
 import Tables from "./components/template/Tables";
 import Billing from "./components/template/Billing";
 import Rtl from "./components/template/Rtl";
@@ -13,7 +13,7 @@ import Main from "./components/layout/Main";
 import Dashboard from './pages/dashboard/pages/Dashboard';
 
 // Management
-// import ManagementAdmin from './pages/management/admin/pages/Admin'
+import ManagementAdmin from './pages/management/admin/pages/Admin'
 import ManagementEventBanner from './pages/management/eventBanner/pages/EventBanner'
 
 // Setting
@@ -40,7 +40,7 @@ function App() {
     },
     {
       routerLink:'/admin',
-      component: Home
+      component: ManagementAdmin
     },
     {
       routerLink:'/event-banner',
