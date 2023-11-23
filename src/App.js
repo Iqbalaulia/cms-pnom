@@ -9,8 +9,11 @@ import SignUp from "./components/template/SignUp";
 import SignIn from "./components/template/SignIn";
 import Main from "./components/layout/Main";
 
+// Dashboard
+import Dashboard from './pages/dashboard/pages/Dashboard';
+
 // Management
-import ManagementAdmin from './pages/management/admin/pages/Admin'
+// import ManagementAdmin from './pages/management/admin/pages/Admin'
 import ManagementEventBanner from './pages/management/eventBanner/pages/EventBanner'
 
 // Setting
@@ -33,11 +36,11 @@ function App() {
   const settingMenu = [
     {
       routerLink:'/dashboard',
-      component: Home
+      component: Dashboard
     },
     {
       routerLink:'/admin',
-      component: ManagementAdmin
+      component: Home
     },
     {
       routerLink:'/event-banner',
