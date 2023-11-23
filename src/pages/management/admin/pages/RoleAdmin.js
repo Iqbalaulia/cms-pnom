@@ -2,16 +2,16 @@ import React, { useEffect, useState, } from 'react';
 import { Switch, Select, Table, Col,  Button, Space,Form,Input,Row,Layout } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
 
-import { adminModel, roleModel, selectStatusRole } from '../data/setting';
+import { adminModel, roleModel, selectStatusRole, mockDataRole } from '../data/setting';
 import { paginationModel } from 'composables/useSetting';
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
-import PnomConfirm from 'components/layout/ConfirmDialog';
+// import PnomConfirm from 'components/layout/ConfirmDialog';
 
 const RoleAdmin = () => {
   const { Content } = Layout
-  const [data, setData] = useState();
+  const [dataTable, setDataTable] = useState();
   const [loading, setLoading] = useState(false);
   const [isModalShow, setIsModalForm] = useState(false)
   const [tableParams, setTableParams] = useState(paginationModel);
@@ -31,7 +31,7 @@ const RoleAdmin = () => {
       title: 'Role',
       dataIndex: 'role',
       sorter: true,
-      render: (name) => `${name.first} ${name.last}`,
+      render: (role_name) => `${role_name}`,
     },
     {
       title: 'Status',
@@ -66,18 +66,18 @@ const RoleAdmin = () => {
     resetField()
   };
   const handleNonActive = (status) => {
-    PnomConfirm({
-      onOkConfirm: handleOkDelete,
-      onCancelConfirm: handleCancelDelete,
-      content: 'Your confirmation message here'
-    })
+    // PnomConfirm({
+    //   onOkConfirm: handleOkDelete,
+    //   onCancelConfirm: handleCancelDelete,
+    //   content: 'Your confirmation message here'
+    // })
   }
-  const handleOkDelete = () => {
-    console.log('Delete confirmed');
-  }
-  const handleCancelDelete = () => {
-    console.log('Delete canceled');
-  }
+  // const handleOkDelete = () => {
+  //   console.log('Delete confirmed');
+  // }
+  // const handleCancelDelete = () => {
+  //   console.log('Delete canceled');
+  // }
   const handleTableChange = (pagination, filters, sorter) => {
     setTableParams({
       pagination,
@@ -85,14 +85,14 @@ const RoleAdmin = () => {
       ...sorter,
     });
 
-    if (pagination.pageSize !== tableParams.pagination?.pageSize) setData([]);
+    if (pagination.pageSize !== tableParams.pagination?.pageSize) setDataTable([]);
   };
 
   
   const fetchData = async () => {
     try {
       setLoading(true);
-        
+      setDataTable(mockDataRole);
       setLoading(false)
     
     } catch (error) {
@@ -138,8 +138,7 @@ const RoleAdmin = () => {
                     size={'middle'}
                     bordered={true}
                     columns={columns}
-                    rowKey={(record) => record.login.uuid}
-                    dataSource={data}
+                    dataSource={dataTable}
                     pagination={tableParams.pagination}
                     loading={loading}
                     onChange={handleTableChange}
