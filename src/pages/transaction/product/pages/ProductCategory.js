@@ -2,7 +2,7 @@ import React, { useEffect, useState, } from 'react';
 import { Table, Col, Button, Space,Form,Input,Row,Layout } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
-// import { adminModel } from '../data/setting';
+import { mockDataProductCategory } from '../data/setting';
 import { paginationModel } from 'composables/useSetting';
 
 
@@ -12,7 +12,7 @@ import PnomConfirm from 'components/layout/ConfirmDialog';
 
 const ProductCategory = () => {
   const { Content } = Layout
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalShow, setIsModalForm] = useState(false)
   const [tableParams, setTableParams] = useState(paginationModel);
@@ -30,9 +30,9 @@ const ProductCategory = () => {
     },
     {
       title: 'Nama Kategori',
-      dataIndex: 'name',
+      dataIndex: 'category',
       sorter: true,
-      render: (name) => `${name.first} ${name.last}`,
+      render: (category) => `${category}`,
     },
     {
       title: 'Actions',
@@ -94,6 +94,8 @@ const ProductCategory = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
+      setData(mockDataProductCategory)
+      setLoading(false);
     } catch (error) {
       PnomNotification({
         type: 'error',
@@ -110,7 +112,7 @@ const ProductCategory = () => {
 
   return (
     <div className='admin-table'>
-        <row gutter={[24,0]}>
+        <Row gutter={[24,0]}>
             <Col xs="24" xl={24}>
                 <Row className='mb-2'>
                       <Col md={{span: 6}}>
@@ -137,7 +139,7 @@ const ProductCategory = () => {
                         size={'middle'}
                         bordered={true}
                         columns={columns}
-                        rowKey={(record) => record.login.uuid}
+                        rowKey={(record) => record.id}
                         dataSource={data}
                         pagination={tableParams.pagination}
                         loading={loading}
@@ -147,14 +149,14 @@ const ProductCategory = () => {
                     </Col>
                 </Row>
             </Col>
-        </row>
+        </Row>
 
 
         <PnomModal 
           onOk={handleSubmit} 
           onCancel={handleCancelSubmit} 
           visible={isModalShow}
-          width={800}
+          width={600}
           >
             <Content className="form-data">
               <Form>

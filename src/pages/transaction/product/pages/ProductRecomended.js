@@ -2,12 +2,13 @@ import React, { useEffect, useState, } from 'react';
 import { Table, Col, Switch, Space, Input,Row } from 'antd';
 
 import { paginationModel } from 'composables/useSetting';
+import { mockDataProductRecomended } from '../data/setting';
 
 import PnomNotification from 'components/layout/Notification';
-import PnomConfirm from 'components/layout/ConfirmDialog';
+// import PnomConfirm from 'components/layout/ConfirmDialog';
 
 const ProductRecomended = () => {
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [tableParams, setTableParams] = useState(paginationModel);
   const columns = [
@@ -23,19 +24,18 @@ const ProductRecomended = () => {
     },
     {
       title: 'Nama Produk',
-      dataIndex: 'name',
+      dataIndex: 'product_name',
       sorter: true,
-      render: (name) => `${name.first} ${name.last}`,
       width: '20%',
     },
     {
       title: 'Jenis',
-      dataIndex: 'Jenis',
+      dataIndex: 'product_type',
       width: '20%',
     },
     {
       title: 'Tipe',
-      dataIndex: 'Tipe',
+      dataIndex: 'product_type',
     },
     {
       title: 'Rekomendasi',
@@ -52,18 +52,18 @@ const ProductRecomended = () => {
   }, []);
 
   const handleNonActive = () => {
-    PnomConfirm({
-      onOkConfirm: handleOkDelete,
-      onCancelConfirm: handleCancelDelete,
-      content: 'Your confirmation message here'
-    })
+    // PnomConfirm({
+    //   onOkConfirm: handleOkDelete,
+    //   onCancelConfirm: handleCancelDelete,
+    //   content: 'Your confirmation message here'
+    // })
   }
-  const handleOkDelete = () => {
-    console.log('Delete confirmed');
-  }
-  const handleCancelDelete = () => {
-    console.log('Delete canceled');
-  }
+  // const handleOkDelete = () => {
+  //   console.log('Delete confirmed');
+  // }
+  // const handleCancelDelete = () => {
+  //   console.log('Delete canceled');
+  // }
   const handleTableChange = (pagination, filters, sorter) => {
     setTableParams({
       pagination,
@@ -78,7 +78,7 @@ const ProductRecomended = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      
+      setData(mockDataProductRecomended)
       setLoading(false)     
     } catch (error) {
       PnomNotification({
@@ -108,7 +108,7 @@ const ProductRecomended = () => {
                         size={'middle'}
                         bordered={true}
                         columns={columns}
-                        rowKey={(record) => record.login.uuid}
+                        rowKey={(record) => record.id}
                         dataSource={data}
                         pagination={tableParams.pagination}
                         loading={loading}

@@ -2,7 +2,7 @@ import React, { useEffect, useState, } from 'react';
 import { Select, Table, Col, Button, Space,Form,Input,Row,Layout } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
-import { adminModel, roleModel } from '../data/setting';
+import { adminModel, roleModel, mockDataProductList } from '../data/setting';
 import { paginationModel } from 'composables/useSetting';
 
 // import { ApiGetRequest } from 'utils/api/config';
@@ -14,7 +14,7 @@ import PnomConfirm from 'components/layout/ConfirmDialog';
 
 const ProductList = () => {
   const { Content } = Layout
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalShow, setIsModalForm] = useState(false)
   const [tableParams, setTableParams] = useState(paginationModel);
@@ -32,23 +32,22 @@ const ProductList = () => {
     },
     {
       title: 'Nama Produk',
-      dataIndex: 'name',
+      dataIndex: 'product_name',
       sorter: true,
-      render: (name) => `${name.first} ${name.last}`,
       width: '20%',
     },
     {
       title: 'Jenis',
-      dataIndex: 'Jenis',
+      dataIndex: 'product_type',
       width: '20%',
     },
     {
       title: 'Tipe',
-      dataIndex: 'Tipe',
+      dataIndex: 'product_type',
     },
     {
       title: 'Stok',
-      dataIndex: 'Stok',
+      dataIndex: 'Stock',
     },
     {
       title: 'Actions',
@@ -120,7 +119,9 @@ const ProductList = () => {
       //     ...tableParams.pagination,
       //     total: 200,
       //   },
-      // });     
+      // });
+      setData(mockDataProductList)
+      setLoading(false)     
     } catch (error) {
       PnomNotification({
         type: 'error',
@@ -173,7 +174,6 @@ const ProductList = () => {
                         size={'middle'}
                         bordered={true}
                         columns={columns}
-                        rowKey={(record) => record.login.uuid}
                         dataSource={data}
                         pagination={tableParams.pagination}
                         loading={loading}
@@ -190,7 +190,7 @@ const ProductList = () => {
           onOk={handleSubmit} 
           onCancel={handleCancelSubmit} 
           visible={isModalShow}
-          width={800}
+          width={600}
           >
             <Content className="form-data">
               <Form>
