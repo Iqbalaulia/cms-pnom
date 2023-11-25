@@ -215,6 +215,10 @@ const NewOrder = () => {
                             loading={loading}
                             onChange={handleTableChange}
                             dataSource={dataTable}
+                            scroll={{
+                                x: 1000,
+                                y: 1000,
+                              }}
                         />
                     </Col>
                 </Row>

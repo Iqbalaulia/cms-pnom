@@ -1,27 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { Typography, DatePicker, Card, Table, Col, Button, Space, Input, Row } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import { Typography, DatePicker, Card, Table, Col, Input, Row } from 'antd';
 
 import { paginationModel } from 'composables/useSetting';
+import { mockDataTransaction } from '../data/setting';
 
-// import PnomConfirm from 'components/layout/ConfirmDialog';
-// import PnomModal from 'components/layout/Modal';
-// import PnomNotification from 'components/layout/Notification';
+import PnomNotification from 'components/layout/Notification';
 
 const Transaction = () => {
-    // const { Content } = Layout
     const { RangePicker } = DatePicker
     const { Title } = Typography;
 
-    // const [dataTable, setDataTable] = useState()
-    // const [tableParams, setTableParams] = useState(paginationModel)
-
-    const [dataTable] = useState()
-    const [tableParams] = useState(paginationModel)
-    // const [isModalShow, setIsModalShow] = useState(false)
-    // const [loading, setLoading] = useState(false)
-    const [loading] = useState(false)
+    const [dataTable, setDataTable] = useState()
+    const [tableParams, setTableParams] = useState(paginationModel)
+    const [loading, setLoading] = useState(false)
 
     const columnsCustomer = [
         {
@@ -36,39 +28,64 @@ const Transaction = () => {
         },
         {
             title:'No Pesanan',
-            dataIndex: 'name_customerss'
+            dataIndex: 'no_pesanan',
+            width:'30%'
         },
         {
             title: 'No Resi',
-            dataIndex:'phone'
+            dataIndex:'no_resi'
         },
         {
             title:'Status Pesanan',
-            dataIndex:'created_at',
+            dataIndex:'status_order',
             width:'20%'
         },
         {
             title:'Status Resi',
-            dataIndex:'address'
+            dataIndex:'status_shipping'
         },
         {
             title:'Opsi Pengiriman',
-            dataIndex:'address'
+            dataIndex:'expedition'
         },
         {
             title:'Metode Pembayaran',
-            dataIndex:'address'
+            dataIndex:'payment_method'
         },
-        {
-            title: 'Actions',
-            width: '20%',
-            render: () => (
-              <Space size={8}>
-                <Button  type="primary" icon={<UserOutlined />} size={'large'} />
-              </Space>        
-            )
-          },
+       
     ]
+
+
+    useEffect(() => {
+        getFetchData()
+    },[])
+
+    const handleTableChange = (pagination, filters, sorter) => {
+        setTableParams({
+            pagination,
+            filters,
+
+            ...sorter
+        })
+
+        if (pagination.pageSize !== tableParams.pagination?.pageSize) setDataTable([])
+    }
+
+    const getFetchData = () => {
+        try {
+            setLoading(true)
+            setDataTable(mockDataTransaction)
+            setLoading(false)
+        } catch (error) {
+            PnomNotification({
+                type: 'error',
+                message: 'Maaf terjadi kesalahan!',
+                description:error
+            })
+        } finally {
+            setLoading(false)
+        }
+    }
 
     return(
         <>
@@ -197,7 +214,12 @@ const Transaction = () => {
                                 pagination={tableParams.pagination}
                                 columns={columnsCustomer}
                                 loading={loading}
+                                onChange={handleTableChange}
                                 dataSource={dataTable}
+                                scroll={{
+                                    x: 1000,
+                                    y: 1000,
+                                }}
                             />
                         </Col>
                     </Row>
