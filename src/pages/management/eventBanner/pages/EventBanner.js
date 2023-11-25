@@ -13,6 +13,7 @@ import PnomConfirm from 'components/layout/ConfirmDialog';
 function EventBanner() {
     const { Content } = Layout
     const { Dragger } = Upload
+
     const [ dataTable, setDataTable ] = useState([])
     const [ loading, setLoading ] = useState(false)
     const [ isModalForm, setIsModalForm ] = useState(false)
@@ -134,7 +135,7 @@ function EventBanner() {
       console.log(date, dateString);
     };
 
-    const handleChangeEndtDate = (date, dateString) => {
+    const handleChangeEndDate = (date, dateString) => {
       console.log(date, dateString);
     };
 
@@ -270,7 +271,7 @@ function EventBanner() {
                         ]}>
                           <DatePicker  
                             value={formData.end_date}  
-                            onChange={handleChangeEndtDate} 
+                            onChange={handleChangeEndDate} 
                           />
                       </Form.Item>
                     </Col>

@@ -1,27 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { DatePicker, Table, Col, Button, Space, Form, Input, Row, Layout } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
 import { paginationModel } from 'composables/useSetting';
+import { mockDataCustomerList } from '../data/setting';
 
 // import PnomConfirm from 'components/layout/ConfirmDialog';
 import PnomModal from 'components/layout/Modal';
-// import PnomNotification from 'components/layout/Notification';
+import PnomNotification from 'components/layout/Notification';
 
 const CustomerList = () => {
     const { Content } = Layout
     const { RangePicker } = DatePicker
-    // const [dataTable, setDataTable] = useState()
-    // const [tableParams, setTableParams] = useState(paginationModel)
-    // const [isModalShow, setIsModalShow] = useState(false)
-    // const [loading, setLoading] = useState(false)
+    const { TextArea } = Input;
 
-    const [dataTable] = useState()
-    const [tableParams] = useState(paginationModel)
-    const [isModalShow] = useState(false)
-    const [loading] = useState(false)
+    const [dataTable, setDataTable] = useState()
+    const [tableParams, setTableParams] = useState(paginationModel)
+    const [isModalShow, setIsModalShow] = useState(false)
+    const [loading, setLoading] = useState(false)
 
+   
     const columnsCustomer = [
         {
             title: 'No',
@@ -35,7 +34,7 @@ const CustomerList = () => {
         },
         {
             title:'Nama',
-            dataIndex: 'name_customer'
+            dataIndex: 'name'
         },
         {
             title: 'No Telp',
@@ -43,7 +42,7 @@ const CustomerList = () => {
         },
         {
             title:'Tanggal Bergabung',
-            dataIndex:'created_at',
+            dataIndex:'created_date',
             width:'20%'
         },
         {
@@ -55,11 +54,52 @@ const CustomerList = () => {
             width: '20%',
             render: () => (
               <Space size={8}>
-                <Button  type="primary" icon={<UserOutlined />} size={'large'} />
+                <Button  type="primary" onClick={handleShowModalDetail} icon={<UserOutlined />} size={'large'} />
               </Space>        
             )
           },
     ]
+
+    useEffect(() => {
+        getFetchData()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    const handleTableChange = (pagination, filters, sorter) => {
+        setTableParams({
+            pagination,
+            filters,
+            ...sorter
+        })
+    }
+
+    const handleShowModalDetail = () => {
+        setIsModalShow(true)
+    }
+
+    const handleOkModal = () => {
+        setIsModalShow(false)
+    }
+
+    const handleCancelModal = () => {
+        setIsModalShow(false)
+    }
+
+    const getFetchData = async () => {
+        try {
+            setLoading(true)
+            setDataTable(mockDataCustomerList)
+            setLoading(false)
+        } catch (error) {
+            PnomNotification({
+                type: 'error',
+                message: 'Maaf terjadi kesalahan!',
+                description:error
+            })
+        } finally {
+            setLoading(false)
+        }
+    }
 
     return(
         <>
@@ -82,13 +122,16 @@ const CustomerList = () => {
                             columns={columnsCustomer}
                             loading={loading}
                             dataSource={dataTable}
+                            onChange={handleTableChange}
                         />
                     </Col>
                 </Row>
 
                 <PnomModal
                     visible={isModalShow}
-                    width={800}
+                    onOk={handleOkModal}
+                    onCancel={handleCancelModal}
+                    width={600}
                 >
                     <Content className='form-data'>
                         <Form>
@@ -96,10 +139,41 @@ const CustomerList = () => {
                                 <Col md={{span: 12}}>
                                     <Form.Item
                                         className='username mb-0'
-                                        label="Nama Customer"
+                                        label="Nama"
                                         name='customerName'
                                     >
-                                        <Input/>
+                                        <Input placeholder='Nama pelanggan'/>
+                                    </Form.Item>
+                                </Col>
+                                <Col md={{span: 12}}>
+                                    <Form.Item
+                                        className='username mb-0'
+                                        label="Np Telp"
+                                        name='notelp'
+                                    >
+                                        <Input type='number' placeholder='Nomor Telepon'/>
+                                    </Form.Item>
+                                </Col>  
+                            </Row>
+                            <Row gutter={[24, 0]}>
+                                <Col md={{span: 24}}>
+                                    <Form.Item
+                                        className='username mb-0'
+                                        label="Tanggal Bergabung"
+                                        name='createdDate'
+                                    >
+                                        <DatePicker placeholder='Tanggal bergabung'/>
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                            <Row gutter={[24, 0]}>
+                                <Col md={{span: 24}}>
+                                    <Form.Item
+                                        className='username mb-0'
+                                        label="Alamat"
+                                        name='address'
+                                    >
+                                        <TextArea placeholder='Alamat' rows={8} />
                                     </Form.Item>
                                 </Col>
                             </Row>
