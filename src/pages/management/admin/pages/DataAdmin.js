@@ -153,7 +153,8 @@ const DataAdmin = () => {
   }
 
   return (
-    <div className='admin-table'>
+    <>
+      <div className='admin-table'>
          <Row className='mb-2'>
             <Col md={{span: 6}}>
                 <Input
@@ -189,112 +190,111 @@ const DataAdmin = () => {
                />      
             </Col>
         </Row>   
-
-
-        <PnomModal 
-          onOk={handleSubmit} 
-          onCancel={handleCancelSubmit} 
-          visible={isModalShow}
-          width={800}
-          >
-            <Content className="form-data">
-              <Form>
-                  <Row gutter={[24,0]}>
-                    <Col md={{ span: 12 }}>
-                      <Form.Item
-                        className="username mb-0"
-                        label="Nama"
-                        name="name"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Input data nama!",
-                          },
-                        ]}>
-                        <Input 
-                          value={form.name} 
-                          onChange={e => setFormData(
-                            {
-                              ...form,
-                              name: e.target.value
-                            }
-                          )} 
-                          placeholder="Nama" 
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        className="username mb-2"
-                        label="Email"
-                        name="email"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Input data email!",
-                          },
-                        ]}>
-                        <Input 
-                          value={form.email}
-                          onChange={e => setFormData(
-                            {
-                              ...form,
-                              email: e.target.value
-                            }
-                          )}  
-                          placeholder="Email" />
-                      </Form.Item>
-                    </Col>
-                    <Col md={{ span: 12 }}>
-                      <Form.Item
-                        className="username"
-                        label="Role"
-                        name="role"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Input data role!",
-                          },
-                        ]}>
-
-                        <Select
-                          value={form.role}
-                          onSelect={value => setFormData(
-                            {
-                              ...form,
-                              role: value
-                            }
-                          )} 
-                          options={selectRole}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        className="username"
-                        label="Jenis Kelamin"
-                        name="gender"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Input data jenis kelamin!",
-                          },
-                        ]}>
-
-                        <Select
-                          value={form.gender}
-                          onSelect={value => setFormData(
-                            {
-                              ...form,
-                              gender: value
-                            }
-                          )} 
-                          placeholder="Jenis Kelamin"
-                          options={jenisKelaminModel}
-                        />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-              </Form>
-            </Content>
-        </PnomModal>
     </div>
+    <PnomModal 
+      onOk={handleSubmit} 
+      onCancel={handleCancelSubmit} 
+      visible={isModalShow}
+      width={600}
+    >
+      <Content className="form-data">
+        <Form>
+            <Row gutter={[24,0]}>
+              <Col md={{ span: 24 }}>
+                <Form.Item
+                  className="username mb-0"
+                  label="Nama"
+                  name="name"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Input data nama!",
+                    },
+                  ]}>
+                  <Input 
+                    value={form.name} 
+                    onChange={e => setFormData(
+                      {
+                        ...form,
+                        name: e.target.value
+                      }
+                    )} 
+                    placeholder="Nama" 
+                  />
+                </Form.Item>
+                <Form.Item
+                  className="username mb-2"
+                  label="Email"
+                  name="email"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Input data email!",
+                    },
+                  ]}>
+                  <Input 
+                    value={form.email}
+                    onChange={e => setFormData(
+                      {
+                        ...form,
+                        email: e.target.value
+                      }
+                    )}  
+                    placeholder="Email" />
+                </Form.Item>
+              </Col>
+              <Col md={{ span: 24 }}>
+                <Form.Item
+                  className="username"
+                  label="Role"
+                  name="role"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Input data role!",
+                    },
+                  ]}>
+
+                  <Select
+                    value={form.role}
+                    onSelect={value => setFormData(
+                      {
+                        ...form,
+                        role: value
+                      }
+                    )} 
+                    options={selectRole}
+                  />
+                </Form.Item>
+                <Form.Item
+                  className="username"
+                  label="Jenis Kelamin"
+                  name="gender"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Input data jenis kelamin!",
+                    },
+                  ]}>
+
+                  <Select
+                    value={form.gender}
+                    onSelect={value => setFormData(
+                      {
+                        ...form,
+                        gender: value
+                      }
+                    )} 
+                    placeholder="Jenis Kelamin"
+                    options={jenisKelaminModel}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+        </Form>
+      </Content>
+    </PnomModal>
+    </>
   );
 };
 export default DataAdmin;

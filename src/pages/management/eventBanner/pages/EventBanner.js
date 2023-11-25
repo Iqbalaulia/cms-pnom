@@ -32,7 +32,7 @@ function EventBanner() {
           },
           {
             title: 'Nama Event',
-            dataIndex: 'name_event',
+            dataIndex: 'name',
             sorter: true,
             render: (name_event) => `${name_event}`,
           },
@@ -217,18 +217,17 @@ function EventBanner() {
                     </Card>
                 </Col>
             </row>
-
-            
-        <PnomModal 
+         </div> 
+         <PnomModal 
             onOk={handleSubmit} 
             onCancel={handleCancelSubmit} 
             visible={isModalForm}
-            width={800}
+            width={600}
           >
             <Content className="form-data">
               <Form>
                   <Row gutter={[24,0]}>
-                    <Col md={{ span: 12 }}>
+                    <Col md={{ span: 24 }}>
                       <Form.Item
                         className="username mb-0"
                         label="Nama Event"
@@ -275,30 +274,30 @@ function EventBanner() {
                           />
                       </Form.Item>
                     </Col>
-                    <Col md={{ span: 12 }}>
-                      <Form.Item
-                        className="username mb-2"
-                        label="Upload Banner"
-                        name="upload_banner"
-                        >
-                          <Dragger>
-                            <p className="ant-upload-drag-icon">
-                              <InboxOutlined />
-                            </p>
-                            <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                            <p className="ant-upload-hint">
-                              Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-                              band files
-                            </p>
-                          </Dragger>,
-                      </Form.Item>
-                      
-                    </Col>
+                  </Row>
+                  <Row gutter={[24,0]}>
+                    <Col md={{ span: 24 }}>
+                        <Form.Item
+                          className="username mb-2"
+                          label="Upload Banner"
+                          name="upload_banner"
+                          >
+                            <Dragger>
+                              <p className="ant-upload-drag-icon">
+                                <InboxOutlined />
+                              </p>
+                              <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                              <p className="ant-upload-hint">
+                                Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+                                band files
+                              </p>
+                            </Dragger>,
+                        </Form.Item>
+                      </Col>
                   </Row>
               </Form>
             </Content>
             </PnomModal>
-         </div> 
         </>
     )
 }

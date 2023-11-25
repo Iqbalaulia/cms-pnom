@@ -11,11 +11,13 @@ import PnomNotification from 'components/layout/Notification';
 
 const RoleAdmin = () => {
   const { Content } = Layout
+  
   const [dataTable, setDataTable] = useState();
   const [loading, setLoading] = useState(false);
   const [isModalShow, setIsModalForm] = useState(false)
   const [tableParams, setTableParams] = useState(paginationModel);
   const [form, setFormData] = useState(roleModel)
+  
   const columns = [
     {
       title: 'No',
@@ -29,9 +31,9 @@ const RoleAdmin = () => {
     },
     {
       title: 'Role',
-      dataIndex: 'role',
+      dataIndex: 'role_name',
       sorter: true,
-      render: (role_name) => `${role_name}`,
+      render: (item) => `${item}`,
     },
     {
       title: 'Status',
@@ -152,7 +154,7 @@ const RoleAdmin = () => {
           onOk={handleSubmit} 
           onCancel={handleCancelSubmit} 
           visible={isModalShow}
-          width={800}
+          width={600}
           >
             <Content className="form-data">
               <Form>
