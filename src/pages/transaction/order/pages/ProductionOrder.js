@@ -4,6 +4,7 @@ import { Upload, DatePicker, Select, Table, Col, Button, Space, Form, Input, Row
 import { InboxOutlined, CloudDownloadOutlined, CloudUploadOutlined } from '@ant-design/icons';
 
 import { paginationModel } from 'composables/useSetting';
+import { mockDataProductionOrder } from '../data/setting';
 
 import PnomConfirm from 'components/layout/ConfirmDialog';
 import PnomModal from 'components/layout/Modal';
@@ -34,7 +35,7 @@ const ProductionOrder = () => {
         },
         {
             title:'No Resi',
-            dataIndex: 'resi'
+            dataIndex: 'no_resi'
         },
         {
             title:'Pesanan',
@@ -46,7 +47,7 @@ const ProductionOrder = () => {
         },
         {
             title:'Tanggal Pesanan',
-            dataIndex: 'order_date'
+            dataIndex: 'create_at'
         },
         {
             title:'Ekspedisi',
@@ -70,7 +71,7 @@ const ProductionOrder = () => {
     ]
 
     useEffect(() => {
-
+        getFetchData()
     }, []);
 
 
@@ -135,6 +136,21 @@ const ProductionOrder = () => {
         if (pagination.pageSize !== tableParams.pagination?.pageSize) setDataTable([])
     }
     
+    const getFetchData = () => {
+        try {
+            setLoading(true)
+            setDataTable(mockDataProductionOrder)
+            setLoading(false)
+        } catch (error) {
+            PnomNotification({
+                type: 'error',
+                message: 'Maaf terjadi kesalahan!',
+                description:error
+            })
+        } finally {
+            setLoading(false)
+        }
+    }
     
 
     return(
@@ -182,6 +198,10 @@ const ProductionOrder = () => {
                             loading={loading}
                             onChange={handleTableChange}
                             dataSource={dataTable}
+                            scroll={{
+                                x: 1000,
+                                y: 1000,
+                              }}
                         />
                     </Col>
                 </Row>

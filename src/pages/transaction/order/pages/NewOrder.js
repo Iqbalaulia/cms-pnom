@@ -4,6 +4,7 @@ import { Upload, DatePicker, Select, Table, Col, Button, Space, Form, Input, Row
 import { InboxOutlined, CloudDownloadOutlined, CloudUploadOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 import { paginationModel } from 'composables/useSetting';
+import { mockDataNewOrder } from '../data/setting';
 
 import PnomConfirm from 'components/layout/ConfirmDialog';
 import PnomModal from 'components/layout/Modal';
@@ -34,7 +35,7 @@ const NewOrder = () => {
         },
         {
             title:'No Resi',
-            dataIndex: 'resi'
+            dataIndex: 'no_resi'
         },
         {
             title:'Pesanan',
@@ -46,7 +47,7 @@ const NewOrder = () => {
         },
         {
             title:'Tanggal Pesanan',
-            dataIndex: 'order_date'
+            dataIndex: 'create_at'
         },
         {
             title:'Ekspedisi',
@@ -70,7 +71,7 @@ const NewOrder = () => {
     ]
 
     useEffect(() => {
-
+        getFetchData()
     }, []);
 
 
@@ -136,6 +137,22 @@ const NewOrder = () => {
         })
 
         if (pagination.pageSize !== tableParams.pagination?.pageSize) setDataTable([])
+    }
+
+    const getFetchData = () => {
+        try {
+            setLoading(true)
+            setDataTable(mockDataNewOrder)
+            setLoading(false)
+        } catch (error) {
+            PnomNotification({
+                type: 'error',
+                message: 'Maaf terjadi kesalahan!',
+                description:error
+            })
+        } finally {
+            setLoading(false)
+        }
     }
     
     
