@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from 'react-router-dom';
 
 import {
@@ -12,6 +12,9 @@ import {
   Switch,
 } from "antd";
 import signinbg from "assets/images/png/img-signin.png";
+import { signInModel } from "pages/signIn/data/setting";
+import { ApiGetRequest, ApiPostRequest } from "utils/api/config";
+import { notificationSuccess, notificationError  } from "utils/general/general";
 
 
 const SignIn = () => {
@@ -21,6 +24,16 @@ const SignIn = () => {
   const history = useHistory();
   const { Title } = Typography;
   const { Content } = Layout;
+
+  const [formData, setFormData] = useState(signInModel)
+
+  const handleChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value
+    })
+  }
+
   const onFinish = (values) => {
     console.log("Success:", values);
   };
@@ -30,7 +43,34 @@ const SignIn = () => {
   };
   
   const handleSubmit = () => {
-    history.replace('/dashboard')
+      submitSignIn()
+  }
+
+  const submitSignIn = async () => {
+    try {
+      const response = await ApiPostRequest(`login`, formData)
+      localStorage.setItem('accessToken', JSON.stringify(response.data.accessToken))
+      
+      if (response) {
+        getAuth()
+      }
+      
+      history.replace('/dashboard')
+      notificationError('Berhasil Login')
+    } catch (error) {
+      notificationError(error)
+    } finally {
+
+    }
+  }
+
+  const getAuth = async () => {
+    try {
+      const response = await ApiGetRequest(`auth`)
+      localStorage.setItem('account', JSON.stringify(response))
+    } catch (error) {
+      notificationError(error)
+    }
   }
   
   
@@ -57,15 +97,20 @@ const SignIn = () => {
                 <Form.Item
                   className="username"
                   label="Usernname"
-                  name="email"
+                  name="login"
                   rules={[
                     {
                       required: true,
-                      message: "Please input your email!",
+                      message: "Please input your username!",
                     },
                   ]}
                 >
-                  <Input placeholder="Username" />
+                  <Input
+                    name="login"
+                    value={formData.login}
+                    placeholder="Username" 
+                    onChange={handleChange}
+                  />
                 </Form.Item>
   
                 <Form.Item
@@ -79,7 +124,12 @@ const SignIn = () => {
                     },
                   ]}
                 >
-                  <Input placeholder="Password" />
+                  <Input 
+                    name="password"
+                    value={formData.password}
+                    placeholder="Password" 
+                    onChange={handleChange}
+                  />
                 </Form.Item>
   
                 <Form.Item

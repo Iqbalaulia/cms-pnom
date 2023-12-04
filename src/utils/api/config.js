@@ -3,9 +3,9 @@ const Api = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
   headers: {
     Accept: 'application/json',
-    // 'Access-Control-Allow-Origin': 'Authorization',
-    // 'Content-Type': 'application/json',
-    // 'X-Requested-With': 'XMLHttpRequest',
+    'Access-Control-Allow-Origin': 'Authorization',
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
   },
   mode: 'no-cors',
   credentials: true,
@@ -14,14 +14,13 @@ const Api = axios.create({
 
 Api.interceptors.request.use(
   (config) => {
-    // const LocalDataVuex = JSON.parse(
-    //   window.localStorage.getItem('superindo')
-    // );
+    const LocalDataVuex = JSON.parse(
+      window.localStorage.getItem('superindo')
+    );
 
     config.headers = {
       ...config.headers,
-      // Authorization: `Bearer ${(LocalDataVuex && LocalDataVuex.userToken) ||
-      //   ''}`,
+      Authorization: `Bearer ${(LocalDataVuex && LocalDataVuex.userToken) ||''}`,
     };
 
     return config;
@@ -30,6 +29,7 @@ Api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
 export function ApiGetRequest(url, data = {}) {
     return Api.get(url, {
         params: data
@@ -93,9 +93,9 @@ export function ApiGetUploadFile(url, data = {}, callbackUpload = () => {}) {
             error.response && error.response.data && error.response.data.errors,
         };
       });
-  }
+}
   
-  export const ApiPostRequest = (url, data = {}) => {
+export const ApiPostRequest = (url, data = {}) => {
     return Api.post(url, data)
       .then((response) => response)
       .then((responseJson) => {
@@ -111,9 +111,9 @@ export function ApiGetUploadFile(url, data = {}, callbackUpload = () => {}) {
             error.response && error.response.data && error.response.data.errors,
         };
       });
-  };
+};
   
-  export const ApiPutRequest = (url, data = {}) => {
+export const ApiPutRequest = (url, data = {}) => {
     return Api.put(url, data)
       .then((response) => response)
       .then((responseJson) => {
@@ -129,9 +129,9 @@ export function ApiGetUploadFile(url, data = {}, callbackUpload = () => {}) {
             error.response && error.response.data && error.response.data.errors,
         };
       });
-  };
+};
   
-  export const ApiDeleteRequest = (url, data = {}) => {
+export const ApiDeleteRequest = (url, data = {}) => {
     return Api.delete(url, data)
       .then((response) => response)
       .then((responseJson) => {
@@ -147,10 +147,11 @@ export function ApiGetUploadFile(url, data = {}, callbackUpload = () => {}) {
             error.response && error.response.data && error.response.data.errors,
         };
       });
-  };
+};
 
-  const exportedObject = {
+const exportedObject = {
     Api
-  }
-  export default exportedObject
+}
+
+export default exportedObject
 

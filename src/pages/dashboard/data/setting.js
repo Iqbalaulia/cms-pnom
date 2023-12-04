@@ -1,6 +1,6 @@
 import { Tooltip, Progress } from "antd";
 
-const mockDataProductBestSeller = [
+  const mockDataProductBestSeller = [
     {
       img: '',
       Title: "Soft UI Shopify Version",
@@ -122,6 +122,7 @@ const mockDataProductBestSeller = [
     },
   ];
 
+
   export {
-    mockDataProductBestSeller
+    mockDataProductBestSeller,
   }
