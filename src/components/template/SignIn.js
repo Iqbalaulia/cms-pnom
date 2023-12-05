@@ -22,6 +22,7 @@ const SignIn = () => {
     console.log(`switch to ${checked}`);
   }
   const history = useHistory();
+  const [form] = Form.useForm();
   const { Title } = Typography;
   const { Content } = Layout;
 
@@ -42,8 +43,15 @@ const SignIn = () => {
     console.log("Failed:", errorInfo);
   };
   
-  const handleSubmit = () => {
-      submitSignIn()
+  const handleSubmit = async () => {
+     try {
+      const validateValue = await form.validateFields()
+      if (validateValue) {
+        submitSignIn()
+      }
+     } catch (error) {
+      
+     }
   }
 
   const submitSignIn = async () => {
@@ -54,9 +62,9 @@ const SignIn = () => {
       if (response) {
         getAuth()
       }
-      
+
       history.replace('/dashboard')
-      notificationError('Berhasil Login')
+      notificationSuccess('Berhasil Login')
     } catch (error) {
       notificationError(error)
     } finally {
@@ -67,7 +75,7 @@ const SignIn = () => {
   const getAuth = async () => {
     try {
       const response = await ApiGetRequest(`auth`)
-      localStorage.setItem('account', JSON.stringify(response))
+      localStorage.setItem('userData', JSON.stringify(response))
     } catch (error) {
       notificationError(error)
     }
@@ -93,6 +101,7 @@ const SignIn = () => {
                 onFinishFailed={onFinishFailed}
                 layout="vertical"
                 className="row-col"
+                form={form}
               >
                 <Form.Item
                   className="username"
@@ -146,6 +155,7 @@ const SignIn = () => {
                     type="primary"
                     onClick={handleSubmit}
                     style={{ width: "100%" }}
+                    htmlType="submit"
                   >
                     SIGN IN
                   </Button>

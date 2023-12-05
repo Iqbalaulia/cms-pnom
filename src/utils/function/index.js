@@ -6,3 +6,7 @@ const getDataFromLocalStorage = (key) => {
       return null;
     }
 };
+
+export {
+    getDataFromLocalStorage
+}

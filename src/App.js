@@ -1,4 +1,4 @@
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 // import { Switch, Route, Redirect } from "react-router-dom";
 
 // import Home from "./components/template/Home";
@@ -30,6 +30,9 @@ import "./assets/styles/main.css";
 import "./assets/styles/responsive.css";
 import './assets/styles/override.css';
 import './assets/styles/loading.css';
+
+import { getDataFromLocalStorage } from "utils/function";
+
 
 function App() {
 
@@ -68,24 +71,35 @@ function App() {
     }
   ]
 
+  const userData = getDataFromLocalStorage('userData')
+
+  const menuData = (
+        <Main>
+              <Route exact path="/tables" component={Tables} />
+              <Route exact path="/billing" component={Billing} />
+              <Route exact path="/rtl" component={Rtl} />
+                {
+                  settingMenu.map((item, indexMenu) => {
+                    return(
+                      <Route key={indexMenu} exact path={item.routerLink} component={item.component} />
+                    )
+                  })
+                }
+          </Main>
+  )
+
+  const redirectMenu = (
+    <Redirect from="*" to="/sign-in" />
+  )
+
   return (
     <div className="App">
       <Switch>
         <Route path="/sign-up" exact component={SignUp} />
         <Route path="/sign-in" exact component={SignIn} />
-        <Main>
-          <Route exact path="/tables" component={Tables} />
-          <Route exact path="/billing" component={Billing} />
-          <Route exact path="/rtl" component={Rtl} />
-            {
-              settingMenu.map((item, indexMenu) => {
-                return(
-                  <Route key={indexMenu} exact path={item.routerLink} component={item.component} />
-                )
-              })
-            }
-          {/* <Redirect from="*" to="/sign-in" /> */}
-        </Main>
+          {
+            userData ? (menuData) :  (redirectMenu)
+          }
       </Switch>
     </div>
   );
