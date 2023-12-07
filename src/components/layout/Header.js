@@ -18,6 +18,8 @@ import {
 import { NavLink, Link } from "react-router-dom";
 import styled from "styled-components";
 import { getDataFromLocalStorage } from "utils/function";
+import { notificationError, notificationSuccess  } from "utils/general/general";
+import { ApiPostRequest } from "utils/api/config";
 
 const ButtonContainer = styled.div`
   .ant-btn-primary {
@@ -107,6 +109,7 @@ const setting = [
   </svg>,
 ];
 
+
 function Header({
   placement,
   name,
@@ -126,6 +129,16 @@ function Header({
 
   const showDrawer = () => setVisible(true);
   const hideDrawer = () => setVisible(false);
+
+  const sumbitLogout = async () => {
+    try {
+      await ApiPostRequest(`logout`)
+      localStorage.clear()
+      notificationSuccess('Anda berhasil logout!')
+    } catch (error) {
+      notificationError(error)
+    } 
+  }
 
   return (
     <>
@@ -263,14 +276,14 @@ function Header({
                   </ButtonContainer>
                   <Row gutter={[24,0]}>
                     <Col md={24}>
-                      <Button>LOGOUT</Button>
+                      <Button onClick={sumbitLogout()}>LOGOUT</Button>
                     </Col>
                   </Row>
                 </div>
                 
               </div>
             </div>
-          </Drawer> 
+      </Drawer> 
     </>
   );
 }
