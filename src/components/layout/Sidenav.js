@@ -91,7 +91,7 @@ function Sidenav({ color }) {
       </div>
       <hr />
       <Menu theme="light" mode="inline">
-        {dataMenu.map((item) => {
+        {dataMenu.map((item, indexParent) => {
             return (
               <Menu.Item className="menu-item-header" key={item.id}>
                 <label>{item.pages}</label>

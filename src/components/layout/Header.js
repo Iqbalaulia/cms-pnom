@@ -42,7 +42,6 @@ const ButtonContainer = styled.div`
   }
 `;
 
-
 const logsetting = [
   <svg
     width="20"
@@ -109,6 +108,16 @@ const setting = [
   </svg>,
 ];
 
+const submitLogout = async () => {
+  try {
+    await ApiPostRequest(`logout`)
+    localStorage.clear()
+    notificationSuccess('Anda berhasil logout!')
+  } catch (error) {
+    notificationError(error)
+  } 
+}
+
 
 function Header({
   placement,
@@ -120,7 +129,6 @@ function Header({
   handleFixedNavbar,
 }) {
   const { Title, Text } = Typography;
-
   const [visible, setVisible] = useState(false);
   const [sidenavType, setSidenavType] = useState("white");
   const userData = getDataFromLocalStorage('userData');
@@ -130,15 +138,6 @@ function Header({
   const showDrawer = () => setVisible(true);
   const hideDrawer = () => setVisible(false);
 
-  const sumbitLogout = async () => {
-    try {
-      await ApiPostRequest(`logout`)
-      localStorage.clear()
-      notificationSuccess('Anda berhasil logout!')
-    } catch (error) {
-      notificationError(error)
-    } 
-  }
 
   return (
     <>
@@ -276,7 +275,7 @@ function Header({
                   </ButtonContainer>
                   <Row gutter={[24,0]}>
                     <Col md={24}>
-                      <Button onClick={sumbitLogout()}>LOGOUT</Button>
+                      <Button onClick={() => submitLogout()}>LOGOUT</Button>
                     </Col>
                   </Row>
                 </div>

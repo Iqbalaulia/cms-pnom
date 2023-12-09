@@ -1,14 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import { Image, Table, Col, Card, Button, Space,Form,Input,Row,Layout } from 'antd';
+import { Select, Image, Table, Col, Card, Button, Space,Form,Input,Row,Layout } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined, InboxOutlined } from '@ant-design/icons';
 import { DatePicker, Upload  } from 'antd';
 
 import { paginationModel } from 'composables/useSetting';
-import { bannerModel, mockDataBanner } from '../data/setting';
+import { bannerModel } from '../data/setting';
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
 import PnomConfirm from 'components/layout/ConfirmDialog';
+
+import { ApiGetRequest, ApiPostMultipart } from 'utils/api/config';
 
 function EventBanner() {
     const { Content } = Layout
@@ -19,14 +21,31 @@ function EventBanner() {
     const [ isModalForm, setIsModalForm ] = useState(false)
     const [ tableParams, setTableParams ] = useState(paginationModel)
     const [ formData, setFormData ] = useState(bannerModel)
+    const [ filterData, setFilterData ] = useState({
+      startDate:"",
+      endDate:"",
+      search:"",
+      status: 1
+    })
+    let stepAction = 'save-data'
+    const selectStatus = [
+      {
+        value:1,
+        label:'Aktif'
+      },
+      {
+        value:0,
+        label:'Tidak Aktif'
+      }
+    ]
 
     const columns = [
         {
             title: 'No',
             render: (text, record, index) => {
-              const current = tableParams.pagination.current; 
+              const pageNum = tableParams.pagination.pageNum; 
               const pageSize = tableParams.pagination.pageSize; 
-              const calculatedIndex = (current - 1) * pageSize + index + 1; 
+              const calculatedIndex = (pageNum - 1) * pageSize + index + 1; 
               return calculatedIndex;
             },
             width: '5%'
@@ -72,7 +91,7 @@ function EventBanner() {
                     size={'large'} 
                 />
                 <Button 
-                    onClick={handleShowModalForm} 
+                    onClick={handleEditModalForm} 
                     type="primary" 
                     icon={<EditOutlined />} 
                     size={'large'} 
@@ -81,8 +100,7 @@ function EventBanner() {
             )
           },
     ]
-
-    
+  
     useEffect(() => {
         getFetchData()
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -100,10 +118,20 @@ function EventBanner() {
     const handleShowModalForm = () => {
         setIsModalForm(true)
         resetField()
+        stepAction = 'save-data'
+    }
+
+    const handleEditModalForm = () => {
+      setIsModalForm(true)
+      stepAction = 'update-data'
     }
 
     const handleSubmit = () => {
         setIsModalForm(false)
+
+        if(stepAction === `save-data`)  saveDataForm()
+        if(stepAction === `update-data`) updateDataForm()
+        
         resetField()
         PnomNotification({
             type: 'success',
@@ -147,26 +175,59 @@ function EventBanner() {
         console.log('Delete canceled'); 
     }
 
-    // const getParams = (params) => ({
-    //     results: params.pagination?.pageSize,
-    //     page: params.pagination?.current,
-    //     ...params,
-    // })
-
     const getFetchData = async () => {
         try {
+            let params = {
+              startDate: filterData.startDate,
+              endDate: filterData.endDate,
+              search: filterData.search,
+              status:filterData.status
+            }
+
             setLoading(true)
-            setDataTable(mockDataBanner)
-            setLoading(false)
+            const response = await ApiGetRequest(`banner`, params)
+            setDataTable(response.data.data)
         } catch (error) {
             PnomNotification({
                 type: 'error',
                 message: 'Maaf terjadi kesalahan!',
-                description:error
+                description: 'Mohon periksa kembali jaringan anda. Atau menghubungi call center',
             })
         } finally {
             setLoading(false)
         }
+    }
+
+    const saveDataForm = async () => {
+      try {
+        setLoading(true)
+        await ApiPostMultipart(`banner`, formData)
+        
+      } catch (error) {
+        PnomNotification({
+          type: 'error',
+          message: 'Maaf terjadi kesalahan!',
+          description: error.message,
+       })
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    const updateDataForm = async () => {
+      try {
+        setLoading(true)
+        await ApiPostMultipart(`banner`, formData)
+        
+      } catch (error) {
+        PnomNotification({
+          type: 'error',
+          message: 'Maaf terjadi kesalahan!',
+          description: error.message,
+       })
+      } finally {
+        setLoading(false)
+      }
     }
 
     return(
@@ -183,15 +244,36 @@ function EventBanner() {
                             <Col md={{span: 6}}>
                                 <Input
                                     placeholder="Pencarian..."
+                                    value={filterData.search}
+                                    onChange={
+                                      (event) => setFilterData({...filterData, search: event.target.value})
+                                    }
                                 />
                             </Col>
                             <Col md={{span: 5}}>
-                              <DatePicker placeholder='Tanggal Mulai' onChange={handleChangeStartDate} />
+                              <DatePicker 
+                                placeholder='Tanggal Mulai' 
+                                onChange={(event) => setFilterData({ ...filterData, startDate: event.target.value })}
+                                />
                             </Col>
                             <Col md={{span: 5}}>
-                              <DatePicker placeholder='Tanggal Akhir' onChange={handleChangeStartDate} />
+                              <DatePicker 
+                                placeholder='Tanggal Akhir'  
+                                onChange={
+                                      (event) => setFilterData({...filterData, endDate: event.target.value})
+                                } 
+                              />
                             </Col>
-                            <Col md={{span: 8}} className='d-flex justify-end'>
+                            <Col md={{span: 4}}>
+                              <Select
+                                value={filterData.status}
+                                onChange={
+                                  (event) => setFilterData({...filterData, status: event.target.value})
+                                }
+                                options={selectStatus}
+                              />
+                            </Col>
+                            <Col md={{span: 4}} className='d-flex justify-end'>
                                 <Space align='start'>
                                     <Button  
                                         type="primary" 

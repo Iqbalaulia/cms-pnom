@@ -3,7 +3,7 @@ import { notification } from 'antd';
 const notificationSuccess = (message) => {
   notification.success({
     message: 'Successfully!',
-    description: message,
+    description: JSON.stringify(message),
     placement: 'bottomRight',
   });
 };
@@ -11,10 +11,10 @@ const notificationSuccess = (message) => {
 const notificationError = (message) => {
     notification.error({
       message: 'Opps!',
-      description: message,
+      description: message ? JSON.stringify(message) : 'Mohon periksa kembali jaringan anda. Atau menghubungi call center',
       placement: 'bottomRight',
     });
-  };
+};
 
 export { 
     notificationSuccess,
