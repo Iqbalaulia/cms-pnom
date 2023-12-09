@@ -5,6 +5,10 @@ const adminModel = {
     gender:''
 }
 
+const productCategoryModel = {
+  name:''
+}
+
 const roleModel = [
     {
         value:"Admin",
@@ -282,10 +286,10 @@ const mockDataProductRecomended = [{
     "Stock": 1
 }]
 
-
 export {
     adminModel,
     roleModel,
+    productCategoryModel,
     mockDataProductList,
     mockDataProductCategory,
     mockDataProductRecomended

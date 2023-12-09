@@ -2,13 +2,14 @@ import React, { useEffect, useState, } from 'react';
 import { Table, Col, Button, Space,Form,Input,Row,Layout } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
-import { mockDataProductCategory } from '../data/setting';
+import { productCategoryModel } from '../data/setting';
 import { paginationModel } from 'composables/useSetting';
 
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
 import PnomConfirm from 'components/layout/ConfirmDialog';
+import { ApiGetRequest, ApiPostRequest } from 'utils/api/config';
 
 const ProductCategory = () => {
   const { Content } = Layout
@@ -16,7 +17,10 @@ const ProductCategory = () => {
   const [loading, setLoading] = useState(false);
   const [isModalShow, setIsModalForm] = useState(false)
   const [tableParams, setTableParams] = useState(paginationModel);
-//   const [form, setFormData] = useState(adminModel)
+  const [formData, setFormData] = useState(productCategoryModel)
+  const [filterData, setFilterData] = useState({
+    search:''
+  })
   const columns = [
     {
       title: 'No',
@@ -39,22 +43,32 @@ const ProductCategory = () => {
       render: () => (
         <Space size={8}>
           <Button onClick={handleDeleteData} type="danger" danger ghost icon={<DeleteOutlined />} size={'large'} />
-          <Button onClick={handleShowForm} type="primary" icon={<EditOutlined />} size={'large'} />
+          <Button onClick={handleEditModalForm} type="primary" icon={<EditOutlined />} size={'large'} />
         </Space>        
       )
     },
   ];
+
+  let stepAction = 'save-data'
   
   useEffect(() => {
     fetchData();
   }, []);
 
   const handleShowForm = () => {
+    stepAction = 'save-data'
     setIsModalForm(true)
     resetField()
   }
+  const handleEditModalForm = () => {
+    stepAction = 'update-data'
+    setIsModalForm(true)
+  }
   const handleSubmit = () => {
     setIsModalForm(false);
+    if(stepAction === `save-data`)  saveDataForm()
+    if(stepAction === `update-data`) updateDataForm()
+        
     resetField()
     PnomNotification({
       type: 'success',
@@ -93,21 +107,56 @@ const ProductCategory = () => {
   
   const fetchData = async () => {
     try {
+      let params = {
+        search: filterData.search
+      }
+
       setLoading(true);
-      setData(mockDataProductCategory)
-      setLoading(false);
+      const response = await ApiGetRequest(`product/category`, params)
+      setData(response.data.data)
     } catch (error) {
-      PnomNotification({
-        type: 'error',
-        message: 'Maaf terjadi kesalahan!',
-        description:error
-      })
+        PnomNotification({
+          type: 'error',
+          message: 'Maaf terjadi kesalahan!',
+          description: 'Mohon periksa kembali jaringan anda. Atau menghubungi call center',
+        })
     } finally {
       setLoading(false)
     }
   };
+  const saveDataForm = async () => {
+    try {
+      setLoading(true)
+      await ApiPostRequest(`product/category`, formData)
+      
+    } catch (error) {
+      PnomNotification({
+        type: 'error',
+        message: 'Maaf terjadi kesalahan!',
+        description: error.message,
+     })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const updateDataForm = async () => {
+    try {
+      setLoading(true)
+      await ApiPostRequest(`product/category`, formData)
+      
+    } catch (error) {
+      PnomNotification({
+        type: 'error',
+        message: 'Maaf terjadi kesalahan!',
+        description: error.message,
+     })
+    } finally {
+      setLoading(false)
+    }
+  }
   const resetField = () => {
-    // setFormData({...adminModel})
+    setFormData({...productCategoryModel})
   }
 
   return (
@@ -117,6 +166,10 @@ const ProductCategory = () => {
                 <Row className='mb-2'>
                       <Col md={{span: 6}}>
                         <Input
+                          value={filterData.search}
+                          onChange={
+                            (event) => setFilterData({...filterData, search: event.target.value})
+                          }
                           placeholder="Pencarian..."
                         />
                       </Col>
@@ -167,7 +220,11 @@ const ProductCategory = () => {
                         label="Nama"
                         name="name"
                         >
-                        <Input 
+                        <Input
+                          value={formData.name}
+                          onChange={
+                            (event) => setFormData({...formData, name: event.target.value})
+                          } 
                           placeholder="Nama Kategori" 
                         />
                       </Form.Item>
