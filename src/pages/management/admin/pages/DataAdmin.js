@@ -86,7 +86,6 @@ function DataAdmin() {
     setIsModalForm(true)
     resetField()
   }
-
   const handleSubmit = () => {
     if (uuidData && stepAction === `update-data`) updateDataForm()
     if (stepAction === `save-data`) saveDataForm()
@@ -138,7 +137,6 @@ function DataAdmin() {
       setLoading(false)
     }
   };
-
   const saveDataForm = async () => {
     try {
       setLoading(true)
@@ -159,7 +157,6 @@ function DataAdmin() {
       setLoading(false)
     }
   }
-
   const updateDataForm = async () => {
     try {
       setLoading(true)
@@ -180,7 +177,6 @@ function DataAdmin() {
       setLoading(false)
     }
   }
-
   const resetField = () => {
     setFormData({...adminModel})
   }

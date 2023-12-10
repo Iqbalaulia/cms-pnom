@@ -1,25 +1,99 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, Typography, DatePicker } from 'antd';
 
 import Echart from "components/chart/EChart";
 import LineChart from "components/chart/LineChart";
+import PnomNotification from 'components/layout/Notification';
+
 import { mockDataProductBestSeller } from '../data/setting';
+import { ApiGetRequest } from 'utils/api/config';
+
+
+
 
 const Dashboard = () => {
     const { Title } = Typography
+    const [loading, setLoading] = useState(false)
+    const [filterParams, setFilterParams] = useState({
+        startDate: '',
+        endDate:''
+    })
+
+    let summaryData = {
+       production:'',
+       packing:'',
+       shipping:'',
+       printing:'',
+       cutting:'',
+       total:''
+    }
+
+    useEffect(() => {
+        fetchDataSummary()
+    }, [])
+
+    const fetchDataSummary = async () => {
+        try {
+            setLoading(true)
+
+            let params = {
+                startDate: filterParams.startDate,
+                endDate: filterParams.endDate
+            }
+
+            const response = await ApiGetRequest(`dashboard/summary`, params)
+
+            summaryData.production = response.data.summary.transaction.production
+            summaryData.packing = response.data.summary.transaction.packing
+            summaryData.shipping = response.data.summary.transaction.shipping
+            summaryData.printing = response.data.summary.transaction.printing
+            summaryData.cutting = response.data.summary.transaction.cutting
+            summaryData.total = response.data.summary.transaction.total
+            
+        } catch (error) {
+            PnomNotification({
+                type: 'error',
+                message: 'Maaf terjadi kesalahan!',
+                description:'Maaf terjadi kesalahan!'
+              })
+        } finally {
+            setLoading(false)
+        }
+    }
 
     return(
         <>
             <div className='layout-content'>
                 <div className='filter-date mb-4'>
-                <Card>
-                    <Row gutter={[24, 0]}>
-                        <Col md={6}>
-                            <DatePicker placeholder='Tanggal Mulai'/>
-                        </Col>
-                    </Row>
-                </Card>
+                    <Card>
+                        <Row gutter={[24, 0]}>
+                            <Col md={6}>
+                                <DatePicker 
+                                    placeholder='Tanggal Mulai'
+                                    value={filterParams.startDate}
+                                    onChange={
+                                        (event) => setFilterParams({
+                                            ...filterParams,
+                                            startDate: event.target.value
+                                        })
+                                    }
+                                />
+                            </Col>
+                            <Col md={6}>
+                                <DatePicker 
+                                    placeholder='Tanggal Akhir'
+                                    value={filterParams.endDate}
+                                    onChange={
+                                        (event) => setFilterParams({
+                                            ...filterParams,
+                                            endDate: event.target.value
+                                        })
+                                    }
+                                />
+                            </Col>
+                        </Row>
+                    </Card>
                 </div>
                 <Row className="rowgap-vbox" gutter={[24,0]}>
                     <Col
