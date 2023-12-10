@@ -7,16 +7,17 @@ import { paginationModel } from 'composables/useSetting';
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
-// import PnomConfirm from 'components/layout/ConfirmDialog';
+import { ApiGetRequest, ApiPostRequest } from 'utils/api/config';
+import PnomConfirm from 'components/layout/ConfirmDialog';
 
-const RoleAdmin = () => {
+function RoleAdmin() {
   const { Content } = Layout
   
   const [dataTable, setDataTable] = useState();
   const [loading, setLoading] = useState(false);
   const [isModalShow, setIsModalForm] = useState(false)
   const [tableParams, setTableParams] = useState(paginationModel);
-  const [form, setFormData] = useState(roleModel)
+  const [formData, setFormData] = useState(roleModel)
   
   const columns = [
     {
@@ -44,6 +45,9 @@ const RoleAdmin = () => {
       )
     },
   ];
+
+  let uuidData = ''
+
   
   useEffect(() => {
     fetchData();
@@ -54,32 +58,28 @@ const RoleAdmin = () => {
     resetField()
   }
   const handleSubmit = () => {
+    saveDataForm()
     setIsModalForm(false);
     resetField()
-    PnomNotification({
-      type: 'success',
-      message: 'Notification Title',
-      description:
-      'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-    })
   };
   const handleCancelSubmit = () => {
     setIsModalForm(false);
     resetField()
   };
   const handleNonActive = (status) => {
-    // PnomConfirm({
-    //   onOkConfirm: handleOkDelete,
-    //   onCancelConfirm: handleCancelDelete,
-    //   content: 'Your confirmation message here'
-    // })
+    updateDataForm(status)
+    PnomConfirm({
+      onOkConfirm: handleOkDelete,
+      onCancelConfirm: handleCancelDelete,
+      content: 'Your confirmation message here'
+    })
   }
-  // const handleOkDelete = () => {
-  //   console.log('Delete confirmed');
-  // }
-  // const handleCancelDelete = () => {
-  //   console.log('Delete canceled');
-  // }
+  const handleOkDelete = () => {
+    console.log('Delete confirmed');
+  }
+  const handleCancelDelete = () => {
+    console.log('Delete canceled');
+  }
   const handleTableChange = (pagination, filters, sorter) => {
     setTableParams({
       pagination,
@@ -90,27 +90,60 @@ const RoleAdmin = () => {
     if (pagination.pageSize !== tableParams.pagination?.pageSize) setDataTable([]);
   };
 
-  
+  const resetField = () => {
+    setFormData({...adminModel})
+  }
+
   const fetchData = async () => {
     try {
       setLoading(true);
-      setDataTable(mockDataRole);
-      setLoading(false)
+      const response = await ApiGetRequest(`admin/role`)
+      setDataTable(response.data.data)
     
     } catch (error) {
       PnomNotification({
         type: 'error',
         message: 'Maaf terjadi kesalahan!',
-        description:error
+        description:'Maaf terjadi kesalahan!'
       })
     } finally {
       setLoading(false)
     }
   };
 
-  const resetField = () => {
-    setFormData({...adminModel})
+  const saveDataForm = async () => {
+    try {
+      setLoading(true)
+      await ApiPostRequest(`admin/role`, formData)
+      
+    } catch (error) {
+      PnomNotification({
+        type: 'error',
+        message: 'Maaf terjadi kesalahan!',
+        description: error.message,
+     })
+    } finally {
+      setLoading(false)
+    }
   }
+
+  const updateDataForm = async (uuid) => {
+    try {
+      setLoading(true)
+      await ApiPostRequest(`admin/role/${uuid}`, formData)
+      
+    } catch (error) {
+      PnomNotification({
+        type: 'error',
+        message: 'Maaf terjadi kesalahan!',
+        description: error.message,
+     })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+ 
 
   return (
     <div className='admin-table'>
@@ -166,7 +199,11 @@ const RoleAdmin = () => {
                         name="role"
                         >
                         <Input 
-                          value={form.name} 
+                          value={formData.name}
+                          onChange={value => setFormData({
+                            ...formData,
+                            name:value
+                          })} 
                           placeholder="Role" 
                         />
                       </Form.Item>
@@ -184,10 +221,10 @@ const RoleAdmin = () => {
                         ]}>
 
                         <Select
-                          value={form.role}
+                          value={formData.role}
                           onSelect={value => setFormData(
                             {
-                              ...form,
+                              ...formData,
                               status: value
                             }
                           )} 

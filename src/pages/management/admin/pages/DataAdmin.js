@@ -5,22 +5,19 @@ import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/ic
 import { adminModel, selectRole } from '../data/setting';
 import { jenisKelaminModel, paginationModel } from 'composables/useSetting';
 
-import { ApiGetRequest } from 'utils/api/config';
+import { ApiGetRequest, ApiPostRequest } from 'utils/api/config';
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
 import PnomConfirm from 'components/layout/ConfirmDialog';
-import qs from 'qs';
 
-const DataAdmin = () => {
+function DataAdmin() {
   const { Content } = Layout
-  
-  const [data, setData] = useState();
+  const [data, setDataTable] = useState();
   const [loading, setLoading] = useState(false);
   const [isModalShow, setIsModalForm] = useState(false)
   const [tableParams, setTableParams] = useState(paginationModel);
-  const [form, setFormData] = useState(adminModel)
- 
+  const [formData, setFormData] = useState(adminModel)
   const columns = [
     {
       title: 'No',
@@ -60,14 +57,17 @@ const DataAdmin = () => {
     },
     {
       title: 'Actions',
-      render: () => (
+      render: (items) => (
         <Space size={8}>
           <Button onClick={handleDeleteData} type="danger" danger ghost icon={<DeleteOutlined />} size={'large'} />
-          <Button onClick={handleShowForm} type="primary" icon={<EditOutlined />} size={'large'} />
+          <Button onClick={handleEditShowForm(items.uuid)} type="primary" icon={<EditOutlined />} size={'large'} />
         </Space>        
       )
     },
   ];
+
+  let stepAction = 'save-data'
+  let uuidData = ''
   
   useEffect(() => {
     fetchData();
@@ -75,18 +75,24 @@ const DataAdmin = () => {
   }, []);
 
   const handleShowForm = () => {
+    stepAction = 'save-data'
     setIsModalForm(true)
     resetField()
   }
+
+  const handleEditShowForm = (uuid) => {
+    uuidData = uuid
+    stepAction = 'update-data'
+    setIsModalForm(true)
+    resetField()
+  }
+
   const handleSubmit = () => {
+    if (uuidData && stepAction === `update-data`) updateDataForm()
+    if (stepAction === `save-data`) saveDataForm()
+
     setIsModalForm(false);
     resetField()
-    PnomNotification({
-      type: 'success',
-      message: 'Notification Title',
-      description:
-      'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-    })
   };
   const handleCancelSubmit = () => {
     setIsModalForm(false);
@@ -112,42 +118,69 @@ const DataAdmin = () => {
       ...sorter,
     });
 
-    if (pagination.pageSize !== tableParams.pagination?.pageSize) setData([]);
+    if (pagination.pageSize !== tableParams.pagination?.pageSize) setDataTable([]);
   };
 
   
   const fetchData = async () => {
     try {
       setLoading(true);
-      const result = await ApiGetRequest(`api?${qs.stringify(getRandomuserParams(tableParams))}`)
-      setData(result.data.results)
-      setLoading(false)
-      setTableParams({
-        ...tableParams,
-        pagination: {
-          ...tableParams.pagination,
-          total: 200,
-        },
-      });     
+      const response = await ApiGetRequest(`admin/account`)
+      setDataTable(response.data.data)
+      setLoading(false)   
     } catch (error) {
       PnomNotification({
         type: 'error',
         message: 'Maaf terjadi kesalahan!',
-        description:error
+        description:'Maaf terjadi kesalahan!'
       })
     } finally {
       setLoading(false)
     }
   };
-  // const onChangeForm = e => {
-  //   const { name, value } = e.target
-  //   setFormData(prevState => ({...prevState, [name]: value}) )
-  // }
-  const getRandomuserParams = (params) => ({
-    results: params.pagination?.pageSize,
-    page: params.pagination?.current,
-    ...params,
-  });
+
+  const saveDataForm = async () => {
+    try {
+      setLoading(true)
+      await ApiPostRequest(`admin/account`, formData)
+      PnomNotification({
+        type: 'success',
+        message: 'Notification Title',
+        description:
+        'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+      })
+    } catch (error) {
+      PnomNotification({
+        type: 'error',
+        message: 'Maaf terjadi kesalahan!',
+        description: error.message,
+     })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const updateDataForm = async () => {
+    try {
+      setLoading(true)
+      await ApiPostRequest(`admin/account/${uuidData}`, formData)
+      PnomNotification({
+        type: 'success',
+        message: 'Notification Title',
+        description:
+        'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+      })
+    } catch (error) {
+      PnomNotification({
+        type: 'error',
+        message: 'Maaf terjadi kesalahan!',
+        description: error.message,
+     })
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const resetField = () => {
     setFormData({...adminModel})
   }
@@ -212,10 +245,10 @@ const DataAdmin = () => {
                     },
                   ]}>
                   <Input 
-                    value={form.name} 
+                    value={formData.name} 
                     onChange={e => setFormData(
                       {
-                        ...form,
+                        ...formData,
                         name: e.target.value
                       }
                     )} 
@@ -233,10 +266,10 @@ const DataAdmin = () => {
                     },
                   ]}>
                   <Input 
-                    value={form.email}
+                    value={formData.email}
                     onChange={e => setFormData(
                       {
-                        ...form,
+                        ...formData,
                         email: e.target.value
                       }
                     )}  
@@ -256,10 +289,10 @@ const DataAdmin = () => {
                   ]}>
 
                   <Select
-                    value={form.role}
+                    value={formData.role}
                     onSelect={value => setFormData(
                       {
-                        ...form,
+                        ...formData,
                         role: value
                       }
                     )} 
@@ -278,10 +311,10 @@ const DataAdmin = () => {
                   ]}>
 
                   <Select
-                    value={form.gender}
+                    value={formData.gender}
                     onSelect={value => setFormData(
                       {
-                        ...form,
+                        ...formData,
                         gender: value
                       }
                     )} 
@@ -296,5 +329,6 @@ const DataAdmin = () => {
     </PnomModal>
     </>
   );
-};
+}
+
 export default DataAdmin;

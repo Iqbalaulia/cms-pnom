@@ -27,7 +27,6 @@ function EventBanner() {
       search:"",
       status: 1
     })
-    let stepAction = 'save-data'
     const selectStatus = [
       {
         value:1,
@@ -38,7 +37,6 @@ function EventBanner() {
         label:'Tidak Aktif'
       }
     ]
-
     const columns = [
         {
             title: 'No',
@@ -100,6 +98,9 @@ function EventBanner() {
             )
           },
     ]
+
+    let stepAction = 'save-data'
+
   
     useEffect(() => {
         getFetchData()
@@ -127,11 +128,10 @@ function EventBanner() {
     }
 
     const handleSubmit = () => {
-        setIsModalForm(false)
-
         if(stepAction === `save-data`)  saveDataForm()
         if(stepAction === `update-data`) updateDataForm()
         
+        setIsModalForm(false)
         resetField()
         PnomNotification({
             type: 'success',
