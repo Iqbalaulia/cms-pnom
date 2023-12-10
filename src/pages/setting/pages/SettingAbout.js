@@ -4,9 +4,9 @@
 import React, { useEffect, useState, } from 'react';
 import { Col, Button ,Form ,Input} from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
-import { aboutModel } from '../data/setting';
 
 import PnomNotification from 'components/layout/Notification';
+import { aboutModel } from 'utils/models/SettingModels';
 
 const SettingAbout = () => {
     const { TextArea } = Input;

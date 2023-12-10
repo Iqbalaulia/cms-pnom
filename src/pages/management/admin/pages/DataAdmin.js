@@ -2,7 +2,8 @@ import React, { useEffect, useState, } from 'react';
 import { Select, Table, Col,  Button, Space,Form,Input,Row,Layout } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
-import { adminModel, selectRole } from '../data/setting';
+import {  selectRole } from '../data/setting';
+import { adminModel } from 'utils/models/AdminModels';
 import { jenisKelaminModel, paginationModel } from 'composables/useSetting';
 
 import { ApiGetRequest, ApiPostRequest } from 'utils/api/config';

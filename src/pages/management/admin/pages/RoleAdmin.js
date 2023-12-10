@@ -2,12 +2,13 @@ import React, { useEffect, useState, } from 'react';
 import { Switch, Select, Table, Col,  Button, Space,Form,Input,Row,Layout } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
 
-import { adminModel, roleModel, selectStatusRole, mockDataRole } from '../data/setting';
-import { paginationModel } from 'composables/useSetting';
+import { selectStatusRole } from '../data/setting';
+import { roleModel } from 'utils/models/AdminModels';
+import { ApiGetRequest, ApiPostRequest } from 'utils/api/config';
 
+import { paginationModel } from 'composables/useSetting';
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
-import { ApiGetRequest, ApiPostRequest } from 'utils/api/config';
 import PnomConfirm from 'components/layout/ConfirmDialog';
 
 function RoleAdmin() {
@@ -91,7 +92,7 @@ function RoleAdmin() {
   };
 
   const resetField = () => {
-    setFormData({...adminModel})
+    setFormData({...roleModel})
   }
 
   const fetchData = async () => {

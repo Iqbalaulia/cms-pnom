@@ -3,7 +3,8 @@ import { Table, Col, Button, Space, Form, Input, Row, Layout } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 import { paginationModel } from 'composables/useSetting';
-import { socialMediaModel, mockDataTableSosmed } from '../data/setting';
+import { mockDataTableSosmed } from '../data/setting';
+import { socialMediaModel } from 'utils/models/SettingModels';
 
 import PnomConfirm from 'components/layout/ConfirmDialog';
 import PnomModal from 'components/layout/Modal';

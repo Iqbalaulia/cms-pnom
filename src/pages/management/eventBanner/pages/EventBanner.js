@@ -4,13 +4,13 @@ import { EditOutlined, DeleteOutlined, PlusCircleOutlined, InboxOutlined } from 
 import { DatePicker, Upload  } from 'antd';
 
 import { paginationModel } from 'composables/useSetting';
-import { bannerModel } from '../data/setting';
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
 import PnomConfirm from 'components/layout/ConfirmDialog';
 
 import { ApiGetRequest, ApiPostMultipart } from 'utils/api/config';
+import { bannerModel } from 'utils/models/BannerModels';
 
 function EventBanner() {
     const { Content } = Layout

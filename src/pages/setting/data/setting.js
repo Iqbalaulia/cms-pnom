@@ -1,21 +1,4 @@
-const socialMediaModel = {
-    social_name: '',
-    link: ''
-}
 
-const paymentMethodModel = {
-    name: '',
-    status: false
-}
-
-const contactModel = {
-    name: '',
-    description: ''
-}
-
-const aboutModel = {
-    description: ''
-}
 
 const filterStatusModel = [
     {
@@ -154,10 +137,6 @@ const mockDataTableSosmed = [{
 }]
 
 export {
-    socialMediaModel,
-    contactModel,
-    aboutModel,
-    paymentMethodModel,
     filterStatusModel,
     mockDataTable,
     mockDataTableContact,

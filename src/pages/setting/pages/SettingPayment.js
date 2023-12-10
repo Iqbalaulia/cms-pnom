@@ -3,7 +3,8 @@ import {Switch, Select, Table, Col, Button, Space, Form, Input, Row, Layout } fr
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 import { paginationModel } from 'composables/useSetting';
-import { paymentMethodModel, filterStatusModel, mockDataTable } from '../data/setting';
+import { filterStatusModel, mockDataTable } from '../data/setting';
+import { paymentMethodModel } from 'utils/models/SettingModels';
 
 import PnomConfirm from 'components/layout/ConfirmDialog';
 import PnomModal from 'components/layout/Modal';
