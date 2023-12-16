@@ -15,12 +15,11 @@ const Api = axios.create({
 Api.interceptors.request.use(
   (config) => {
     const LocalDataVuex = JSON.parse(
-      window.localStorage.getItem('superindo')
+      window.localStorage.getItem('accessToken')
     );
-
     config.headers = {
       ...config.headers,
-      Authorization: `Bearer ${(LocalDataVuex && LocalDataVuex.userToken) ||''}`,
+      Authorization: `Bearer ${(LocalDataVuex) ||''}`,
     };
 
     return config;

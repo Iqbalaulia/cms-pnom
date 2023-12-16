@@ -1,5 +1,4 @@
-import { Switch, Route } from "react-router-dom";
-// import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 
 // import Home from "./components/template/Home";
 import Tables from "./components/template/Tables";
@@ -31,7 +30,7 @@ import "./assets/styles/responsive.css";
 import './assets/styles/override.css';
 import './assets/styles/loading.css';
 
-// import { getDataFromLocalStorage } from "utils/function";
+import { getDataFromLocalStorage } from "utils/function";
 
 
 function App() {
@@ -70,8 +69,7 @@ function App() {
       component: TransactionOrder
     }
   ]
-
-  // const userData = getDataFromLocalStorage('userData')
+  const userData = getDataFromLocalStorage('userData')
 
   const menuData = (
         <Main>
@@ -88,19 +86,18 @@ function App() {
           </Main>
   )
 
-  // const redirectMenu = (
-  //   <Redirect from="*" to="/sign-in" />
-  // )
+  const redirectMenu = (
+    <Redirect from="*" to="/sign-in" />
+  )
 
   return (
     <div className="App">
       <Switch>
         <Route path="/sign-up" exact component={SignUp} />
         <Route path="/sign-in" exact component={SignIn} />
-          {/* {
+          {
             userData ? (menuData) :  (redirectMenu)
-          } */}
-          {menuData}
+          } 
       </Switch>
     </div>
   );

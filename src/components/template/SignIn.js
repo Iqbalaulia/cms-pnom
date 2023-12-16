@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { useHistory } from 'react-router-dom';
-
 import {
   Layout,
   Button,
@@ -15,6 +13,7 @@ import signinbg from "assets/images/png/img-signin.png";
 import { signInModel } from "pages/signIn/data/setting";
 import { ApiGetRequest, ApiPostRequest } from "utils/api/config";
 import { notificationSuccess, notificationError  } from "utils/general/general";
+import { useHistory } from 'react-router-dom';
 
 
 const SignIn = () => {
@@ -56,14 +55,18 @@ const SignIn = () => {
 
   const submitSignIn = async () => {
     try {
-      const response = await ApiPostRequest(`login`, formData)
+      let formDataLogin = {
+        login: formData.login,
+        password: btoa(formData.password)
+      }
+      
+      const response = await ApiPostRequest(`login`, formDataLogin)
       localStorage.setItem('accessToken', JSON.stringify(response.data.accessToken))
       
       if (response) {
         getAuth()
       }
 
-      history.replace('/dashboard')
       notificationSuccess('Berhasil Login')
     } catch (error) {
       notificationError(error)
@@ -75,7 +78,8 @@ const SignIn = () => {
   const getAuth = async () => {
     try {
       const response = await ApiGetRequest(`auth`)
-      localStorage.setItem('userData', JSON.stringify(response))
+      localStorage.setItem('userData', JSON.stringify(response.data.data))
+      history.push('/dashboard')
     } catch (error) {
       notificationError(error)
     }
@@ -136,7 +140,8 @@ const SignIn = () => {
                   <Input 
                     name="password"
                     value={formData.password}
-                    placeholder="Password" 
+                    placeholder="Password"
+                    type="password" 
                     onChange={handleChange}
                   />
                 </Form.Item>

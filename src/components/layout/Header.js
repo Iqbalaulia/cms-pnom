@@ -15,7 +15,7 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { getDataFromLocalStorage } from "utils/function";
 import { notificationError, notificationSuccess  } from "utils/general/general";
@@ -41,7 +41,6 @@ const ButtonContainer = styled.div`
     background-color: #1890ff;
   }
 `;
-
 const logsetting = [
   <svg
     width="20"
@@ -108,15 +107,6 @@ const setting = [
   </svg>,
 ];
 
-const submitLogout = async () => {
-  try {
-    await ApiPostRequest(`logout`)
-    localStorage.clear()
-    notificationSuccess('Anda berhasil logout!')
-  } catch (error) {
-    notificationError(error)
-  } 
-}
 
 
 function Header({
@@ -132,7 +122,18 @@ function Header({
   const [visible, setVisible] = useState(false);
   const [sidenavType, setSidenavType] = useState("white");
   const userData = getDataFromLocalStorage('userData');
-
+  const history = useHistory();
+  const submitLogout = async () => {
+    try {
+      await ApiPostRequest(`logout`)
+      localStorage.clear()
+      notificationSuccess('Anda berhasil logout!')
+      history.push('/sign-in')
+    } catch (error) {
+      notificationError(error)
+    } 
+  }
+  
   useEffect(() => window.scrollTo(0, 0));
 
   const showDrawer = () => setVisible(true);
