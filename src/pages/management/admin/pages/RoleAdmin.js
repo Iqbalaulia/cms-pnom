@@ -47,8 +47,6 @@ function RoleAdmin() {
     },
   ];
 
-  let uuidData = ''
-
   
   useEffect(() => {
     fetchData();

@@ -53,7 +53,7 @@ const ProductCategory = () => {
   
   useEffect(() => {
     fetchData();
-  }, []);
+  });
 
   const handleShowForm = () => {
     stepAction = 'save-data'

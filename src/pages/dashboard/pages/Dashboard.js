@@ -14,7 +14,6 @@ import { ApiGetRequest } from 'utils/api/config';
 
 const Dashboard = () => {
     const { Title } = Typography
-    const [loading, setLoading] = useState(false)
     const [filterParams, setFilterParams] = useState({
         startDate: '',
         endDate:''
@@ -31,12 +30,10 @@ const Dashboard = () => {
 
     useEffect(() => {
         fetchDataSummary()
-    }, [])
+    })
 
     const fetchDataSummary = async () => {
         try {
-            setLoading(true)
-
             let params = {
                 startDate: filterParams.startDate,
                 endDate: filterParams.endDate
@@ -58,7 +55,6 @@ const Dashboard = () => {
                 description:'Maaf terjadi kesalahan!'
               })
         } finally {
-            setLoading(false)
         }
     }
 
