@@ -38,14 +38,7 @@ export function ApiGetRequest(url, data = {}) {
         return responseJson
     })
     .catch((error) => {
-        return {
-            error:
-                (error.response && error.response.data.error
-                    ? error.response.data.error
-                    : error.response.data.message) || error,
-            errorList: 
-                error.response && error.response.data && error.response.data.error
-        }
+      throw error;
     })
 }
 
@@ -60,14 +53,7 @@ export function ApiPostMultipart(url, data = {}) {
         return responseJson;
       })
       .catch((error) => {
-        return {
-          error:
-            (error.response && error.response.data.error
-              ? error.response.data.error
-              : error.response.data.message) || error,
-          errorList:
-            error.response && error.response.data && error.response.data.errors,
-        };
+        throw error;
       });
 }
 
@@ -83,14 +69,7 @@ export function ApiGetUploadFile(url, data = {}, callbackUpload = () => {}) {
         return responseJson;
       })
       .catch((error) => {
-        return {
-          error:
-            (error.response && error.response.data.error
-              ? error.response.data.error
-              : error.response.data.message) || error,
-          errorList:
-            error.response && error.response.data && error.response.data.errors,
-        };
+        throw error;
       });
 }
   
@@ -101,14 +80,7 @@ export const ApiPostRequest = (url, data = {}) => {
         return responseJson;
       })
       .catch((error) => {
-        return {
-          error:
-            (error.response && error.response.data.error
-              ? error.response.data.error
-              : error.response.data.message) || error,
-          errorList:
-            error.response && error.response.data && error.response.data.errors,
-        };
+        throw error;
       });
 };
   
@@ -119,14 +91,7 @@ export const ApiPutRequest = (url, data = {}) => {
         return responseJson;
       })
       .catch((error) => {
-        return {
-          error:
-            (error.response && error.response.data.error
-              ? error.response.data.error
-              : error.response.data.message) || error,
-          errorList:
-            error.response && error.response.data && error.response.data.errors,
-        };
+        throw error;
       });
 };
   
@@ -137,14 +102,7 @@ export const ApiDeleteRequest = (url, data = {}) => {
         return responseJson;
       })
       .catch((error) => {
-        return {
-          error:
-            (error.response && error.response.data.error
-              ? error.response.data.error
-              : error.response.data.message) || error,
-          errorList:
-            error.response && error.response.data && error.response.data.errors,
-        };
+        throw error;
       });
 };
 

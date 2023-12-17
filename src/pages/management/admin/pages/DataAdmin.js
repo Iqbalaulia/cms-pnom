@@ -22,6 +22,7 @@ const DataAdmin = () => {
     const [ isUuid, setUuid ] = useState('')
     const [ tableParams, setTableParams ] = useState(paginationModel)
     const [ formData, setFormData ] = useState(adminModel)
+    const [ formInputData ] = Form.useForm()
     const [ filterData, setFilterData ] = useState({
       startDate:"",
       endDate:"",
@@ -151,23 +152,26 @@ const DataAdmin = () => {
     }
     const saveDataForm = async () => {
       try {
-        setLoading(true)
-
-        let formDataAdmin = {
-          name: formData.name,
-          login: formData.name,
-          password:btoa(formData.password),
-          status: formData.status,
-          role_uuid: formData.role_uuid
+        const validateValue  = await formInputData.validateFields()
+        console.log('validateValue', validateValue)
+        if(validateValue) { 
+          setLoading(true)
+          let formDataAdmin = {
+            name: formData.name,
+            login: formData.name,
+            password:btoa(formData.password),
+            status: formData.status,
+            role_uuid: formData.role_uuid
+          }
+  
+          await ApiPostRequest(`admin/account`, formDataAdmin)
+          PnomNotification({
+            type: 'success',
+            message: 'Berhasil disimpan!',
+            description:'Data admin berhasil disimpan!',
+          })
+          getFetchData()
         }
-
-        await ApiPostRequest(`admin/account`, formDataAdmin)
-        PnomNotification({
-          type: 'success',
-          message: 'Berhasil disimpan!',
-          description:'Data admin berhasil disimpan!',
-        })
-        getFetchData()
       } catch (error) {
         PnomNotification({
           type: 'error',
@@ -198,6 +202,29 @@ const DataAdmin = () => {
         setLoading(false)
       }
     }
+
+    const formPassword = (
+      <Form.Item
+        className="username mb-2"
+        label="Password"
+        rules={[
+          {
+            required: true,
+            message: "Input data password!",
+          },
+        ]}>
+        <Input 
+          value={formData.password}
+          onChange={e => setFormData(
+            {
+              ...formData,
+              password: e.target.value
+            }
+          )}  
+          placeholder="Password"
+          type='password' />
+      </Form.Item>
+    )
 
 
     return(
@@ -263,7 +290,7 @@ const DataAdmin = () => {
             width={600}
           >
             <Content className="form-data">
-              <Form>
+              <Form form={formInputData}>
                   <Row gutter={[24,0]}>
                     <Col md={{ span: 24 }}>
                       <Form.Item
@@ -287,26 +314,9 @@ const DataAdmin = () => {
                           placeholder="Nama"
                         />
                       </Form.Item>
-                      <Form.Item
-                        className="username mb-2"
-                        label="Password"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Input data password!",
-                          },
-                        ]}>
-                        <Input 
-                          value={formData.password}
-                          onChange={e => setFormData(
-                            {
-                              ...formData,
-                              password: e.target.value
-                            }
-                          )}  
-                          placeholder="Password"
-                          type='password' />
-                      </Form.Item>
+                      {
+                        isStepAction === 'save-data' ? (formPassword) : ''
+                      }
                     </Col>
                     <Col md={{ span: 24 }}>
                       <Form.Item
