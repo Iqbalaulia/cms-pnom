@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Col, Card, Tabs } from 'antd';
+import { Col, Card, Tabs, Row } from 'antd';
 
 import DataAdmin from './DataAdmin';
 import RoleAdmin from './RoleAdmin';
@@ -17,7 +17,7 @@ const AdminPage = () => {
   return (
     <>
       <div className="admin-page">
-        <row gutter={[24, 0]}>
+        <Row gutter={[24, 0]}>
           <Col xs={24} xl={24}>
             <Card
               bordered={false}
@@ -32,7 +32,7 @@ const AdminPage = () => {
                   onChange={tabsChange}
                 >
                     <TabPane
-                      tab="Admin"
+                      tab="Data Admin"
                       key="1"
                     >
                       <DataAdmin/>
@@ -46,7 +46,7 @@ const AdminPage = () => {
                 </Tabs>
             </Card>
           </Col>
-        </row>
+        </Row>
       </div>
     </>
   )

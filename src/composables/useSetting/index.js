@@ -9,6 +9,17 @@ const jenisKelaminModel = [
     }
 ]
 
+const statusModel = [
+    {
+        value: 1,
+        label:'Aktif'
+    },
+    {
+        value: 2,
+        label:'Tidak Aktif'
+    }
+]
+
 const paginationModel = {
     pagination: {
         pageNum: 1,
@@ -19,5 +30,6 @@ const paginationModel = {
 
 export {
     jenisKelaminModel,
-    paginationModel
+    paginationModel,
+    statusModel
 }

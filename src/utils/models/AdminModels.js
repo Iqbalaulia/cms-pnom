@@ -1,8 +1,9 @@
 const adminModel = {
     name:'',
-    role:'',
-    email:'',
-    gender:''
+    login:'',
+    password:'',
+    status:1,
+    role_uuid:''
 }
 
 const roleModel = {

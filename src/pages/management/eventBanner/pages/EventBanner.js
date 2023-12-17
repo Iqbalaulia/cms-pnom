@@ -10,7 +10,7 @@ import PnomNotification from 'components/layout/Notification';
 import PnomConfirm from 'components/layout/ConfirmDialog';
 
 import { ApiGetRequest, ApiPostMultipart } from 'utils/api/config';
-import { bannerModel } from 'utils/models/BannerModels';
+import { adminModel } from 'utils/models/AdminModels';
 
 function EventBanner() {
     const { Content } = Layout
@@ -20,7 +20,7 @@ function EventBanner() {
     const [ loading, setLoading ] = useState(false)
     const [ isModalForm, setIsModalForm ] = useState(false)
     const [ tableParams, setTableParams ] = useState(paginationModel)
-    const [ formData, setFormData ] = useState(bannerModel)
+    const [ formData, setFormData ] = useState(adminModel)
     const [ filterData, setFilterData ] = useState({
       startDate:"",
       endDate:"",
@@ -108,7 +108,7 @@ function EventBanner() {
     }, []);
 
     const resetField = () => {
-        setFormData({...bannerModel})
+        setFormData({...adminModel})
     }
 
     const handleCancelSubmit = () => {

@@ -4,10 +4,10 @@ import { Row, Col, Card, Typography, DatePicker } from 'antd';
 
 import Echart from "components/chart/EChart";
 import LineChart from "components/chart/LineChart";
-import PnomNotification from 'components/layout/Notification';
+// import PnomNotification from 'components/layout/Notification';
 
 import { mockDataProductBestSeller } from '../data/setting';
-import { ApiGetRequest } from 'utils/api/config';
+// import { ApiGetRequest } from 'utils/api/config';
 
 
 
@@ -19,44 +19,44 @@ const Dashboard = () => {
         endDate:''
     })
 
-    let summaryData = {
-       production:'',
-       packing:'',
-       shipping:'',
-       printing:'',
-       cutting:'',
-       total:''
-    }
+    // let summaryData = {
+    //    production:'',
+    //    packing:'',
+    //    shipping:'',
+    //    printing:'',
+    //    cutting:'',
+    //    total:''
+    // }
 
     useEffect(() => {
-        fetchDataSummary()
+        // fetchDataSummary()
     })
 
-    const fetchDataSummary = async () => {
-        try {
-            let params = {
-                startDate: filterParams.startDate,
-                endDate: filterParams.endDate
-            }
+    // const fetchDataSummary = async () => {
+    //     try {
+    //         let params = {
+    //             startDate: filterParams.startDate,
+    //             endDate: filterParams.endDate
+    //         }
 
-            const response = await ApiGetRequest(`dashboard/summary`, params)
+    //         const response = await ApiGetRequest(`dashboard/summary`, params)
 
-            summaryData.production = response.data.summary.transaction.production
-            summaryData.packing = response.data.summary.transaction.packing
-            summaryData.shipping = response.data.summary.transaction.shipping
-            summaryData.printing = response.data.summary.transaction.printing
-            summaryData.cutting = response.data.summary.transaction.cutting
-            summaryData.total = response.data.summary.transaction.total
+    //         summaryData.production = response.data.summary.transaction.production
+    //         summaryData.packing = response.data.summary.transaction.packing
+    //         summaryData.shipping = response.data.summary.transaction.shipping
+    //         summaryData.printing = response.data.summary.transaction.printing
+    //         summaryData.cutting = response.data.summary.transaction.cutting
+    //         summaryData.total = response.data.summary.transaction.total
             
-        } catch (error) {
-            PnomNotification({
-                type: 'error',
-                message: 'Maaf terjadi kesalahan!',
-                description:'Maaf terjadi kesalahan!'
-              })
-        } finally {
-        }
-    }
+    //     } catch (error) {
+    //         PnomNotification({
+    //             type: 'error',
+    //             message: 'Maaf terjadi kesalahan!',
+    //             description:'Maaf terjadi kesalahan!'
+    //           })
+    //     } finally {
+    //     }
+    // }
 
     return(
         <>

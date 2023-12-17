@@ -1,331 +1,364 @@
-import React, { useEffect, useState, } from 'react';
-import { Select, Table, Col,  Button, Space,Form,Input,Row,Layout } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import React, {useEffect, useState} from 'react';
+import { Select, Table, Col, Button, Space, Form, Input, Row, Layout } from 'antd';
+import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
-import {  selectRole } from '../data/setting';
-import { adminModel } from 'utils/models/AdminModels';
-import { jenisKelaminModel, paginationModel } from 'composables/useSetting';
-
-import { ApiGetRequest, ApiPostRequest } from 'utils/api/config';
+import { statusModel, paginationModel } from 'composables/useSetting';
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
-import PnomConfirm from 'components/layout/ConfirmDialog';
 
-function DataAdmin() {
-  const { Content } = Layout
-  const [data, setDataTable] = useState();
-  const [loading, setLoading] = useState(false);
-  const [isModalShow, setIsModalForm] = useState(false)
-  const [tableParams, setTableParams] = useState(paginationModel);
-  const [formData, setFormData] = useState(adminModel)
-  const columns = [
-    {
-      title: 'No',
-      width:'5%',
-      render: (text, record, index) => {
-        const current = tableParams.pagination.current; 
-        const pageSize = tableParams.pagination.pageSize; 
-        const calculatedIndex = (current - 1) * pageSize + index + 1; 
-        return calculatedIndex;
-      },
-    },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      sorter: true,
-      render: (name) => `${name.first} ${name.last}`,
-      width: '20%',
-    },
-    {
-      title: 'Gender',
-      dataIndex: 'gender',
-      filters: [
-        {
-          text: 'Male',
-          value: 'male',
-        },
-        {
-          text: 'Female',
-          value: 'female',
-        },
-      ],
-      width: '20%',
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-    },
-    {
-      title: 'Actions',
-      render: (items) => (
-        <Space size={8}>
-          <Button onClick={handleDeleteData} type="danger" danger ghost icon={<DeleteOutlined />} size={'large'} />
-          <Button onClick={handleEditShowForm(items.uuid)} type="primary" icon={<EditOutlined />} size={'large'} />
-        </Space>        
-      )
-    },
-  ];
+import { ApiGetRequest, ApiPostRequest, ApiPutRequest } from 'utils/api/config';
+import { adminModel } from 'utils/models/AdminModels';
+import { selectRole } from '../data/setting';
 
-  let stepAction = 'save-data'
-  let uuidData = ''
-  
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
-  const handleShowForm = () => {
-    stepAction = 'save-data'
-    setIsModalForm(true)
-    resetField()
-  }
+const DataAdmin = () => {
+    const { Content } = Layout
 
-  const handleEditShowForm = (uuid) => {
-    uuidData = uuid
-    stepAction = 'update-data'
-    setIsModalForm(true)
-    resetField()
-  }
-  const handleSubmit = () => {
-    if (uuidData && stepAction === `update-data`) updateDataForm()
-    if (stepAction === `save-data`) saveDataForm()
-
-    setIsModalForm(false);
-    resetField()
-  };
-  const handleCancelSubmit = () => {
-    setIsModalForm(false);
-    resetField()
-  };
-  const handleDeleteData = () => {
-    PnomConfirm({
-      onOkConfirm: handleOkDelete,
-      onCancelConfirm: handleCancelDelete,
-      content: 'Your confirmation message here'
+    const [ dataTable, setDataTable ] = useState([])
+    const [ loading, setLoading ] = useState(false)
+    const [ isModalForm, setIsModalForm ] = useState(false)
+    const [ isStepAction, setStepAction ] = useState('save-data')
+    const [ isUuid, setUuid ] = useState('')
+    const [ tableParams, setTableParams ] = useState(paginationModel)
+    const [ formData, setFormData ] = useState(adminModel)
+    const [ filterData, setFilterData ] = useState({
+      startDate:"",
+      endDate:"",
+      search:"",
+      status: 1
     })
-  }
-  const handleOkDelete = () => {
-    console.log('Delete confirmed');
-  }
-  const handleCancelDelete = () => {
-    console.log('Delete canceled');
-  }
-  const handleTableChange = (pagination, filters, sorter) => {
-    setTableParams({
-      pagination,
-      filters,
-      ...sorter,
-    });
-
-    if (pagination.pageSize !== tableParams.pagination?.pageSize) setDataTable([]);
-  };
-
-  
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const response = await ApiGetRequest(`admin/account`)
-      setDataTable(response.data.data)
-      setLoading(false)   
-    } catch (error) {
-      PnomNotification({
-        type: 'error',
-        message: 'Maaf terjadi kesalahan!',
-        description:'Maaf terjadi kesalahan!'
-      })
-    } finally {
-      setLoading(false)
-    }
-  };
-  const saveDataForm = async () => {
-    try {
-      setLoading(true)
-      await ApiPostRequest(`admin/account`, formData)
-      PnomNotification({
-        type: 'success',
-        message: 'Notification Title',
-        description:
-        'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-      })
-    } catch (error) {
-      PnomNotification({
-        type: 'error',
-        message: 'Maaf terjadi kesalahan!',
-        description: error.message,
-     })
-    } finally {
-      setLoading(false)
-    }
-  }
-  const updateDataForm = async () => {
-    try {
-      setLoading(true)
-      await ApiPostRequest(`admin/account/${uuidData}`, formData)
-      PnomNotification({
-        type: 'success',
-        message: 'Notification Title',
-        description:
-        'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-      })
-    } catch (error) {
-      PnomNotification({
-        type: 'error',
-        message: 'Maaf terjadi kesalahan!',
-        description: error.message,
-     })
-    } finally {
-      setLoading(false)
-    }
-  }
-  const resetField = () => {
-    setFormData({...adminModel})
-  }
-
-  return (
-    <>
-      <div className='admin-table'>
-         <Row className='mb-2'>
-            <Col md={{span: 6}}>
-                <Input
-                    placeholder="Pencarian..."
-                />
-            </Col>
-            <Col md={{span: 18}} className='d-flex justify-end'>
-              <Space align='start'>
-                <Button  
+    const selectStatus = [
+      {
+        value:1,
+        label:'Aktif'
+      },
+      {
+        value:0,
+        label:'Tidak Aktif'
+      }
+    ]
+    const columns = [
+        {
+            title: 'No',
+            render: (text, record, index) => {
+              const pageNum = tableParams.pagination.pageNum; 
+              const pageSize = tableParams.pagination.pageSize; 
+              const calculatedIndex = (pageNum - 1) * pageSize + index + 1; 
+              return calculatedIndex;
+            },
+            width: '5%'
+          },
+          {
+            title: 'Nama',
+            sorter: true,
+            render: (item) => `${item.name}`,
+          },
+          {
+            title: 'Username',
+            sorter: true,
+            render: (item) => `${item.login}`,
+          },
+          {
+            title: 'Role',
+            sorter: true,
+            render: (item) => `${item.role.name}`,
+          },
+          {
+            title: 'Actions',
+            render: (item) => (
+              <Space size={8}>
+                <Button 
+                    onClick={() => handleEditModalForm(item)} 
                     type="primary" 
-                    icon={<PlusCircleOutlined />} 
-                    className='w-50'
-                    onClick={handleShowForm} 
-                    size={'default'} >
-                    Tambah Data
-                </Button>
-             </Space>
-            </Col>          
-        </Row>
+                    icon={<EditOutlined />} 
+                    size={'large'} 
+                />
+              </Space>        
+            )
+          },
+    ]
 
-        <Row>
-            <Col xs={24} xl={24}>
-                <Table
+    useEffect(() => {
+        getFetchData()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const resetField = () => {
+        setFormData({...adminModel})
+    }
+    const handleCancelSubmit = () => {
+        setIsModalForm(false);
+        resetField()
+    }
+    const handleShowModalForm = () => {
+        setIsModalForm(true)
+        resetField()
+        setStepAction('save-data')
+    }
+    const handleEditModalForm = (item) => {
+      setFormData({
+        ...formData,
+        name: item.name,
+        login: item.login,
+        status: parseInt(item.status),
+        role_uuid: item.role.uuid,
+      });
+      setUuid(item.uuid)
+      setStepAction('update-data')
+      setIsModalForm(true)
+    }
+    const handleSubmit = () => {
+        if(isStepAction === `save-data`)  saveDataForm()
+        if(isStepAction === `update-data`) updateDataForm(isUuid)
+        
+        setIsModalForm(false)
+        resetField()
+       
+    }
+    const handleTableChange = (pagination, filters, sorter) => {
+        setTableParams({
+            pagination,
+            filters,
+            ...sorter,
+        })
+
+        if (pagination.pageSize !== tableParams.pagination?.pageSize) setDataTable([])
+    }
+
+
+    const getFetchData = async () => {
+        try {
+            let params = {
+              startDate: filterData.startDate,
+              endDate: filterData.endDate,
+              search: filterData.search,
+              status:filterData.status
+            }
+
+            setLoading(true)
+            const response = await ApiGetRequest(`admin/account`, params)
+            setDataTable(response.data.data)
+        } catch (error) {
+            PnomNotification({
+                type: 'error',
+                message: 'Maaf terjadi kesalahan!',
+                description: 'Mohon periksa kembali jaringan anda. Atau menghubungi call center',
+            })
+        } finally {
+            setLoading(false)
+        }
+    }
+    const saveDataForm = async () => {
+      try {
+        setLoading(true)
+
+        let formDataAdmin = {
+          name: formData.name,
+          login: formData.name,
+          password:btoa(formData.password),
+          status: formData.status,
+          role_uuid: formData.role_uuid
+        }
+
+        await ApiPostRequest(`admin/account`, formDataAdmin)
+        PnomNotification({
+          type: 'success',
+          message: 'Berhasil disimpan!',
+          description:'Data admin berhasil disimpan!',
+        })
+        getFetchData()
+      } catch (error) {
+        PnomNotification({
+          type: 'error',
+          message: 'Maaf terjadi kesalahan!',
+          description: error.message,
+       })
+      } finally {
+        setLoading(false)
+      }
+    }
+    const updateDataForm = async (uuid) => {
+      try {
+        setLoading(true)
+        await ApiPutRequest(`admin/account/${uuid}`, formData)
+        PnomNotification({
+          type: 'success',
+          message: 'Berhasil diupdate!',
+          description:'Data admin berhasil diupdate!',
+        })
+        await getFetchData()
+      } catch (error) {
+        PnomNotification({
+          type: 'error',
+          message: 'Maaf terjadi kesalahan!',
+          description: error.message,
+       })
+      } finally {
+        setLoading(false)
+      }
+    }
+
+
+    return(
+        <>
+          <div className='admin-table'>
+            <Row gutter={[24,0]}  className='mb-2'>
+                              <Col md={{span: 6}}>
+                                  <Input
+                                      placeholder="Pencarian..."
+                                      value={filterData.search}
+                                      onChange={
+                                        (event) => setFilterData({...filterData, search: event.target.value})
+                                      }
+                                  />
+                              </Col>
+                              <Col md={{span: 5}}>
+                                <Select
+                                    value={filterData.status}
+                                    onChange={
+                                      (event) => setFilterData({...filterData, status: event.target.value})
+                                    }
+                                    options={selectStatus}
+                                  />
+                              </Col>
+                              <Col md={{span: 5}}>
+                              </Col>
+                              <Col md={{span: 4}}>
+                                
+                              </Col>
+                              <Col md={{span: 4}} className='d-flex justify-end'>
+                                  <Space align='start'>
+                                      <Button  
+                                          type="primary" 
+                                          icon={<PlusCircleOutlined />} 
+                                          className='w-50'
+                                          onClick={handleShowModalForm} 
+                                          size={'default'} >
+                                          Tambah Data
+                                      </Button>
+                                  </Space>
+                              </Col>
+            </Row>
+            <Row>
+              <Col xs={24} xl={24}>
+                <Table 
                     size={'middle'}
                     bordered={true}
                     columns={columns}
-                    rowKey={(record) => record.login.uuid}
-                    dataSource={data}
+                    rowKey={(record) => record.id}
+                    dataSource={dataTable}
                     pagination={tableParams.pagination}
                     loading={loading}
                     onChange={handleTableChange}
                     className='ant-border-space'
-               />      
-            </Col>
-        </Row>   
-    </div>
-    <PnomModal 
-      onOk={handleSubmit} 
-      onCancel={handleCancelSubmit} 
-      visible={isModalShow}
-      width={600}
-    >
-      <Content className="form-data">
-        <Form>
-            <Row gutter={[24,0]}>
-              <Col md={{ span: 24 }}>
-                <Form.Item
-                  className="username mb-0"
-                  label="Nama"
-                  name="name"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Input data nama!",
-                    },
-                  ]}>
-                  <Input 
-                    value={formData.name} 
-                    onChange={e => setFormData(
-                      {
-                        ...formData,
-                        name: e.target.value
-                      }
-                    )} 
-                    placeholder="Nama" 
-                  />
-                </Form.Item>
-                <Form.Item
-                  className="username mb-2"
-                  label="Email"
-                  name="email"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Input data email!",
-                    },
-                  ]}>
-                  <Input 
-                    value={formData.email}
-                    onChange={e => setFormData(
-                      {
-                        ...formData,
-                        email: e.target.value
-                      }
-                    )}  
-                    placeholder="Email" />
-                </Form.Item>
+                />
               </Col>
-              <Col md={{ span: 24 }}>
-                <Form.Item
-                  className="username"
-                  label="Role"
-                  name="role"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Input data role!",
-                    },
-                  ]}>
+            </Row>           
+          </div> 
+          <PnomModal 
+            onOk={handleSubmit} 
+            onCancel={handleCancelSubmit} 
+            visible={isModalForm}
+            width={600}
+          >
+            <Content className="form-data">
+              <Form>
+                  <Row gutter={[24,0]}>
+                    <Col md={{ span: 24 }}>
+                      <Form.Item
+                        className="username mb-0"
+                        label="Nama"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Input data nama!",
+                          },
+                        ]}
+                      >
+                        <Input
+                          value={formData.name}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              name: e.target.value,
+                            })
+                          }
+                          placeholder="Nama"
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        className="username mb-2"
+                        label="Password"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Input data password!",
+                          },
+                        ]}>
+                        <Input 
+                          value={formData.password}
+                          onChange={e => setFormData(
+                            {
+                              ...formData,
+                              password: e.target.value
+                            }
+                          )}  
+                          placeholder="Password"
+                          type='password' />
+                      </Form.Item>
+                    </Col>
+                    <Col md={{ span: 24 }}>
+                      <Form.Item
+                        className="username"
+                        label="Role"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Input data role!",
+                          },
+                        ]}>
 
-                  <Select
-                    value={formData.role}
-                    onSelect={value => setFormData(
-                      {
-                        ...formData,
-                        role: value
-                      }
-                    )} 
-                    options={selectRole}
-                  />
-                </Form.Item>
-                <Form.Item
-                  className="username"
-                  label="Jenis Kelamin"
-                  name="gender"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Input data jenis kelamin!",
-                    },
-                  ]}>
+                        <Select
+                          value={formData.role_uuid}
+                          onSelect={(e) => setFormData(
+                            {
+                              ...formData,
+                              role_uuid: e
+                            }
+                          )} 
+                          options={selectRole}
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        className="username"
+                        label="Status"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Input data jenis status!",
+                          },
+                        ]}>
 
-                  <Select
-                    value={formData.gender}
-                    onSelect={value => setFormData(
-                      {
-                        ...formData,
-                        gender: value
-                      }
-                    )} 
-                    placeholder="Jenis Kelamin"
-                    options={jenisKelaminModel}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-        </Form>
-      </Content>
-    </PnomModal>
-    </>
-  );
+                        <Select
+                          value={formData.status}
+                          onSelect={(e) => setFormData(
+                            {
+                              ...formData,
+                              status: e
+                            }
+                          )} 
+                          placeholder="Status"
+                          options={statusModel}
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+              </Form>
+            </Content>
+          </PnomModal>
+        </>
+    )
 }
 
 export default DataAdmin;
