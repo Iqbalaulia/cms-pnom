@@ -10,6 +10,23 @@ const selectRole = [
     }
 ]
 
+const rolesPermission = {
+    permission: {
+        master_setting: {
+            create: true,
+            update: true
+        },
+        master_role: {
+            create: true,
+            update: true
+        },
+        admin: {
+            create: true,
+            update: true
+        }
+    }
+}
+
 const selectStatusRole = [
     {
         value:"active",
@@ -25,4 +42,5 @@ const selectStatusRole = [
 export {
     selectRole,
     selectStatusRole,
+    rolesPermission
 }
