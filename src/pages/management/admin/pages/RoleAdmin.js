@@ -27,7 +27,7 @@ const RoleAdmin = () => {
       startDate:"",
       endDate:"",
       search:"",
-      status: 1
+      status: 0
     })
     const selectStatus = [
       {

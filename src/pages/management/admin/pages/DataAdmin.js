@@ -27,7 +27,7 @@ const DataAdmin = () => {
       startDate:"",
       endDate:"",
       search:"",
-      status: 1
+      status: 0
     })
     const selectStatus = [
       {
@@ -116,6 +116,10 @@ const DataAdmin = () => {
         setIsModalForm(false)
         resetField()
        
+    }
+    const handleOnChangeStatus = (event) => {
+      setFilterData({...filterData, status:event})
+      getFetchData()
     }
     const handleTableChange = (pagination, filters, sorter) => {
         setTableParams({
@@ -243,9 +247,7 @@ const DataAdmin = () => {
                               <Col md={{span: 5}}>
                                 <Select
                                     value={filterData.status}
-                                    onChange={
-                                      (event) => setFilterData({...filterData, status: event.target.value})
-                                    }
+                                    onChange={handleOnChangeStatus}
                                     options={selectStatus}
                                   />
                               </Col>
