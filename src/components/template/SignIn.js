@@ -13,14 +13,12 @@ import signinbg from "assets/images/png/img-signin.png";
 import { signInModel } from "pages/signIn/data/setting";
 import { ApiGetRequest, ApiPostRequest } from "utils/api/config";
 import { notificationSuccess, notificationError  } from "utils/general/general";
-import { useHistory } from 'react-router-dom';
 
 
 const SignIn = () => {
   function onChange(checked) {
     console.log(`switch to ${checked}`);
   }
-  const history = useHistory();
   const [form] = Form.useForm();
   const { Title } = Typography;
   const { Content } = Layout;
@@ -79,7 +77,7 @@ const SignIn = () => {
     try {
       const response = await ApiGetRequest(`auth`)
       localStorage.setItem('userData', JSON.stringify(response.data.data))
-      history.push('/dashboard')
+      window.location.href = '/dashboard'
     } catch (error) {
       notificationError(error)
     }
