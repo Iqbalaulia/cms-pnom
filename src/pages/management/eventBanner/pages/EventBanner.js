@@ -1,26 +1,26 @@
 import React, {useEffect, useState} from 'react';
 import { Select, Image, Table, Col, Card, Button, Space,Form,Input,Row,Layout } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusCircleOutlined, InboxOutlined } from '@ant-design/icons';
+import { EditOutlined, PlusCircleOutlined, InboxOutlined } from '@ant-design/icons';
 import { DatePicker, Upload  } from 'antd';
 
 import { paginationModel } from 'composables/useSetting';
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
-import PnomConfirm from 'components/layout/ConfirmDialog';
 
-import { ApiGetRequest, ApiPostMultipart } from 'utils/api/config';
-import { adminModel } from 'utils/models/AdminModels';
+import { ApiGetRequest, ApiPostMultipart, ApiPutRequest } from 'utils/api/config';
+import { bannerModel } from 'utils/models/BannerModels';
 
 function EventBanner() {
     const { Content } = Layout
     const { Dragger } = Upload
-
+    const { TextArea } = Input;
     const [ dataTable, setDataTable ] = useState([])
     const [ loading, setLoading ] = useState(false)
     const [ isModalForm, setIsModalForm ] = useState(false)
     const [ tableParams, setTableParams ] = useState(paginationModel)
-    const [ formData, setFormData ] = useState(adminModel)
+    const [ formData, setFormData ] = useState(bannerModel)
+    const [ isStepAction, setStepAction ] = useState('save-data')
     const [ filterData, setFilterData ] = useState({
       startDate:"",
       endDate:"",
@@ -50,29 +50,30 @@ function EventBanner() {
           },
           {
             title: 'Nama Event',
-            dataIndex: 'name',
             sorter: true,
-            render: (name_event) => `${name_event}`,
+            render: (item) => `${item.title}`,
           },
           {
             title: 'Tanggal Mulai',
-            dataIndex: 'start_date',
             sorter: true,
-            render: (start_date) => `${start_date}`,
+            render: (item) => `${item.startAt}`,
           },
           {
             title: 'Tanggal Akhir',
-            dataIndex: 'end_date',
             sorter: true,
-            render: (end_date) => `${end_date}`,
+            render: (item) => `${item.endAt}`,
+          },
+          {
+            title: 'Status Banner',
+            sorter: true,
+            render: (item) => `${item.status === '1' ? 'Aktif' : 'Tidak Aktif'}`,
           },
           {
             title: 'Gambar',
-            dataIndex: 'images',
-            render: () => (
+            render: (item) => (
                 <Image
                     width={200}
-                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                    src={item.imageThumb}
                 />
             ),
           },
@@ -81,16 +82,9 @@ function EventBanner() {
             render: () => (
               <Space size={8}>
                 <Button 
-                    onClick={handleDeleteData} 
-                    type="danger" 
-                    danger 
-                    ghost 
-                    icon={<DeleteOutlined />} 
-                    size={'large'} 
-                />
-                <Button 
                     onClick={handleEditModalForm} 
-                    type="primary" 
+                    type="primary"
+                    ghost 
                     icon={<EditOutlined />} 
                     size={'large'} 
                 />
@@ -99,7 +93,6 @@ function EventBanner() {
           },
     ]
 
-    let stepAction = 'save-data'
 
   
     useEffect(() => {
@@ -108,7 +101,16 @@ function EventBanner() {
     }, []);
 
     const resetField = () => {
-        setFormData({...adminModel})
+        setFormData({
+          ...formData,
+          title:'',
+          description:'',
+          image:'',
+          startAt:'',
+          endAt:'',
+          actionUrl:'',
+          status: 1
+        })
     }
 
     const handleCancelSubmit = () => {
@@ -119,34 +121,20 @@ function EventBanner() {
     const handleShowModalForm = () => {
         setIsModalForm(true)
         resetField()
-        stepAction = 'save-data'
+        setStepAction('save-data')
     }
 
     const handleEditModalForm = () => {
       setIsModalForm(true)
-      stepAction = 'update-data'
+      setStepAction('update-data')
     }
 
     const handleSubmit = () => {
-        if(stepAction === `save-data`)  saveDataForm()
-        if(stepAction === `update-data`) updateDataForm()
+        if(isStepAction === `save-data`)  saveDataForm()
+        if(isStepAction === `update-data`) updateDataForm()
         
         setIsModalForm(false)
         resetField()
-        PnomNotification({
-            type: 'success',
-            message: 'Notification Title',
-            description:
-            'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-        })
-    }
-
-    const handleDeleteData = () => {
-        PnomConfirm({
-            onOkConfirm: handleOkDelete,
-            onCancelConfirm: handleCancelDelete,
-            content: 'Your confirmation message here'
-          })
     }
 
     const handleTableChange = (pagination, filters, sorter) => {
@@ -160,20 +148,36 @@ function EventBanner() {
     }
 
     const handleChangeStartDate = (date, dateString) => {
-      console.log(date, dateString);
+      setFormData({
+        startAt: dateString
+      })
     };
 
     const handleChangeEndDate = (date, dateString) => {
-      console.log(date, dateString);
+      setFormData({
+        endAt: dateString
+      })
     };
 
-    const handleOkDelete = () => {
-        console.log('Delete confirmed');
-    }
-
-    const handleCancelDelete = () => {
-        console.log('Delete canceled'); 
-    }
+    const onChnageBanner = {
+      name: 'file',
+      multiple: true,
+      action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
+      onChange(info) {
+        const { status } = info.file;
+        if (status !== 'uploading') {
+          console.log(info.file, info.fileList);
+        }
+        if (status === 'done') {
+          console.log(`${info.file.name} file uploaded successfully.`);
+        } else if (status === 'error') {
+          console.log(`${info.file.name} file upload failed.`);
+        }
+      },
+      onDrop(e) {
+        console.log('Dropped files', e.dataTransfer.files);
+      },
+    };
 
     const getFetchData = async () => {
         try {
@@ -201,7 +205,16 @@ function EventBanner() {
     const saveDataForm = async () => {
       try {
         setLoading(true)
-        await ApiPostMultipart(`banner`, formData)
+
+        let formDataBanner = {
+          title: formData.title,
+          startAt: formData.startAt,
+          endAt: formData.endAt,
+          status: formData.status,
+          description: formData.description
+        }
+
+        await ApiPostMultipart(`banner`, formDataBanner)
         
       } catch (error) {
         PnomNotification({
@@ -217,7 +230,7 @@ function EventBanner() {
     const updateDataForm = async () => {
       try {
         setLoading(true)
-        await ApiPostMultipart(`banner`, formData)
+        await ApiPutRequest(`banner`, formData)
         
       } catch (error) {
         PnomNotification({
@@ -322,7 +335,8 @@ function EventBanner() {
                           },
                         ]}>
                         <Input 
-                          value={formData.name}
+                          value={formData.title}
+                          onChange={(e) => setFormData({...formData, title: e.target.value})}
                           placeholder="Nama Event" 
                         />
                       </Form.Item>
@@ -337,7 +351,7 @@ function EventBanner() {
                           },
                         ]}>
                           <DatePicker
-                             value={formData.start_date}
+                             value={formData.startAt}
                              onChange={handleChangeStartDate} 
                           />
                       </Form.Item>
@@ -352,9 +366,25 @@ function EventBanner() {
                           },
                         ]}>
                           <DatePicker  
-                            value={formData.end_date}  
+                            value={formData.endAt}  
                             onChange={handleChangeEndDate} 
                           />
+                      </Form.Item>
+                      <Form.Item
+                            className='username mb-0'
+                            label="Deskripsi"
+                            name="whatIs"
+                          >
+                            <TextArea 
+                              value={formData.description} 
+                              rows={4}
+                              onChange={
+                                e => setFormData({
+                                  ...formData,
+                                  description: e.target.value
+                                })
+                              }
+                            />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -365,7 +395,7 @@ function EventBanner() {
                           label="Upload Banner"
                           name="upload_banner"
                           >
-                            <Dragger>
+                            <Dragger {...onChnageBanner}>
                               <p className="ant-upload-drag-icon">
                                 <InboxOutlined />
                               </p>

@@ -157,7 +157,6 @@ const DataAdmin = () => {
     const saveDataForm = async () => {
       try {
         const validateValue  = await formInputData.validateFields()
-        console.log('validateValue', validateValue)
         if(validateValue) { 
           setLoading(true)
           let formDataAdmin = {

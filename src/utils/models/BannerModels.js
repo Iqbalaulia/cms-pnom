@@ -1,7 +1,11 @@
 const bannerModel = {
-    name:'',
-    start_date:'',
-    end_date:'',
+    title:'',
+    description:'',
+    image:'',
+    startAt:'',
+    endAt:'',
+    actionUrl:'',
+    status: 1
 }
 
 export {
