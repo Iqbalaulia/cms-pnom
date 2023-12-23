@@ -15,7 +15,7 @@ const statusModel = [
         label:'Aktif'
     },
     {
-        value: 2,
+        value: 0,
         label:'Tidak Aktif'
     }
 ]

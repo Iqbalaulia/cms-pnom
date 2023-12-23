@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Select, Table, Col, Button, Space, Form, Input, Row, Layout } from 'antd';
+import { Select, Table, Col, Button, Space, Form, Input, Row, Layout, Tag } from 'antd';
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 import { statusModel, paginationModel } from 'composables/useSetting';
@@ -27,18 +27,9 @@ const DataAdmin = () => {
       startDate:"",
       endDate:"",
       search:"",
-      status: null
+      status: 0
     })
-    const selectStatus = [
-      {
-        value:1,
-        label:'Aktif'
-      },
-      {
-        value:0,
-        label:'Tidak Aktif'
-      }
-    ]
+
     const columns = [
         {
             title: 'No',
@@ -66,6 +57,13 @@ const DataAdmin = () => {
             render: (item) => `${item.role.name}`,
           },
           {
+            title: 'Status',
+            sorter: true,
+            render: (item) => (
+              <Tag color={item.status != '2' ? 'green' : 'red'}>{item.status != '2' ? 'Aktif' : 'Tidak Aktif'}</Tag>
+            ),
+          },
+          {
             title: 'Actions',
             render: (item) => (
               <Space size={8}>
@@ -85,16 +83,16 @@ const DataAdmin = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const resetField = () => {
+    const handleResetField = () => {
         setFormData({...adminModel})
     }
     const handleCancelSubmit = () => {
         setIsModalForm(false);
-        resetField()
+        handleResetField()
     }
     const handleShowModalForm = () => {
         setIsModalForm(true)
-        resetField()
+        handleResetField()
         setStepAction('save-data')
     }
     const handleEditModalForm = (item) => {
@@ -114,7 +112,7 @@ const DataAdmin = () => {
         if(isStepAction === `update-data`) updateDataForm(isUuid)
         
         setIsModalForm(false)
-        resetField()
+        handleResetField()
        
     }
     const handleOnChangeStatus = (event) => {
@@ -206,6 +204,7 @@ const DataAdmin = () => {
       }
     }
 
+
     const formPassword = (
       <Form.Item
         className="username mb-2"
@@ -247,7 +246,7 @@ const DataAdmin = () => {
                                 <Select
                                     value={filterData.status}
                                     onChange={handleOnChangeStatus}
-                                    options={selectStatus}
+                                    options={statusModel}
                                   />
                               </Col>
                               <Col md={{span: 5}}>
@@ -284,6 +283,8 @@ const DataAdmin = () => {
               </Col>
             </Row>           
           </div> 
+
+
           <PnomModal 
             onOk={handleSubmit} 
             onCancel={handleCancelSubmit} 

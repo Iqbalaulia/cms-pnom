@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import { Select, Table, Col, Button, Space, Form, Input, Row, Layout } from 'antd';
+import { Select, Table, Col, Button, Space, Form, Input, Row, Layout, Tag } from 'antd';
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
-import { paginationModel } from 'composables/useSetting';
+import { paginationModel, statusModel } from 'composables/useSetting';
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
@@ -29,16 +29,6 @@ const RoleAdmin = () => {
       search:"",
       status: 0
     })
-    const selectStatus = [
-      {
-        value:1,
-        label:'Aktif'
-      },
-      {
-        value:0,
-        label:'Tidak Aktif'
-      }
-    ]
     const columns = [
         {
             title: 'No',
@@ -58,8 +48,9 @@ const RoleAdmin = () => {
           {
             title: 'Status',
             sorter: true,
-            render: (item) => `${item.status === '1' ? `Aktif` : `Tidak Aktif`}`,
-          },
+            render: (item) => (
+              <Tag color={item.status != '2' ? 'green' : 'red'}>{item.status != '2' ? 'Aktif' : 'Tidak Aktif'}</Tag>
+            ),          },
           {
             title: 'Actions',
             render: (item) => (
@@ -218,7 +209,7 @@ const RoleAdmin = () => {
                                 <Select
                                     value={filterData.status}
                                     onChange={handleOnChangeStatus}
-                                    options={selectStatus}
+                                    options={statusModel}
                                   />
                               </Col>
                               <Col md={{span: 5}}>
