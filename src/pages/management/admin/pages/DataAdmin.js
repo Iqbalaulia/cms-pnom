@@ -9,13 +9,13 @@ import PnomNotification from 'components/layout/Notification';
 
 import { ApiGetRequest, ApiPostRequest, ApiPutRequest } from 'utils/api/config';
 import { adminModel } from 'utils/models/AdminModels';
-import { selectRole } from '../data/setting';
 
 
 const DataAdmin = () => {
     const { Content } = Layout
 
     const [ dataTable, setDataTable ] = useState([])
+    const [ dataRole, setDataRole ] = useState([])
     const [ loading, setLoading ] = useState(false)
     const [ isModalForm, setIsModalForm ] = useState(false)
     const [ isStepAction, setStepAction ] = useState('save-data')
@@ -27,7 +27,7 @@ const DataAdmin = () => {
       startDate:"",
       endDate:"",
       search:"",
-      status: 0
+      status: null
     })
 
     const columns = [
@@ -60,7 +60,7 @@ const DataAdmin = () => {
             title: 'Status',
             sorter: true,
             render: (item) => (
-              <Tag color={item.status != '2' ? 'green' : 'red'}>{item.status != '2' ? 'Aktif' : 'Tidak Aktif'}</Tag>
+              <Tag color={item.status !== '0' ? 'green' : 'red'}>{item.status !== '0' ? 'Aktif' : 'Tidak Aktif'}</Tag>
             ),
           },
           {
@@ -91,9 +91,11 @@ const DataAdmin = () => {
         handleResetField()
     }
     const handleShowModalForm = () => {
+        getRoleData()
         setIsModalForm(true)
         handleResetField()
         setStepAction('save-data')
+
     }
     const handleEditModalForm = (item) => {
       setFormData({
@@ -103,6 +105,7 @@ const DataAdmin = () => {
         status: parseInt(item.status),
         role_uuid: item.role.uuid,
       });
+      getRoleData()
       setUuid(item.uuid)
       setStepAction('update-data')
       setIsModalForm(true)
@@ -151,6 +154,30 @@ const DataAdmin = () => {
         } finally {
             setLoading(false)
         }
+    }
+    const getRoleData = async () => {
+      try {
+        let params = {
+          status:1
+        }
+
+        setLoading(true)
+        const response = await ApiGetRequest(`admin/role`, params)
+
+        setDataRole(response.data.data.map(element => ({
+          value: element.uuid,
+          label: element.name
+        })));
+       
+    } catch (error) {
+        PnomNotification({
+            type: 'error',
+            message: 'Maaf terjadi kesalahan!',
+            description: 'Mohon periksa kembali jaringan anda. Atau menghubungi call center',
+        })
+    } finally {
+        setLoading(false)
+    }
     }
     const saveDataForm = async () => {
       try {
@@ -247,6 +274,7 @@ const DataAdmin = () => {
                                     value={filterData.status}
                                     onChange={handleOnChangeStatus}
                                     options={statusModel}
+                                    placeholder='Pilih Status'
                                   />
                               </Col>
                               <Col md={{span: 5}}>
@@ -332,6 +360,7 @@ const DataAdmin = () => {
                         ]}>
 
                         <Select
+                          placeholder='Pilih Role'
                           value={formData.role_uuid}
                           onSelect={(e) => setFormData(
                             {
@@ -339,7 +368,7 @@ const DataAdmin = () => {
                               role_uuid: e
                             }
                           )} 
-                          options={selectRole}
+                          options={dataRole}
                         />
                       </Form.Item>
                       <Form.Item

@@ -27,7 +27,7 @@ const RoleAdmin = () => {
       startDate:"",
       endDate:"",
       search:"",
-      status: 0
+      status: null
     })
     const columns = [
         {
@@ -49,7 +49,7 @@ const RoleAdmin = () => {
             title: 'Status',
             sorter: true,
             render: (item) => (
-              <Tag color={item.status != '2' ? 'green' : 'red'}>{item.status != '2' ? 'Aktif' : 'Tidak Aktif'}</Tag>
+              <Tag color={item.status !== '0' ? 'green' : 'red'}>{item.status !== '0' ? 'Aktif' : 'Tidak Aktif'}</Tag>
             ),          },
           {
             title: 'Actions',
@@ -210,6 +210,7 @@ const RoleAdmin = () => {
                                     value={filterData.status}
                                     onChange={handleOnChangeStatus}
                                     options={statusModel}
+                                    placeholder='Pilih Status'
                                   />
                               </Col>
                               <Col md={{span: 5}}>
