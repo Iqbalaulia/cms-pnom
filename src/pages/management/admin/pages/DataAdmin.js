@@ -27,7 +27,7 @@ const DataAdmin = () => {
       startDate:"",
       endDate:"",
       search:"",
-      status: 0
+      status: null
     })
     const selectStatus = [
       {

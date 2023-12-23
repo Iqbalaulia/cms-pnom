@@ -94,6 +94,21 @@ export const ApiPutRequest = (url, data = {}) => {
         throw error;
       });
 };
+
+export function ApiPutMultipart(url, data = {}) {
+  return Api.put(url, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+    .then((response) => response)
+    .then((responseJson) => {
+      return responseJson;
+    })
+    .catch((error) => {
+      throw error;
+    });
+}
   
 export const ApiDeleteRequest = (url, data = {}) => {
     return Api.delete(url, data)
