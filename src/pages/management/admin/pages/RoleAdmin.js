@@ -87,6 +87,7 @@ const RoleAdmin = () => {
       setFormData({
         ...formData,
         name: item.name,
+        status: parseInt(item.status)
       });
       setUuid(item.uuid)
       setStepAction('update-data')
@@ -172,6 +173,7 @@ const RoleAdmin = () => {
         setLoading(true)
         let formRoleAdmin = {
           name: formData.name,
+          status: formData.status,
           permission: rolesPermission.permission
         }
         await ApiPutRequest(`admin/role/${uuid}`, formRoleAdmin)
@@ -280,6 +282,28 @@ const RoleAdmin = () => {
                       </Form.Item>
                     </Col>
                     <Col md={{ span: 24 }}>
+                    <Form.Item
+                        className="username"
+                        label="Status"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Input data jenis status!",
+                          },
+                        ]}>
+
+                        <Select
+                          value={formData.status}
+                          onSelect={(e) => setFormData(
+                            {
+                              ...formData,
+                              status: e
+                            }
+                          )} 
+                          placeholder="Status"
+                          options={statusModel}
+                        />
+                      </Form.Item>
                     </Col>
                   </Row>
               </Form>

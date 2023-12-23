@@ -8,6 +8,7 @@ const adminModel = {
 
 const roleModel = {
     name:'',
+    status:''
 }
 
 export {
