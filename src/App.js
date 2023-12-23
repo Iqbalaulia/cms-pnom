@@ -14,6 +14,7 @@ import Dashboard from './pages/dashboard/pages/Dashboard';
 // Management
 import ManagementAdmin from './pages/management/admin/pages/Admin'
 import ManagementEventBanner from './pages/management/eventBanner/pages/EventBanner'
+import ManagementNotification from './pages/management/notification/pages/Notification'
 
 // Setting
 import Setting from './pages/setting/pages/Setting'
@@ -47,6 +48,10 @@ function App() {
     {
       routerLink:'/event-banner',
       component: ManagementEventBanner
+    },
+    {
+      routerLink: '/notification',
+      component: ManagementNotification
     },
     {
       routerLink:'/pengaturan',

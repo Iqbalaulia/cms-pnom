@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 
 import { Select, Image, Table, Col, Card, Button, Space,Form,Input,Row,Layout } from 'antd';

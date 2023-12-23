@@ -5,3 +5,7 @@
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
     font-weight: bold;
 }
+
+.notification_information {
+    margin: 0px 20px 0px 0px;
+}

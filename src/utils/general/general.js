@@ -11,7 +11,7 @@ const notificationSuccess = (message) => {
 const notificationError = (message) => {
     notification.error({
       message: 'Opps!',
-      description: message ? JSON.stringify(message) : 'Mohon periksa kembali jaringan anda. Atau menghubungi call center',
+      description: message ?  message.message : 'Mohon periksa kembali jaringan anda. Atau menghubungi call center',
       placement: 'bottomRight',
     });
 };

@@ -1,25 +1,15 @@
+import styled from "styled-components";
+
 import { useState, useEffect } from "react";
-
-import {
-  Row,
-  Col,
-  Breadcrumb,
-  Button,
-  Input,
-  Drawer,
-  Typography,
-  Switch,
-} from "antd";
-
-import {
-  SearchOutlined,
-} from "@ant-design/icons";
+import { Row, Col, Breadcrumb, Button, Input, Drawer, Typography, Switch, Badge, Dropdown, List } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 import { NavLink, Link, useHistory } from "react-router-dom";
-import styled from "styled-components";
 import { getDataFromLocalStorage } from "utils/function";
 import { notificationError, notificationSuccess  } from "utils/general/general";
-import { ApiPostRequest } from "utils/api/config";
+import { ApiGetRequest, ApiPostRequest, ApiPutRequest } from "utils/api/config";
+
+import icons from 'composables/useIcon'
 
 const ButtonContainer = styled.div`
   .ant-btn-primary {
@@ -109,6 +99,9 @@ const setting = [
 
 
 
+
+
+
 function Header({
   placement,
   name,
@@ -119,10 +112,22 @@ function Header({
   handleFixedNavbar,
 }) {
   const { Title, Text } = Typography;
-  const [visible, setVisible] = useState(false);
-  const [sidenavType, setSidenavType] = useState("white");
+  const [ visible, setVisible ] = useState(false);
+  const [ dataNotification, setDataNotification ] = useState([])
+  const [ sidenavType, setSidenavType ] = useState("white");
   const userData = getDataFromLocalStorage('userData');
   const history = useHistory();
+
+  
+  useEffect(() => {
+    getNotification()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    window.scrollTo(0, 0)
+  },[]);
+
+  const showDrawer = () => setVisible(true);
+  const hideDrawer = () => setVisible(false);
+
   const submitLogout = async () => {
     try {
       await ApiPostRequest(`logout`)
@@ -133,12 +138,53 @@ function Header({
       notificationError(error)
     } 
   }
-  
-  useEffect(() => window.scrollTo(0, 0));
 
-  const showDrawer = () => setVisible(true);
-  const hideDrawer = () => setVisible(false);
+  const getNotification = async () => {
+    try {
+      const response = await ApiGetRequest(`/notification`)
+      setDataNotification(response.data.data.map(element => ({
+        title: element.title,
+        description: element.detail,
+        uuid: element.uuid,
+        status: element.status
+      })))
+    } catch (error) {
+      notificationError(error)
+    }
+  }
 
+  const getUpdateNotification = async (uuid) => {
+    try {
+      let params = {
+        status: 2
+      }
+      await ApiPutRequest(`/notification/${uuid}`, params)
+      getNotification()
+    } catch (error) {
+      notificationError(error)
+    }
+  }
+
+
+  const menuNotification = (
+    <List
+      min-width="100%"
+      className="header-notifications-dropdown"
+      itemLayout="horizontal"
+      dataSource={dataNotification}
+      renderItem={(item) => (
+        <List.Item>
+          <List.Item.Meta
+            title={item.title}
+            description={item.description}
+            onClick={() => getUpdateNotification(item.uuid)}
+          />
+          {item.status !== '1' ? 'Sudah dibaca' : 'Belum dibaca'}
+        </List.Item>
+      )}
+     
+    />
+  );
 
   return (
     <>
@@ -165,6 +211,7 @@ function Header({
           </div>
         </Col>
         <Col span={24} md={18} className="header-control">
+        
           <Button type="link" onClick={showDrawer}>
             {logsetting}
           </Button>
@@ -184,6 +231,17 @@ function Header({
             placeholder="Type here..."
             prefix={<SearchOutlined />}
           />
+          <Badge size="small" className="notification_information" count={dataNotification.length}>
+            <Dropdown overlay={menuNotification} trigger={["click"]}>
+              <a
+                href="#pablo"
+                className="ant-dropdown-link"
+                onClick={(e) => e.preventDefault()}
+              >
+                {icons.iconBell}
+              </a>
+            </Dropdown>
+          </Badge>
         </Col>
       </Row>
       <Drawer

@@ -56,16 +56,22 @@ function Sidenav({ color }) {
       pages:'Management',
       data:[
         {
-          id:'4',
+          id:'1',
           icons: icons.iconAdminPanel,
           routerLink:'/admin',
           name:'Admin'
         },
         {
-          id:'5',
+          id:'2',
           icons: icons.iconCalendarEvent,
           routerLink:'/event-banner',
           name:'Banner Acara'
+        },
+        {
+          id:'3',
+          icons: icons.iconBell,
+          routerLink:'/notification',
+          name:'Notifikasi'
         }
       ]
     },
