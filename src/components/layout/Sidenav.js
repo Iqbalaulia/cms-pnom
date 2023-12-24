@@ -37,18 +37,18 @@ function Sidenav({ color }) {
           routerLink:'/transaction',
           name:'Transaksi'
         },
-        {
-          id:'3',
-          icons: icons.iconOrder,
-          routerLink:'/order',
-          name:'Order'
-        },
-        {
-          id:'4',
-          icons: icons.iconCustomer,
-          routerLink:'/customer',
-          name:'Pelanggan'
-        },
+        // {
+        //   id:'3',
+        //   icons: icons.iconOrder,
+        //   routerLink:'/order',
+        //   name:'Order'
+        // },
+        // {
+        //   id:'4',
+        //   icons: icons.iconCustomer,
+        //   routerLink:'/customer',
+        //   name:'Pelanggan'
+        // },
       ]
     },
     {

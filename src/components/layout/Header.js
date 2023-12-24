@@ -122,8 +122,8 @@ function Header({
   useEffect(() => {
     getNotification()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    window.scrollTo(0, 0)
   },[]);
+  useEffect(() => window.scrollTo(0, 0));
 
   const showDrawer = () => setVisible(true);
   const hideDrawer = () => setVisible(false);
