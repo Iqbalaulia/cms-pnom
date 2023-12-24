@@ -5,7 +5,9 @@ const socialMediaModel = {
 
 const paymentMethodModel = {
     name: '',
-    status: false
+    value:'',
+    image:'',
+    status: null
 }
 
 const contactModel = {
