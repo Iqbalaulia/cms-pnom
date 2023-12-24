@@ -183,16 +183,14 @@ const EventBanner = () => {
 
         setSelectedFile(event.target.files[0])
         
-        setFormData({
-          ...formData,
-          image: selectedFile.name,
-          actionUrl: URL.createObjectURL(selectedFile)
-        })
-        
-        
         formDataUpload.append("file", selectedFile, selectedFile.name);
 
-        await ApiPostMultipart(`file-upload`, formDataUpload)
+        const response = await ApiPostMultipart(`file-upload`, formDataUpload)
+
+        setFormData({
+          ...formData,
+          image: response.data.data.filename,
+        })
        
       } catch (error) {
         PnomNotification({
@@ -243,13 +241,13 @@ const EventBanner = () => {
         }
 
         await ApiPostMultipart(`banner`, formDataBanner)
-        
+        await getFetchData()
       } catch (error) {
         PnomNotification({
           type: 'error',
           message: 'Maaf terjadi kesalahan!',
           description: error.message,
-       })
+        })
       } finally {
         setLoading(false)
       }
@@ -278,7 +276,7 @@ const EventBanner = () => {
           description: 'Data berhasil diubah',
         })
 
-        getFetchData()
+        await getFetchData()
       } catch (error) {
         PnomNotification({
           type: 'error',
@@ -421,6 +419,21 @@ const EventBanner = () => {
                               ...formData,
                               endAt: event
                             })} 
+                          />
+                      </Form.Item>
+                      <Form.Item
+                        className="username mb-2"
+                        label="Url"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Masukkan ur;!",
+                          },
+                        ]}>
+                          <Input 
+                            value={formData.actionUrl}
+                            onChange={(e) => setFormData({...formData, actionUrl: e.target.value})}
+                            placeholder="Url" 
                           />
                       </Form.Item>
                       <Form.Item
