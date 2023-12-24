@@ -12,7 +12,9 @@ const paymentMethodModel = {
 
 const contactModel = {
     name: '',
-    description: ''
+    value:'',
+    image:'',
+    status: null
 }
 
 const aboutModel = {

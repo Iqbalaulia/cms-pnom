@@ -1,85 +1,112 @@
 import React, { useEffect, useState, } from 'react';
-import { Table, Col, Button, Space, Form, Input, Row, Layout } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Select, Table, Col, Button, Space, Form, Input, Row, Layout, Tag, Image } from 'antd';
+import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
-import { paginationModel } from 'composables/useSetting';
-import { mockDataTableContact } from '../data/setting';
+import { paginationModel, statusModel } from 'composables/useSetting';
 import { contactModel } from 'utils/models/SettingModels';
+import { notificationError } from 'utils/general/general';
 
-import PnomConfirm from 'components/layout/ConfirmDialog';
+import { ApiGetRequest, ApiPostMultipart, ApiPostRequest, ApiPutRequest } from 'utils/api/config';
+
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
 
 const SettingContact = () => {
     const { Content } = Layout
-    const { TextArea } = Input;
-    const [tableParams, setTableParams] = useState(paginationModel);
-    const [dataTable, setDataTable] = useState();
-    const [isModalShow, setIsModalShow] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [formContact, setFormContact] = useState(contactModel);
+    
+    const [ isStepAction, setStepAction ] = useState('save-data')
+    const [ isUuid, setUuid ] = useState('')
+    const [ dataTable, setDataTable ] = useState();
+    const [ parentUuid, setParentUuid ] = useState(null);
+    const [ selectedFile, setSelectedFile ] = useState(null);
+    const [ isModalShow, setIsModalShow ] = useState(false);
+    const [ loading, setLoading ] = useState(false);
+    const [ formData, setFormData ] = useState(contactModel);
+    const [ tableParams, setTableParams ] = useState(paginationModel);
+    const [ filterData, setFilterData ] = useState({
+      search:"",
+      status: null
+    })
     const columnsContact = [
-        {
+          {
             title: 'No',
-            width:'5%',
             render: (text, record, index) => {
-              const current = tableParams.pagination.current; 
+              const pageNum = tableParams.pagination.pageNum; 
               const pageSize = tableParams.pagination.pageSize; 
-              const calculatedIndex = (current - 1) * pageSize + index + 1; 
+              const calculatedIndex = (pageNum - 1) * pageSize + index + 1; 
               return calculatedIndex;
             },
+            width: '5%'
           },
           {
-            title: 'Nama',
-            dataIndex: 'name',
+            title: 'Nama Kontak',
             sorter: true,
-            render: (name) => `${name}`,
+            render: (item) => (
+              <label className=''>{item.value}</label>
+            )
           },
           {
-            title: 'Keterangan',
-            dataIndex: 'description',
+            title: 'Tipe',
+            sorter: true,
+            render: (item) => (
+              <label className='text-capitalize'>{item.name}</label>
+            )
+          },
+          {
+            title: 'Status',
+            render: (item) => (
+              <Tag color={item.status !== '0' ? 'green' : 'red'}>{item.status !== '0' ? 'Aktif' : 'Tidak Aktif'}</Tag>
+            ),
+            
+          },
+          {
+            title: 'Gambar',
+            render: (item) => (
+                <Image
+                    width={80}
+                    src={item.imageThumb}
+                />
+            ),
           },
           {
             title: 'Actions',
             width: '20%',
-            render: () => (
+            render: (item) => (
               <Space size={8}>
-                <Button onClick={handleDeleteData} type="danger" danger ghost icon={<DeleteOutlined />} size={'large'} />
-                <Button onClick={handleShowForm} type="primary" icon={<EditOutlined />} size={'large'} />
+                <Button onClick={() => handleEditModalForm(item)} type="primary" ghost icon={<EditOutlined />} size={'large'} />
               </Space>        
             )
           },
     ]
 
     useEffect(() => {
-      fetchDataContact()
+      getDataContact()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const handleDeleteData = () => {
-        PnomConfirm({
-          onOkConfirm: handleOkDelete,
-          onCancelConfirm: handleCancelDelete,
-          content: 'Your confirmation message here'
-        })
-    }
     const handleShowForm = () => {
        setIsModalShow(true)
-       resetField()
+       setStepAction('save-data')
+       handleResetField()
     }
-    const handleOkDelete = () => {
-        console.log('Delete confirmed');
-    }  
-    const handleCancelDelete = () => {
-        console.log('Delete canceled');
+    const handleEditModalForm = (item) => {
+      setFormData({
+        ...formData,
+        name: item.name,
+        value: item.value,
+        status: item.status,
+        parentUuid: parentUuid
+      })
+      setUuid(item.uuid)
+      setIsModalShow(true)
+      setStepAction('update-data')
     }
     const handleSubmit = () => {
+      if(isStepAction === `save-data`)  saveDataForm()
+      if(isStepAction === `update-data`) updateDataForm(isUuid)
+        
       setIsModalShow(false)
-      resetField()
-      PnomNotification({
-        type: 'success',
-        message: 'Notification Title',
-        description:'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-      })
+      handleResetField()
     }
     const handleCancelSubmit = () => {
       setIsModalShow(false)
@@ -93,21 +120,105 @@ const SettingContact = () => {
 
       if (pagination.pageSize !== tableParams.pagination?.pageSize) setDataTable([]);
     }
+    const handleResetField = () => {
+      setFormData({...contactModel})
+      setSelectedFile(null)
+    }
+    const handleUploadImage = async (event) => {
+      try {
+        const formDataUpload = new FormData();
+
+        setSelectedFile(event.target.files[0])
+        
+        formDataUpload.append("file", selectedFile, selectedFile.name);
+
+        const response = await ApiPostMultipart(`file-upload`, formDataUpload)
+
+        setFormData({
+          ...formData,
+          image: response.data.data.filename,
+        })
+       
+      } catch (error) {
+        PnomNotification({
+          type: 'error',
+          message: 'Maaf terjadi kesalahan!',
+          description: 'Mohon periksa kembali jaringan anda. Atau menghubungi call center',
+        })
+      }
+    };
+    const handleOnChangeStatus = (event) => {
+      setFilterData({...filterData, status:event})
+      getDataContact()
+    }
+
+ 
+    const getDataContact = async () => {
+      try {
+        setLoading(true)
+        let params = {
+          name: 'contact',
+          search: filterData.search,
+          status:filterData.status
+        }
+
+        const response = await ApiGetRequest(`setting`, params)
+        setDataTable(response.data.data.child)
+        setParentUuid(response.data.data.uuid)
+      
+      } catch (error) {
+        notificationError(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    const saveDataForm = async () => {
+      try {
+        setLoading(true)
+
+        let formDataPayment = {
+          parentUuid: parentUuid,
+          name: formData.name,
+          value: formData.value,
+          image: formData.image,
+          status: formData.status
+        }
+
+        await ApiPostRequest(`setting`, formDataPayment)
+        PnomNotification({
+          type: 'success',
+          message: 'Berhasil disimpan!',
+          description:'Data kontak berhasil disimpan!',
+        })
+        getDataContact()
+      } catch (error) {
+        notificationError(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    const updateDataForm = async (uuid) => {
+      try {
+        setLoading(true)
+        await ApiPutRequest(`setting/${uuid}`, formData)
+        PnomNotification({
+          type: 'success',
+          message: 'Berhasil diupdate!',
+          description:'Data admin berhasil diupdate!',
+        })
+        await getDataContact()
+      } catch (error) {
+        PnomNotification({
+          type: 'error',
+          message: 'Maaf terjadi kesalahan!',
+          description: error.message,
+       })
+      } finally {
+        setLoading(false)
+      }
+    }
 
     
-    const fetchDataContact = async () => {
-      setLoading(true)
-      setDataTable(mockDataTableContact)
-      setLoading(false)
-    }
-
-    const resetField = () => {
-      setFormContact({...contactModel})
-    }
-    // const onChangeForm = e => {
-    //   const { name, value } = e.target
-    //   setFormContact(prevState => ({...prevState, [name]: value}) )
-    // }
     return(
         <>
             <div className='setting-payment'>
@@ -117,7 +228,15 @@ const SettingContact = () => {
                         placeholder="Pencarian..."
                       />  
                   </Col>
-                  <Col className='d-flex justify-end' md={{span: 18}}>
+                  <Col className='px-2' md={{span: 6}}>
+                    <Select
+                      value={filterData.status}
+                      onChange={handleOnChangeStatus}
+                      options={statusModel}
+                      placeholder='Pilih Status'
+                    />
+                  </Col>
+                  <Col className='d-flex justify-end' md={{span: 12}}>
                     <Space align='start'>
                       <Button
                         type='primary'
@@ -151,30 +270,61 @@ const SettingContact = () => {
                   onOk={handleSubmit}
                   onCancel={handleCancelSubmit}
                   visible={isModalShow}
-                  width={800}
+                  width={600}
                 >
                   <Content className='form-data'>
                     <Form>
                       <Row gutter={[24,0]}>
+                      <Col md={{ span: 24 }}>
+                          <Form.Item
+                            className="username mb-0"
+                            label="Kontak"
+                            >
+                            <Input 
+                              value={formData.value}
+                              onChange={(e) => setFormData({...formData, value: e.target.value})}
+                              placeholder="Kontak" 
+                            />
+                          </Form.Item>
+                        </Col>
                         <Col md={{ span: 24 }}>
                           <Form.Item
                             className="username mb-0"
-                            label="Nama"
-                            name="name"
+                            label="Tipe"
                             >
-                            <Input
-                              value={formContact.name} 
-                              placeholder="Masukkan Sosial Media" 
+                            <Input 
+                              value={formData.name}
+                              onChange={(e) => setFormData({...formData, name: e.target.value})}
+                              placeholder="Tipe" 
                             />
                           </Form.Item>
                         </Col>
                         <Col md={{ span: 24}}>
                           <Form.Item
                             className="username mb-0"
-                            label="Keterangan"
-                            name="description"
+                            label="Status"
                             >
-                              <TextArea value={formContact.description} rows={4} />
+                              <Select
+                               value={formData.status}
+                               onSelect={(e) => setFormData(
+                                 {
+                                   ...formData,
+                                   status: e
+                                 }
+                               )} 
+                               placeholder="Status"
+                               options={statusModel}
+                              />
+                          </Form.Item>
+                        </Col>
+                        <Col md={{ span: 24 }}>
+                          <Form.Item
+                            className="username mb-2"
+                            label="Upload Banner"
+                            name="upload_banner"
+                            >
+                          
+                            <input type="file" id="file-upload" multiple onChange={handleUploadImage} accept="image/*" />
                           </Form.Item>
                         </Col>
                       </Row>

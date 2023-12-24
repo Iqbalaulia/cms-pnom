@@ -42,14 +42,14 @@ const SettingPaymentMethod = () => {
             title: 'Nama Pembayaran',
             sorter: true,
             render: (item) => (
-              <label className=''>{item.name}</label>
+              <label className=''>{item.value}</label>
             )
           },
           {
             title: 'Tipe',
             sorter: true,
             render: (item) => (
-              <label className='text-capitalize'>{item.value}</label>
+              <label className='text-capitalize'>{item.name}</label>
             )
           },
           {
@@ -151,8 +151,7 @@ const SettingPaymentMethod = () => {
       getDataPaymentMethod()
     }
 
-
-    
+ 
     const getDataPaymentMethod = async () => {
       try {
         setLoading(true)
