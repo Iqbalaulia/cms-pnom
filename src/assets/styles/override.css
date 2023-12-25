@@ -6,6 +6,17 @@
     font-weight: bold;
 }
 
+.ant-input-affix-wrapper{
+    padding: 0px 10px !important;
+}
+
+.ant-input {
+    border-radius: 0px !important;
+}
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+    border-radius: 0px !important;
+}
+
 .notification_information {
     margin: 0px 20px 0px 0px;
 }
