@@ -23,9 +23,9 @@ const EventBanner = () => {
     const [ loading, setLoading ] = useState(false)
     const [ isModalForm, setIsModalForm ] = useState(false)
     const [ selectedFile, setSelectedFile ] = useState(null);
+    const [ uuidData, setUuidData] = useState(null)
     const [ tableParams, setTableParams ] = useState(paginationModel)
     const [ formData, setFormData ] = useState(bannerModel)
-    const [ uuidData, setUuidData] = useState(null)
     const [ isStepAction, setStepAction ] = useState('save-data')
     const [ filterData, setFilterData ] = useState({
       startAt:"",

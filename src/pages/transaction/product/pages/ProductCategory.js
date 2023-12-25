@@ -1,98 +1,104 @@
 import React, { useEffect, useState, } from 'react';
-import { Table, Col, Button, Space,Form,Input,Row,Layout } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Table, Col, Button, Space,Form,Input,Row,Layout, Tag, Image } from 'antd';
+import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
-import { productCategoryModel } from '../data/setting';
 import { paginationModel } from 'composables/useSetting';
-
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
-import PnomConfirm from 'components/layout/ConfirmDialog';
-import { ApiGetRequest, ApiPostRequest } from 'utils/api/config';
+
+import { ApiGetRequest, ApiPostMultipart, ApiPostRequest, ApiPutRequest } from 'utils/api/config';
+import { productCategoryModel } from 'utils/models/ProductModels';
 
 const ProductCategory = () => {
   const { Content } = Layout
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [isModalShow, setIsModalForm] = useState(false)
-  const [tableParams, setTableParams] = useState(paginationModel);
-  const [formData, setFormData] = useState(productCategoryModel)
-  const [filterData, setFilterData] = useState({
+
+  const [ data, setData ] = useState([]);
+  const [ loading, setLoading ] = useState(false);
+  const [ isModalShow, setIsModalForm ] = useState(false)
+  const [ uuidData, setUuidData] = useState(null)
+  const [ selectedFile, setSelectedFile ] = useState(null);
+  const [ tableParams, setTableParams ] = useState(paginationModel);
+  const [ formData, setFormData ] = useState(productCategoryModel)
+  const [ stepAction, setStepAction ] = useState('save-data')
+  const [ filterData, setFilterData ] = useState({
     search:''
-  })
-  const columns = [
+})
+  const columnsProductCategory = [
     {
       title: 'No',
       render: (text, record, index) => {
-        const current = tableParams.pagination.current; 
+        const pageNum = tableParams.pagination.pageNum; 
         const pageSize = tableParams.pagination.pageSize; 
-        const calculatedIndex = (current - 1) * pageSize + index + 1; 
+        const calculatedIndex = (pageNum - 1) * pageSize + index + 1; 
         return calculatedIndex;
       },
-      width:'5%'
+      width: '5%'
     },
     {
       title: 'Nama Kategori',
-      dataIndex: 'category',
       sorter: true,
-      render: (category) => `${category}`,
+      render: (item) => `${item.name}`,
+    },
+    {
+      title: 'Status',
+      sorter: true,
+      render: (item) => (
+        <Tag color={item.status !== '0' ? 'green' : 'red'}>{item.status !== '0' ? 'Aktif' : 'Tidak Aktif'}</Tag>
+      ),
+    },
+    {
+      title: 'Gambar',
+      render: (item) => (
+          <Image
+              width={100}
+              src={item.imageThumb}
+          />
+      ),
     },
     {
       title: 'Actions',
-      render: () => (
+      render: (item) => (
         <Space size={8}>
-          <Button onClick={handleDeleteData} type="danger" danger ghost icon={<DeleteOutlined />} size={'large'} />
-          <Button onClick={handleEditModalForm} type="primary" icon={<EditOutlined />} size={'large'} />
+          <Button onClick={() => handleEditModalForm(item)} type="primary" ghost icon={<EditOutlined />} size={'large'} />
         </Space>        
       )
     },
   ];
 
-  let stepAction = 'save-data'
   
   useEffect(() => {
-    fetchData();
-  });
+    fetchDataCategory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleShowForm = () => {
-    stepAction = 'save-data'
+    setStepAction('save-data')
     setIsModalForm(true)
-    resetField()
+    handleResetField()
   }
-  const handleEditModalForm = () => {
-    stepAction = 'update-data'
+  const handleEditModalForm = (item) => {
+    setFormData({
+      ...formData,
+      name: item.name
+    })
+    setUuidData(item.uuid)
+    setStepAction('update-data')
     setIsModalForm(true)
   }
   const handleSubmit = () => {
-    setIsModalForm(false);
     if(stepAction === `save-data`)  saveDataForm()
     if(stepAction === `update-data`) updateDataForm()
-        
-    resetField()
-    PnomNotification({
-      type: 'success',
-      message: 'Notification Title',
-      description:
-      'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-    })
+    
+    setIsModalForm(false);
+    handleResetField()
   };
   const handleCancelSubmit = () => {
     setIsModalForm(false);
-    resetField()
+    handleResetField()
   };
-  const handleDeleteData = () => {
-    PnomConfirm({
-      onOkConfirm: handleOkDelete,
-      onCancelConfirm: handleCancelDelete,
-      content: 'Your confirmation message here'
-    })
-  }
-  const handleOkDelete = () => {
-    console.log('Delete confirmed');
-  }
-  const handleCancelDelete = () => {
-    console.log('Delete canceled');
+  const handleResetField = () => {
+    setFormData({...productCategoryModel})
   }
   const handleTableChange = (pagination, filters, sorter) => {
     setTableParams({
@@ -103,9 +109,32 @@ const ProductCategory = () => {
 
     if (pagination.pageSize !== tableParams.pagination?.pageSize) setData([]);
   };
+  const handleUploadImage = async (event) => {
+    try {
+      const formDataUpload = new FormData();
+
+      setSelectedFile(event.target.files[0])
+      
+      formDataUpload.append("file", selectedFile, selectedFile.name);
+
+      const response = await ApiPostMultipart(`file-upload`, formDataUpload)
+
+      setFormData({
+        ...formData,
+        image: response.data.data.filename,
+      })
+     
+    } catch (error) {
+      PnomNotification({
+        type: 'error',
+        message: 'Maaf terjadi kesalahan!',
+        description: 'Mohon periksa kembali jaringan anda. Atau menghubungi call center',
+      })
+    }
+  };
 
   
-  const fetchData = async () => {
+  const fetchDataCategory = async () => {
     try {
       let params = {
         search: filterData.search
@@ -127,8 +156,13 @@ const ProductCategory = () => {
   const saveDataForm = async () => {
     try {
       setLoading(true)
-      await ApiPostRequest(`product/category`, formData)
-      
+
+      let formDataProductCategory = {
+        name: formData.name,
+        image: formData.image
+      }
+      await ApiPostRequest(`product/category`, formDataProductCategory)
+      await fetchDataCategory()
     } catch (error) {
       PnomNotification({
         type: 'error',
@@ -143,8 +177,12 @@ const ProductCategory = () => {
   const updateDataForm = async () => {
     try {
       setLoading(true)
-      await ApiPostRequest(`product/category`, formData)
-      
+      let formDataProductCategory = {
+        name: formData.name,
+        image: formData.image
+      }
+      await ApiPutRequest(`product/category/${uuidData}`, formDataProductCategory)
+      await fetchDataCategory()
     } catch (error) {
       PnomNotification({
         type: 'error',
@@ -155,9 +193,7 @@ const ProductCategory = () => {
       setLoading(false)
     }
   }
-  const resetField = () => {
-    setFormData({...productCategoryModel})
-  }
+  
 
   return (
     <div className='admin-table'>
@@ -191,7 +227,7 @@ const ProductCategory = () => {
                         <Table
                         size={'middle'}
                         bordered={true}
-                        columns={columns}
+                        columns={columnsProductCategory}
                         rowKey={(record) => record.id}
                         dataSource={data}
                         pagination={tableParams.pagination}
@@ -200,6 +236,7 @@ const ProductCategory = () => {
                         className='ant-border-space'
                         />
                     </Col>
+                    
                 </Row>
             </Col>
         </Row>
@@ -218,7 +255,6 @@ const ProductCategory = () => {
                       <Form.Item
                         className="username mb-0"
                         label="Nama"
-                        name="name"
                         >
                         <Input
                           value={formData.name}
@@ -229,7 +265,16 @@ const ProductCategory = () => {
                         />
                       </Form.Item>
                     </Col>
-                    
+                    <Col md={{ span: 24 }}>
+                        <Form.Item
+                          className="username mb-2"
+                          label="Upload Banner"
+                          name="upload_banner"
+                          >
+                        
+                          <input type="file" id="file-upload" multiple onChange={handleUploadImage} accept="image/*" />
+                        </Form.Item>
+                      </Col>
                   </Row>
               </Form>
             </Content>
