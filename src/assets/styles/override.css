@@ -6,6 +6,10 @@
     font-weight: bold;
 }
 
+.ant-modal-title {
+    font-weight: bold !important;
+}
+
 .ant-input-affix-wrapper{
     padding: 0px 10px !important;
 }

@@ -22,6 +22,7 @@ const DataAdmin = () => {
     const [ isModalForm, setIsModalForm ] = useState(false)
 
     const [ isStepAction, setStepAction ] = useState('save-data')
+    const [ isTitleModal, setTitleModal ] = useState('Tambah Data')
     const [ isUuid, setUuid ] = useState('')
 
     const [ tableParams, setTableParams ] = useState(paginationModel)
@@ -100,8 +101,9 @@ const DataAdmin = () => {
         setIsModalForm(true)
         handleResetField()
         setStepAction('save-data')
+        setTitleModal('Tambah Data')
     }
-    const handleEditModalForm = (item) => {
+    const handleEditModalForm = async (item) => {
       setFormData({
         ...formData,
         name: item.name,
@@ -109,10 +111,11 @@ const DataAdmin = () => {
         status: parseInt(item.status),
         role_uuid: item.role.uuid,
       });
-      getRoleData()
+      await getRoleData()
       setUuid(item.uuid)
-      setStepAction('update-data')
       setIsModalForm(true)
+      setStepAction('update-data')
+      setTitleModal('Edit Data')
     }
     const handleSubmit = () => {
         if(isStepAction === `save-data`)  saveDataForm()
@@ -320,6 +323,7 @@ const DataAdmin = () => {
             onOk={handleSubmit} 
             onCancel={handleCancelSubmit} 
             visible={isModalForm}
+            title={isTitleModal}
             width={600}
           >
             <Content className="form-data">

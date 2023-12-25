@@ -22,6 +22,7 @@ const EventBanner = () => {
     const [ dataTable, setDataTable ] = useState([])
 
     const [ isStepAction, setStepAction ] = useState('save-data')
+    const [ isTitleModal, setTitleModal ] = useState('Tambah Data')
 
     const [ loading, setLoading ] = useState(false)
     const [ isModalForm, setIsModalForm ] = useState(false)
@@ -136,6 +137,7 @@ const EventBanner = () => {
         setIsModalForm(true)
         handleResetField()
         setStepAction('save-data')
+        setTitleModal('Tambah Data')
     }
 
     const handleEditModalForm = (item) => {
@@ -151,6 +153,7 @@ const EventBanner = () => {
       setUuidData(item.uuid)
       setIsModalForm(true)
       setStepAction('update-data')
+      setTitleModal('Edit Data')
     }
 
     const handleSubmit = () => {
@@ -351,6 +354,7 @@ const EventBanner = () => {
             onOk={handleSubmit} 
             onCancel={handleCancelSubmit} 
             visible={isModalForm}
+            title={isTitleModal}
             width={600}
           >
             <Content className="form-data">

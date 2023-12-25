@@ -13,7 +13,8 @@ const SettingAboutus = () => {
 
     const [ isStepAction, setStepAction ] = useState('save-data')
     const [ isUuid, setUuid ] = useState('')
-    const [ dataAboutus, setDataAboutus ] = useState({});
+
+    const [ dataAboutUs, setDataAboutUs ] = useState({});
     const [ parentUuid, setParentUuid ] = useState(null);
   
     useEffect(() => {
@@ -33,7 +34,7 @@ const SettingAboutus = () => {
         }
 
         const response = await ApiGetRequest(`setting`, params)
-        setDataAboutus({
+        setDataAboutUs({
           name: response.data.data.child[0].name,
           value: response.data.data.child[0].value,
         })
@@ -54,8 +55,8 @@ const SettingAboutus = () => {
       try {
         let formDataAboutus = {
           parentUuid: parentUuid,
-          name: dataAboutus.name,
-          value: dataAboutus.value,
+          name: dataAboutUs.name,
+          value: dataAboutUs.value,
         }
 
         await ApiPostRequest(`setting`, formDataAboutus)
@@ -73,8 +74,8 @@ const SettingAboutus = () => {
       try {
         let formDataAboutus = {
           parentUuid: parentUuid,
-          name: dataAboutus.name,
-          value: dataAboutus.value,
+          name: dataAboutUs.name,
+          value: dataAboutUs.value,
         }
         await ApiPutRequest(`setting/${uuid}`, formDataAboutus)
         PnomNotification({
@@ -104,8 +105,8 @@ const SettingAboutus = () => {
                       >
                                 
                         <TextArea 
-                          value={dataAboutus.value}
-                          onChange={(e) => setDataAboutus({...dataAboutus, value: e.target.value})}  
+                          value={dataAboutUs.value}
+                          onChange={(e) => setDataAboutUs({...dataAboutUs, value: e.target.value})}  
                           rows={10} 
                         />
                     </Form.Item>

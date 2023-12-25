@@ -21,6 +21,7 @@ const RoleAdmin = () => {
     const [ isModalForm, setIsModalForm ] = useState(false)
 
     const [ isStepAction, setStepAction ] = useState('save-data')
+    const [ isTitleModal, setTitleModal ] = useState('Tambah Data')
     const [ isUuid, setUuid ] = useState('')
 
     const [ tableParams, setTableParams ] = useState(paginationModel)
@@ -86,6 +87,7 @@ const RoleAdmin = () => {
         setIsModalForm(true)
         handleResetField()
         setStepAction('save-data')
+        setTitleModal('Tambah Data')
     }
     const handleEditModalForm = (item) => {
       setFormData({
@@ -94,8 +96,9 @@ const RoleAdmin = () => {
         status: parseInt(item.status)
       });
       setUuid(item.uuid)
-      setStepAction('update-data')
       setIsModalForm(true)
+      setStepAction('update-data')
+      setTitleModal('Edit Data')
     }
     const handleSubmit = () => {
         if(isStepAction === `save-data`)  saveDataForm()
@@ -257,6 +260,7 @@ const RoleAdmin = () => {
             onOk={handleSubmit} 
             onCancel={handleCancelSubmit} 
             visible={isModalForm}
+            title={isTitleModal}
             width={600}
           >
             <Content className="form-data">

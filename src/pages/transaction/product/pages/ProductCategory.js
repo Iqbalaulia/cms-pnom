@@ -15,6 +15,9 @@ const ProductCategory = () => {
 
   const [ dataTable, setDataTable ] = useState([]);
 
+  const [ stepAction, setStepAction ] = useState('save-data')
+  const [ isTitleModal, setTitleModal ] = useState('Tambah Data')
+
   const [ loading, setLoading ] = useState(false);
   const [ isModalShow, setIsModalForm ] = useState(false)
 
@@ -23,8 +26,6 @@ const ProductCategory = () => {
 
   const [ tableParams, setTableParams ] = useState(paginationModel);
   const [ formData, setFormData ] = useState(productCategoryModel)
-
-  const [ stepAction, setStepAction ] = useState('save-data')
   const [ filterData, setFilterData ] = useState({
     search:''
   })
@@ -78,9 +79,10 @@ const ProductCategory = () => {
   }, []);
 
   const handleShowForm = () => {
-    setStepAction('save-data')
     setIsModalForm(true)
     handleResetField()
+    setStepAction('save-data')
+    setTitleModal('Tambah Data')
   }
   const handleEditModalForm = (item) => {
     setFormData({
@@ -88,8 +90,9 @@ const ProductCategory = () => {
       name: item.name
     })
     setUuidData(item.uuid)
-    setStepAction('update-data')
     setIsModalForm(true)
+    setStepAction('update-data')
+    setTitleModal('Edit Data')
   }
   const handleSubmit = () => {
     if(stepAction === `save-data`)  saveDataForm()
@@ -250,6 +253,7 @@ const ProductCategory = () => {
           onOk={handleSubmit} 
           onCancel={handleCancelSubmit} 
           visible={isModalShow}
+          title={isTitleModal}
           width={600}
           >
             <Content className="form-data">

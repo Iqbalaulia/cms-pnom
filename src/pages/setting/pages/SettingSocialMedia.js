@@ -16,6 +16,7 @@ const SettingSocialMedia = () => {
     const { Content } = Layout
     
     const [ isStepAction, setStepAction ] = useState('save-data')
+    const [ isTitleModal, setTitleModal ] = useState('Tambah Data')
     const [ isUuid, setUuid ] = useState('')
 
     const [ dataTable, setDataTable ] = useState([]);
@@ -92,8 +93,9 @@ const SettingSocialMedia = () => {
 
     const handleShowForm = () => {
        setIsModalShow(true)
-       setStepAction('save-data')
        handleResetField()
+       setStepAction('save-data')
+       setTitleModal('Tambah Data')
     }
     const handleEditModalForm = (item) => {
       setFormData({
@@ -106,6 +108,7 @@ const SettingSocialMedia = () => {
       setUuid(item.uuid)
       setIsModalShow(true)
       setStepAction('update-data')
+      setTitleModal('Edit Data')
     }
     const handleSubmit = () => {
       if(isStepAction === `save-data`)  saveDataForm()
@@ -276,6 +279,7 @@ const SettingSocialMedia = () => {
                   onOk={handleSubmit}
                   onCancel={handleCancelSubmit}
                   visible={isModalShow}
+                  title={isTitleModal}
                   width={600}
                 >
                   <Content className='form-data'>
