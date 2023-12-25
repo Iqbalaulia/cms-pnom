@@ -3,9 +3,9 @@ import { Select, Table, Col, Button, Space, Form, Input, Row, Layout, Tag, Image
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 import { paginationModel, statusModel } from 'composables/useSetting';
+
 import { contactModel } from 'utils/models/SettingModels';
 import { notificationError } from 'utils/general/general';
-
 import { ApiGetRequest, ApiPostMultipart, ApiPostRequest, ApiPutRequest } from 'utils/api/config';
 
 import PnomModal from 'components/layout/Modal';
@@ -15,18 +15,23 @@ const SettingContact = () => {
     const { Content } = Layout
     
     const [ isStepAction, setStepAction ] = useState('save-data')
+
     const [ isUuid, setUuid ] = useState('')
-    const [ dataTable, setDataTable ] = useState();
+    const [ dataTable, setDataTable ] = useState([]);
+
     const [ parentUuid, setParentUuid ] = useState(null);
     const [ selectedFile, setSelectedFile ] = useState(null);
+
     const [ isModalShow, setIsModalShow ] = useState(false);
     const [ loading, setLoading ] = useState(false);
+
     const [ formData, setFormData ] = useState(contactModel);
     const [ tableParams, setTableParams ] = useState(paginationModel);
     const [ filterData, setFilterData ] = useState({
       search:"",
       status: null
     })
+    
     const columnsContact = [
           {
             title: 'No',

@@ -1,9 +1,9 @@
 import React, { useEffect, useState, } from 'react';
+
 import { Col, Button, Space, Form, Input, Row } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
 
 import { notificationError } from 'utils/general/general';
-
 import { ApiGetRequest, ApiPostRequest, ApiPutRequest } from 'utils/api/config';
 
 import PnomNotification from 'components/layout/Notification';
@@ -16,7 +16,6 @@ const SettingAboutus = () => {
     const [ dataAboutus, setDataAboutus ] = useState({});
     const [ parentUuid, setParentUuid ] = useState(null);
   
-
     useEffect(() => {
       getDataAboutUs()
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -128,7 +127,7 @@ const SettingAboutus = () => {
                       </Button>
                     </Space>
                   </Col>
-                </Row>
+              </Row>
             </div>
         </>
     )

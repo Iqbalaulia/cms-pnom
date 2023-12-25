@@ -5,9 +5,11 @@ import SettingPayment from './SettingPayment';
 import SettingAbout from './SettingAbout';
 import SettingContact from './SettingContact';
 import SettingSocialMedia from './SettingSocialMedia';
+
 const Setting = () => {
     const { TabPane } = Tabs
-    const [header, setHeader] = useState('Metode Pembayaran')
+    
+    const [ header, setHeader ] = useState('Metode Pembayaran')
 
     const callback = (key) => {
         if(key === '1') setHeader('Metode Pembayaran') 
