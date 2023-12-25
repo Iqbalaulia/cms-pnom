@@ -135,7 +135,7 @@ const SignIn = () => {
                     },
                   ]}
                 >
-                  <Input 
+                  <Input.Password
                     name="password"
                     value={formData.password}
                     placeholder="Password"
