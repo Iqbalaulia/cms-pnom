@@ -13,17 +13,22 @@ import { productCategoryModel } from 'utils/models/ProductModels';
 const ProductCategory = () => {
   const { Content } = Layout
 
-  const [ data, setData ] = useState([]);
+  const [ dataTable, setDataTable ] = useState([]);
+
   const [ loading, setLoading ] = useState(false);
   const [ isModalShow, setIsModalForm ] = useState(false)
+
   const [ uuidData, setUuidData] = useState(null)
   const [ selectedFile, setSelectedFile ] = useState(null);
+
   const [ tableParams, setTableParams ] = useState(paginationModel);
   const [ formData, setFormData ] = useState(productCategoryModel)
+
   const [ stepAction, setStepAction ] = useState('save-data')
   const [ filterData, setFilterData ] = useState({
     search:''
-})
+  })
+
   const columnsProductCategory = [
     {
       title: 'No',
@@ -107,7 +112,7 @@ const ProductCategory = () => {
       ...sorter,
     });
 
-    if (pagination.pageSize !== tableParams.pagination?.pageSize) setData([]);
+    if (pagination.pageSize !== tableParams.pagination?.pageSize) setDataTable([]);
   };
   const handleUploadImage = async (event) => {
     try {
@@ -142,7 +147,7 @@ const ProductCategory = () => {
 
       setLoading(true);
       const response = await ApiGetRequest(`product/category`, params)
-      setData(response.data.data)
+      setDataTable(response.data.data)
     } catch (error) {
         PnomNotification({
           type: 'error',
@@ -173,7 +178,6 @@ const ProductCategory = () => {
       setLoading(false)
     }
   }
-
   const updateDataForm = async () => {
     try {
       setLoading(true)
@@ -229,7 +233,7 @@ const ProductCategory = () => {
                         bordered={true}
                         columns={columnsProductCategory}
                         rowKey={(record) => record.id}
-                        dataSource={data}
+                        dataSource={dataTable}
                         pagination={tableParams.pagination}
                         loading={loading}
                         onChange={handleTableChange}
