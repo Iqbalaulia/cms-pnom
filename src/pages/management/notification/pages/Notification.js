@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Col, Input, Row, Select, Space, Table, Tag } from 'antd';
 
+import { Button, Card, Col, Input, Row, Select, Space, Table, Tag } from 'antd';
 import { EyeOutlined, CheckCircleOutlined } from '@ant-design/icons';
 
 import { statusModel, paginationModel } from 'composables/useSetting';
+
 import { notificationError } from 'utils/general/general';
 import { ApiGetRequest, ApiPutRequest } from 'utils/api/config';
 
 
 const Notification = () => {
     const [ dataTable, setDataTable ] = useState([])
-    const [ tableParams, setTableParams ] = useState(paginationModel)
+
     const [ loading, setLoading ] = useState(false)
+
+    const [ tableParams, setTableParams ] = useState(paginationModel)
     const [ filterData, setFilterData ] = useState({
         search:"",
         status: null
     })
+
     const columnsTable =  [
         {
             title: 'No',
@@ -72,24 +76,13 @@ const Notification = () => {
     }, []);
 
    
-
     const handleOnChangeStatus = (event) => {
         setFilterData({...filterData, status:event})
         getFetchData()
     }
-
     const handleReadNotification = async (uuid) => {
-        try {
-            let params = {
-              status: 2
-            }
-            await ApiPutRequest(`/notification/${uuid}`, params)
-            getFetchData()
-          } catch (error) {
-            notificationError(error)
-          }
+      updateStatusNotif(uuid)
     }
-
     const handleTableChange = (pagination, filters, sorter) => {
         setTableParams({
             pagination,
@@ -99,6 +92,7 @@ const Notification = () => {
 
         if (pagination.pageSize !== tableParams.pagination?.pageSize) setDataTable([])
     }
+
 
     const getFetchData = async () => {
         try {
@@ -113,6 +107,17 @@ const Notification = () => {
         } finally {
             setLoading(false)
         }
+    }
+    const updateStatusNotif = async (uuid) => {
+      try {
+        let params = {
+          status: 2
+        }
+        await ApiPutRequest(`/notification/${uuid}`, params)
+        getFetchData()
+      } catch (error) {
+        notificationError(error)
+      }
     }
 
     return(
@@ -162,7 +167,6 @@ const Notification = () => {
                 </Col>
             </Row>
          </div>
-
         </>
     )
 }

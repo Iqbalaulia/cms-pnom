@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 
-import { Select, Image, Table, Col, Card, Button, Space,Form,Input,Row,Layout } from 'antd';
+import { Select, Image, Table, Col, Card, Button, Space,Form,Input,Row,Layout, DatePicker } from 'antd';
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { DatePicker } from 'antd';
 
-import { paginationModel } from 'composables/useSetting';
+import { paginationModel, statusModel } from 'composables/useSetting';
+import { convertDate } from 'composables/useHelper';
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
@@ -20,13 +20,17 @@ const EventBanner = () => {
     const { TextArea } = Input;
 
     const [ dataTable, setDataTable ] = useState([])
+
+    const [ isStepAction, setStepAction ] = useState('save-data')
+
     const [ loading, setLoading ] = useState(false)
     const [ isModalForm, setIsModalForm ] = useState(false)
+
     const [ selectedFile, setSelectedFile ] = useState(null);
     const [ uuidData, setUuidData] = useState(null)
+
     const [ tableParams, setTableParams ] = useState(paginationModel)
     const [ formData, setFormData ] = useState(bannerModel)
-    const [ isStepAction, setStepAction ] = useState('save-data')
     const [ filterData, setFilterData ] = useState({
       startAt:"",
       endAt:"",
@@ -34,17 +38,7 @@ const EventBanner = () => {
       status: 1
     })
 
-    const selectStatus = [
-      {
-        value: 0,
-        label:'Aktif'
-      },
-      {
-        value: 1,
-        label:'Tidak Aktif'
-      }
-    ]
-    const columns = [
+    const columnsBanner = [
         {
             title: 'No',
             render: (text, record, index) => {
@@ -225,7 +219,6 @@ const EventBanner = () => {
             setLoading(false)
         }
     }
-
     const saveDataForm = async () => {
       try {
         setLoading(true)
@@ -252,7 +245,6 @@ const EventBanner = () => {
         setLoading(false)
       }
     }
-
     const updateDataForm = async () => {
       try {
         setLoading(true)
@@ -286,13 +278,6 @@ const EventBanner = () => {
       } finally {
         setLoading(false)
       }
-    }
-
-    function convertDate(str) {
-      var date = new Date(str),
-        mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-        day = ("0" + date.getDate()).slice(-2);
-      return [date.getFullYear(), mnth, day].join("-");
     }
 
     return(
@@ -331,7 +316,7 @@ const EventBanner = () => {
                               <Select
                                 value={filterData.status}
                                 onChange={handleFilterStatus}
-                                options={selectStatus}
+                                options={statusModel}
                               />
                             </Col>
                             <Col md={{span: 4}} className='d-flex justify-end'>
@@ -349,14 +334,14 @@ const EventBanner = () => {
                         </Row>
                         <Table 
                              size={'middle'}
+                             className='ant-border-space'
                              bordered={true}
-                             columns={columns}
+                             columns={columnsBanner}
                              rowKey={(record) => record.id}
                              dataSource={dataTable}
-                             pagination={tableParams.pagination}
                              loading={loading}
                              onChange={handleTableChange}
-                             className='ant-border-space'
+                             pagination={tableParams.pagination}
                         />
                     </Card>
                 </Col>

@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+
 import { Select, Table, Col, Button, Space, Form, Input, Row, Layout, Tag } from 'antd';
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
@@ -16,12 +17,16 @@ const DataAdmin = () => {
 
     const [ dataTable, setDataTable ] = useState([])
     const [ dataRole, setDataRole ] = useState([])
+
     const [ loading, setLoading ] = useState(false)
     const [ isModalForm, setIsModalForm ] = useState(false)
+
     const [ isStepAction, setStepAction ] = useState('save-data')
     const [ isUuid, setUuid ] = useState('')
+
     const [ tableParams, setTableParams ] = useState(paginationModel)
     const [ formData, setFormData ] = useState(adminModel)
+
     const [ formInputData ] = Form.useForm()
     const [ filterData, setFilterData ] = useState({
       startDate:"",
@@ -30,7 +35,7 @@ const DataAdmin = () => {
       status: null
     })
 
-    const columns = [
+    const columnsDataAdmin = [
         {
             title: 'No',
             render: (text, record, index) => {
@@ -95,7 +100,6 @@ const DataAdmin = () => {
         setIsModalForm(true)
         handleResetField()
         setStepAction('save-data')
-
     }
     const handleEditModalForm = (item) => {
       setFormData({
@@ -231,7 +235,6 @@ const DataAdmin = () => {
       }
     }
 
-
     const formPassword = (
       <Form.Item
         className="username mb-2"
@@ -300,7 +303,7 @@ const DataAdmin = () => {
                 <Table 
                     size={'middle'}
                     bordered={true}
-                    columns={columns}
+                    columns={columnsDataAdmin}
                     rowKey={(record) => record.id}
                     dataSource={dataTable}
                     pagination={tableParams.pagination}

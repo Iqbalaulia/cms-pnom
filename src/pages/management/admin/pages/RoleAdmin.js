@@ -1,35 +1,39 @@
 import React, {useEffect, useState} from 'react';
+
 import { Select, Table, Col, Button, Space, Form, Input, Row, Layout, Tag } from 'antd';
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
-import { paginationModel, statusModel } from 'composables/useSetting';
+import { paginationModel, rolesPermissionModel, statusModel } from 'composables/useSetting';
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
 
 import { ApiGetRequest, ApiPostRequest, ApiPutRequest } from 'utils/api/config';
 import { roleModel } from 'utils/models/AdminModels';
-import { rolesPermission } from '../data/setting';
 
 
 const RoleAdmin = () => {
     const { Content } = Layout
 
     const [ dataTable, setDataTable ] = useState([])
+
     const [ loading, setLoading ] = useState(false)
     const [ isModalForm, setIsModalForm ] = useState(false)
+
     const [ isStepAction, setStepAction ] = useState('save-data')
     const [ isUuid, setUuid ] = useState('')
+
     const [ tableParams, setTableParams ] = useState(paginationModel)
     const [ formData, setFormData ] = useState(roleModel)
-    const [ formInputData ] = Form.useForm()
     const [ filterData, setFilterData ] = useState({
       startDate:"",
       endDate:"",
       search:"",
       status: null
     })
-    const columns = [
+    const [ formInputData ] = Form.useForm()
+
+    const columnsRoleAdmin = [
         {
             title: 'No',
             render: (text, record, index) => {
@@ -71,16 +75,16 @@ const RoleAdmin = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const resetField = () => {
+    const handleResetField = () => {
         setFormData({...roleModel})
     }
     const handleCancelSubmit = () => {
         setIsModalForm(false);
-        resetField()
+        handleResetField()
     }
     const handleShowModalForm = () => {
         setIsModalForm(true)
-        resetField()
+        handleResetField()
         setStepAction('save-data')
     }
     const handleEditModalForm = (item) => {
@@ -98,7 +102,7 @@ const RoleAdmin = () => {
         if(isStepAction === `update-data`) updateDataForm(isUuid)
         
         setIsModalForm(false)
-        resetField()
+        handleResetField()
        
     }
     const handleTableChange = (pagination, filters, sorter) => {
@@ -110,7 +114,6 @@ const RoleAdmin = () => {
 
         if (pagination.pageSize !== tableParams.pagination?.pageSize) setDataTable([])
     }
-
     const handleOnChangeStatus = (event) => {
       setFilterData({...filterData, status:event})
       getFetchData()
@@ -147,7 +150,7 @@ const RoleAdmin = () => {
           setLoading(true)
           let formRoleAdmin = {
             name: formData.name,
-            permission: rolesPermission.permission
+            permission: rolesPermissionModel.permission
           }
   
           await ApiPostRequest(`admin/role`, formRoleAdmin)
@@ -174,7 +177,7 @@ const RoleAdmin = () => {
         let formRoleAdmin = {
           name: formData.name,
           status: formData.status,
-          permission: rolesPermission.permission
+          permission: rolesPermissionModel.permission
         }
         await ApiPutRequest(`admin/role/${uuid}`, formRoleAdmin)
         PnomNotification({
@@ -237,18 +240,19 @@ const RoleAdmin = () => {
               <Col xs={24} xl={24}>
                 <Table 
                     size={'middle'}
+                    className='ant-border-space'
                     bordered={true}
-                    columns={columns}
-                    rowKey={(record) => record.id}
+                    columns={columnsRoleAdmin}
                     dataSource={dataTable}
-                    pagination={tableParams.pagination}
                     loading={loading}
                     onChange={handleTableChange}
-                    className='ant-border-space'
+                    rowKey={(record) => record.id}
+                    pagination={tableParams.pagination}
                 />
               </Col>
             </Row>           
           </div> 
+
           <PnomModal 
             onOk={handleSubmit} 
             onCancel={handleCancelSubmit} 

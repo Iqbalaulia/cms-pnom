@@ -27,9 +27,27 @@ const paginationModel = {
     }
 }
 
+const rolesPermissionModel = {
+    permission: {
+        master_setting: {
+            create: true,
+            update: true
+        },
+        master_role: {
+            create: true,
+            update: true
+        },
+        admin: {
+            create: true,
+            update: true
+        }
+    }
+}
+
 
 export {
     jenisKelaminModel,
     paginationModel,
-    statusModel
+    statusModel,
+    rolesPermissionModel
 }
