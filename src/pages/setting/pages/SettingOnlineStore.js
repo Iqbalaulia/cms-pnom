@@ -12,6 +12,7 @@ import { ApiGetRequest, ApiPostMultipart, ApiPostRequest, ApiPutRequest } from '
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
 
+
 const SettingOnlineStore = () => {
     const { Content } = Layout
     
@@ -90,6 +91,7 @@ const SettingOnlineStore = () => {
       getDataOnlineStore()
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+    
 
     const handleShowForm = () => {
        setIsModalShow(true)

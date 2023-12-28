@@ -5,6 +5,20 @@ function convertDate(str) {
     return [date.getFullYear(), mnth, day].join("-");
 }
 
+function handleValidasiImage (url) {
+  let element = document.createElement('IMG')
+  element.src = url
+  element.onerror = function () {
+      return false
+  }
+  element.onload = function () {
+      return true
+  }
+
+  return true
+}
+
 export {
-    convertDate
+    convertDate,
+    handleValidasiImage
 }

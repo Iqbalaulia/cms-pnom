@@ -1,6 +1,6 @@
 import React, { useEffect, useState, } from 'react';
 
-import { Select, Table, Col, Button, Space, Form, Input, Row, Layout, Tag, Image } from 'antd';
+import { Select, Table, Col, Button, Space, Form, Input, Row, Layout, Tag } from 'antd';
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 import { paginationModel, statusModel } from 'composables/useSetting';
