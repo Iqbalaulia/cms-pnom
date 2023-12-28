@@ -5,6 +5,8 @@ import SettingPayment from './SettingPayment';
 import SettingAbout from './SettingAbout';
 import SettingContact from './SettingContact';
 import SettingSocialMedia from './SettingSocialMedia';
+import SettingInternal from './SettingInternal';
+import SettingOnlineStore from './SettingOnlineStore';
 
 const Setting = () => {
     const { TabPane } = Tabs
@@ -16,6 +18,8 @@ const Setting = () => {
         if(key === '2') setHeader('Kontak')
         if(key === '3') setHeader('Sosial Media')
         if(key === '4') setHeader('Tentang PNOM')
+        if(key === '5') setHeader('Internal')
+        if(key === '6') setHeader('Toko Online')
     }
     
     return(
@@ -40,6 +44,12 @@ const Setting = () => {
                                 </TabPane>
                                 <TabPane tab="Tentang PNOM" key="4">
                                     <SettingAbout/>
+                                </TabPane>
+                                <TabPane tab="Internal" key="5">
+                                    <SettingInternal/>
+                                </TabPane>
+                                <TabPane tab="Toko Online" key="6">
+                                    <SettingOnlineStore/>
                                 </TabPane>
                             </Tabs>  
                         </Card>
