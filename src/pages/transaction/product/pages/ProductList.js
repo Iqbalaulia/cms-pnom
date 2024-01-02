@@ -13,7 +13,7 @@ import { subStringText } from 'utils/function';
 
 const ProductList = () => {
   const { Content } = Layout
-  const [data, setData] = useState([]);
+  const [ data, setData ] = useState([]);
   
   const [ loading, setLoading ] = useState(false);
   const [ isModalShow, setIsModalForm ] = useState(false)
@@ -23,7 +23,8 @@ const ProductList = () => {
   const [ filterData, setFilterData ] = useState({
     search:''
   })
-  const columns = [
+
+  const columnsProductList = [
     {
       title: 'No',
       render: (text, record, index) => {
@@ -164,7 +165,7 @@ const ProductList = () => {
                         <Table
                         size={'middle'}
                         bordered={true}
-                        columns={columns}
+                        columns={columnsProductList}
                         dataSource={data}
                         pagination={tableParams.pagination}
                         loading={loading}
