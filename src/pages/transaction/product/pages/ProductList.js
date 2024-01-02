@@ -1,59 +1,70 @@
 import React, { useEffect, useState, } from 'react';
-import { Select, Table, Col, Button, Space,Form,Input,Row,Layout } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Select, Table, Col, Button, Space,Form,Input,Row,Layout, Tag } from 'antd';
+import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
-import { adminModel, roleModel, mockDataProductList } from '../data/setting';
+import { adminModel, roleModel } from '../data/setting';
 import { paginationModel } from 'composables/useSetting';
-
-// import { ApiGetRequest } from 'utils/api/config';
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
-import PnomConfirm from 'components/layout/ConfirmDialog';
-// import qs from 'qs';
+
+import { ApiGetRequest } from 'utils/api/config';
+import { subStringText } from 'utils/function';
 
 const ProductList = () => {
   const { Content } = Layout
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [isModalShow, setIsModalForm] = useState(false)
-  const [tableParams, setTableParams] = useState(paginationModel);
-  const [form, setFormData] = useState(adminModel)
+  
+  const [ loading, setLoading ] = useState(false);
+  const [ isModalShow, setIsModalForm ] = useState(false)
+  
+  const [ tableParams, setTableParams ] = useState(paginationModel);
+  const [ form, setFormData ] = useState(adminModel)
+  const [ filterData, setFilterData ] = useState({
+    search:''
+  })
   const columns = [
     {
       title: 'No',
       render: (text, record, index) => {
-        const current = tableParams.pagination.current; 
+        const pageNum = tableParams.pagination.pageNum; 
         const pageSize = tableParams.pagination.pageSize; 
-        const calculatedIndex = (current - 1) * pageSize + index + 1; 
+        const calculatedIndex = (pageNum - 1) * pageSize + index + 1; 
         return calculatedIndex;
       },
-      width:'5%'
+      width: '5%'
     },
     {
       title: 'Nama Produk',
-      dataIndex: 'product_name',
       sorter: true,
-      width: '20%',
+      width: '10%',
+      render: (item) => `${subStringText(item.name)}`
     },
     {
-      title: 'Jenis',
-      dataIndex: 'product_type',
-      width: '20%',
+      title: 'Kategori',
+      width: '10%',
+      render: (item) => `${item.category.name}`
     },
     {
-      title: 'Tipe',
-      dataIndex: 'product_type',
+      title: 'Jumlah Product',
+      render: (item) => `${item.details.length + ` ` + ` Produk`}`
     },
     {
-      title: 'Stok',
-      dataIndex: 'Stock',
+      title: 'Rekomendasi',
+      render: (item) => (
+        <Tag color={item.recommendation !== '0' ? 'green' : 'red'}>{item.recommendation !== '0' ? 'Rekomendasi' : '-'}</Tag>
+      ),
+    },
+    {
+      title: 'Status',
+      render: (item) => (
+        <Tag color={item.status !== '0' ? 'green' : 'red'}>{item.status !== '0' ? 'Aktif' : 'Tidak Aktif'}</Tag>
+      ),
     },
     {
       title: 'Actions',
       render: () => (
         <Space size={8}>
-          <Button onClick={handleDeleteData} type="danger" danger ghost icon={<DeleteOutlined />} size={'large'} />
           <Button onClick={handleShowForm} type="primary" icon={<EditOutlined />} size={'large'} />
         </Space>        
       )
@@ -61,12 +72,12 @@ const ProductList = () => {
   ];
   
   useEffect(() => {
-    fetchData();
+    fetchDataProduct();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleShowForm = () => {
-    setIsModalForm(true)
+    window.location.href = `/product/create`
     resetField()
   }
   const handleSubmit = () => {
@@ -79,23 +90,13 @@ const ProductList = () => {
       'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
     })
   };
+
   const handleCancelSubmit = () => {
     setIsModalForm(false);
     resetField()
   };
-  const handleDeleteData = () => {
-    PnomConfirm({
-      onOkConfirm: handleOkDelete,
-      onCancelConfirm: handleCancelDelete,
-      content: 'Your confirmation message here'
-    })
-  }
-  const handleOkDelete = () => {
-    console.log('Delete confirmed');
-  }
-  const handleCancelDelete = () => {
-    console.log('Delete canceled');
-  }
+  
+  
   const handleTableChange = (pagination, filters, sorter) => {
     setTableParams({
       pagination,
@@ -107,21 +108,15 @@ const ProductList = () => {
   };
 
   
-  const fetchData = async () => {
+  const fetchDataProduct = async () => {
     try {
+      let params = {
+        search: filterData.search
+      }
+
       setLoading(true);
-      // const result = await ApiGetRequest(`api?${qs.stringify(getRandomuserParams(tableParams))}`)
-      // setData(result.data.results)
-      // setLoading(false)
-      // setTableParams({
-      //   ...tableParams,
-      //   pagination: {
-      //     ...tableParams.pagination,
-      //     total: 200,
-      //   },
-      // });
-      setData(mockDataProductList)
-      setLoading(false)     
+      const response = await ApiGetRequest(`product/item`, params)
+      setData(response.data.data) 
     } catch (error) {
       PnomNotification({
         type: 'error',
@@ -132,15 +127,7 @@ const ProductList = () => {
       setLoading(false)
     }
   };
-  // const onChangeForm = e => {
-  //   const { name, value } = e.target
-  //   setFormData(prevState => ({...prevState, [name]: value}) )
-  // }
-  // const getRandomuserParams = (params) => ({
-  //   results: params.pagination?.pageSize,
-  //   page: params.pagination?.current,
-  //   ...params,
-  // });
+  
   const resetField = () => {
     setFormData({...adminModel})
   }
@@ -152,7 +139,11 @@ const ProductList = () => {
                 <Row className='mb-2'>
                       <Col md={{span: 6}}>
                         <Input
-                          placeholder="Pencarian..."
+                           value={filterData.search}
+                           onChange={
+                             (event) => setFilterData({...filterData, search: event.target.value})
+                           }
+                           placeholder="Pencarian..."
                         />
                       </Col>
                       <Col md={{span: 18}} className='d-flex justify-end'>

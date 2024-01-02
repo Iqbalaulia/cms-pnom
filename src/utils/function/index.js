@@ -7,6 +7,15 @@ const getDataFromLocalStorage = (key) => {
     }
 };
 
+const subStringText = (text) => {
+  if (text.length > 40) {
+    return text.substring(0, 40) + `...`
+  } else {
+    return text
+  }
+}
+
 export {
-    getDataFromLocalStorage
+    getDataFromLocalStorage,
+    subStringText
 }
