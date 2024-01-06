@@ -20,6 +20,17 @@ const statusModel = [
     }
 ]
 
+const discountModel = [
+    {
+        value: 1,
+        label:'Nominal'
+    },
+    {
+        value: 2,
+        label:'Persentasi'
+    }
+]
+
 const paginationModel = {
     pagination: {
         pageNum: 1,
@@ -44,10 +55,23 @@ const rolesPermissionModel = {
     }
 }
 
+const recommendationModel = [
+    {
+        value: 1,
+        label:'Rekomendasi'
+    },
+    {
+        value: 0,
+        label:'Tidak Rekomendasi'
+    }
+]
+
 
 export {
     jenisKelaminModel,
     paginationModel,
     statusModel,
-    rolesPermissionModel
+    rolesPermissionModel,
+    discountModel,
+    recommendationModel
 }

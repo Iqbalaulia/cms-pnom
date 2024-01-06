@@ -1,25 +1,20 @@
 import React, { useEffect, useState, } from 'react';
-import { Select, Table, Col, Button, Space,Form,Input,Row,Layout, Tag } from 'antd';
+import { Table, Col, Button, Space, Input, Row, Tag } from 'antd';
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
-import { adminModel, roleModel } from '../data/setting';
 import { paginationModel } from 'composables/useSetting';
 
-import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
 
 import { ApiGetRequest } from 'utils/api/config';
 import { subStringText } from 'utils/function';
 
 const ProductList = () => {
-  const { Content } = Layout
   const [ data, setData ] = useState([]);
   
   const [ loading, setLoading ] = useState(false);
-  const [ isModalShow, setIsModalForm ] = useState(false)
   
   const [ tableParams, setTableParams ] = useState(paginationModel);
-  const [ form, setFormData ] = useState(adminModel)
   const [ filterData, setFilterData ] = useState({
     search:''
   })
@@ -79,25 +74,8 @@ const ProductList = () => {
 
   const handleShowForm = () => {
     window.location.href = `/product/create`
-    resetField()
   }
-  const handleSubmit = () => {
-    setIsModalForm(false);
-    resetField()
-    PnomNotification({
-      type: 'success',
-      message: 'Notification Title',
-      description:
-      'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-    })
-  };
-
-  const handleCancelSubmit = () => {
-    setIsModalForm(false);
-    resetField()
-  };
-  
-  
+    
   const handleTableChange = (pagination, filters, sorter) => {
     setTableParams({
       pagination,
@@ -129,9 +107,6 @@ const ProductList = () => {
     }
   };
   
-  const resetField = () => {
-    setFormData({...adminModel})
-  }
 
   return (
     <div className='admin-table'>
@@ -176,75 +151,6 @@ const ProductList = () => {
                 </Row>
             </Col>
         </row>
-
-
-        <PnomModal 
-          onOk={handleSubmit} 
-          onCancel={handleCancelSubmit} 
-          visible={isModalShow}
-          width={600}
-          >
-            <Content className="form-data">
-              <Form>
-                  <Row gutter={[24,0]}>
-                    <Col md={{ span: 12 }}>
-                      <Form.Item
-                        className="username mb-0"
-                        label="Nama"
-                        name="name"
-                        >
-                        <Input 
-                          placeholder="Nama Produk" 
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        className="username mb-2"
-                        label="Stok"
-                        name="email"
-                       >
-                        <Input 
-                          type='number'
-                          placeholder="Stok" />
-                      </Form.Item>
-                    </Col>
-                    <Col md={{ span: 12 }}>
-                      <Form.Item
-                        className="username"
-                        label="Jenis"
-                        name="role"
-                        >
-
-                        <Select
-                          value={form.role}
-                          onSelect={value => setFormData(
-                            {
-                              ...form,
-                              role: value
-                            }
-                          )} 
-                          options={roleModel}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        className="username"
-                        label="Tipe"
-                        name="type"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Input data jenis kelamin!",
-                          },
-                        ]}>
-
-                        <Select
-                          
-                        />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-              </Form>
-            </Content>
-        </PnomModal>
     </div>
   );
 };

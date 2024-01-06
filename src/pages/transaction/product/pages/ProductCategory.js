@@ -9,6 +9,7 @@ import PnomNotification from 'components/layout/Notification';
 
 import { ApiGetRequest, ApiPostMultipart, ApiPostRequest, ApiPutRequest } from 'utils/api/config';
 import { productCategoryModel } from 'utils/models/ProductModels';
+import { notificationError } from 'utils/general/general';
 
 const ProductCategory = () => {
   const { Content } = Layout
@@ -152,11 +153,7 @@ const ProductCategory = () => {
       const response = await ApiGetRequest(`product/category`, params)
       setDataTable(response.data.data)
     } catch (error) {
-        PnomNotification({
-          type: 'error',
-          message: 'Maaf terjadi kesalahan!',
-          description: 'Mohon periksa kembali jaringan anda. Atau menghubungi call center',
-        })
+        notificationError(error)
     } finally {
       setLoading(false)
     }
@@ -172,11 +169,7 @@ const ProductCategory = () => {
       await ApiPostRequest(`product/category`, formDataProductCategory)
       await fetchDataCategory()
     } catch (error) {
-      PnomNotification({
-        type: 'error',
-        message: 'Maaf terjadi kesalahan!',
-        description: error.message,
-     })
+      notificationError(error)
     } finally {
       setLoading(false)
     }
@@ -191,11 +184,7 @@ const ProductCategory = () => {
       await ApiPutRequest(`product/category/${uuidData}`, formDataProductCategory)
       await fetchDataCategory()
     } catch (error) {
-      PnomNotification({
-        type: 'error',
-        message: 'Maaf terjadi kesalahan!',
-        description: error.message,
-     })
+      notificationError(error)
     } finally {
       setLoading(false)
     }
