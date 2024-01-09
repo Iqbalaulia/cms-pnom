@@ -10,8 +10,7 @@ import { productModel } from "utils/models/ProductModels";
 import { discountModel, recommendationModel, statusModel } from "composables/useSetting";
 
 
-const ProductCreatePage = () => {
-    const history = useHistory();
+const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, dataDetail }) => {
 
     const { TextArea } = Input
 
@@ -23,6 +22,9 @@ const ProductCreatePage = () => {
     const [ dataProduct, setDataProduct ] = useState(productModel)
 
     useEffect(() => {
+
+        const objectLength = Object.keys(dataDetail).length
+        
         fetchDataMaterial();
         // eslint-disable-next-line react-hooks/exhaustive-deps
         fetchDataMotif()
@@ -226,11 +228,11 @@ const ProductCreatePage = () => {
             }
 
             await ApiPostRequest(`product/item`, formData)
-            history.push('/product')
-
-            console.log('dataSales', dataSales)
+            onUpdateStep('')
+            onClickProduct()
         } catch (error) {
             notificationError(error)
+           
         }
     }
 
@@ -485,7 +487,7 @@ const ProductCreatePage = () => {
                             </Row>
                             <Row gutter={{span: 24}} className="mt-4">
                                 <Col offset={22}>
-                                    <Button onClick={() => handleSaveData()} type="primary">Simpan</Button>
+                                    <Button onClick={() => handleSaveData()} type="primary">{valueStepAction === `update-action` ? 'Ubah Data' : 'Simpan'}</Button>
                                 </Col>
                             </Row>
                         </Form>

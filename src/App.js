@@ -21,7 +21,7 @@ import Setting from './pages/setting/pages/Setting'
 
 // Transaction
 import TransactionProduct from './pages/transaction/product/pages/Product'
-import TransactionCreate from './pages/transaction/product/pages/createProduct/CreateProduct'
+import TransactionCreate from './pages/transaction/product/pages/actionProduct'
 import TransactionCustomer from './pages/transaction/customer/pages/Customer'
 import TransactionData from './pages/transaction/transaction/pages/Transaction'
 import TransactionOrder from './pages/transaction/order/pages/Order'
