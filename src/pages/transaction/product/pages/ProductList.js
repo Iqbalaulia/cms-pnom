@@ -1,10 +1,12 @@
 import React, { useEffect, useState, } from 'react';
+
 import { Table, Col, Button, Space, Input, Row, Tag } from 'antd';
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 import { paginationModel } from 'composables/useSetting';
 
 import PnomNotification from 'components/layout/Notification';
+import CreateProduct from './actionProduct';
 
 import { ApiGetRequest } from 'utils/api/config';
 import { subStringText } from 'utils/function';
@@ -18,6 +20,8 @@ const ProductList = () => {
   const [ filterData, setFilterData ] = useState({
     search:''
   })
+  const [ stepAction, setStepAction ] = useState('')
+  const [ dataDetail, setDataDetail ] = useState({})
 
   const columnsProductList = [
     {
@@ -48,7 +52,7 @@ const ProductList = () => {
     {
       title: 'Rekomendasi',
       render: (item) => (
-        <Tag color={item.recommendation !== '0' ? 'green' : 'red'}>{item.recommendation !== '0' ? 'Rekomendasi' : '-'}</Tag>
+        <Tag color={item.recommendation !== '0' ? 'green' : 'red'}>{item.recommendation !== '0' ? 'Rekomendasi' : 'Tidak Rekomendasi'}</Tag>
       ),
     },
     {
@@ -59,9 +63,9 @@ const ProductList = () => {
     },
     {
       title: 'Actions',
-      render: () => (
+      render: (item) => (
         <Space size={8}>
-          <Button onClick={handleShowForm} type="primary" icon={<EditOutlined />} size={'large'} />
+          <Button onClick={() => handleEditForm(item)} type="primary" icon={<EditOutlined />} size={'large'} />
         </Space>        
       )
     },
@@ -73,7 +77,17 @@ const ProductList = () => {
   }, []);
 
   const handleShowForm = () => {
-    window.location.href = `/product/create`
+    setStepAction('save-action')
+    // window.location.href = `/product/create`
+  }
+
+  const handleEditForm = (item) => {
+    setStepAction('update-action')
+    setDataDetail(item)
+  }
+
+  const handleUpdateStepAction = (value) => {
+    setStepAction(value)
   }
     
   const handleTableChange = (pagination, filters, sorter) => {
@@ -109,8 +123,10 @@ const ProductList = () => {
   
 
   return (
-    <div className='admin-table'>
-        <row gutter={[24,0]}>
+    <div className='admin-table'>   
+        {
+            stepAction === `save-action` || stepAction === `update-action` ? <CreateProduct dataDetail={dataDetail} onClickProduct={()=> fetchDataProduct()} onUpdateStep={handleUpdateStepAction} valueStepAction={stepAction} /> : (
+            <row gutter={[24,0]}>
             <Col xs="24" xl={24}>
                 <Row className='mb-2'>
                       <Col md={{span: 6}}>
@@ -150,7 +166,9 @@ const ProductList = () => {
                     </Col>
                 </Row>
             </Col>
-        </row>
+            </row>
+          )
+        }
     </div>
   );
 };
