@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 
 import { Button, Card, Col, Divider, Form, Input, Row, Select } from "antd";
 
-import { ApiGetRequest, ApiPostMultipart, ApiPostRequest } from "utils/api/config";
+import { ApiGetRequest, ApiPostMultipart, ApiPostRequest, ApiPutRequest } from "utils/api/config";
 import { notificationError } from "utils/general/general";
 import { productModel } from "utils/models/ProductModels";
 
@@ -20,10 +19,48 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
     const [ dataSales, setDataSales ] = useState([])
     const [ dataCategory, setDataCategory ] = useState([])
     const [ dataProduct, setDataProduct ] = useState(productModel)
+    const [ uuidData, setUuidData ] = useState('')
 
     useEffect(() => {
-
         const objectLength = Object.keys(dataDetail).length
+        if (objectLength > 0) {
+            setDataProduct({
+                name: dataDetail.name,
+                description: dataDetail.description,
+                categoryUuid: dataDetail.category.uuid,
+                recommendation: parseInt(dataDetail.recommendation),
+                status: parseInt(dataDetail.status)
+            })
+
+            setUuidData(dataDetail.uuid)
+
+            setDataSales(dataDetail.details.map(item => ({
+                    uuid: item.uuid,
+                    material: item.material,
+                    motif: item.motif,
+                    variant: item.variant,
+                    sku: item.sku,
+                    priceDefault: parseInt(item.priceDefault),
+                    priceDropship: parseInt(item.priceDropship),
+                    discountType: parseInt(item.discountType),
+                    discountValue:parseInt(item.discountValue),
+            })))
+
+        } else {
+            setDataSales([
+                {
+                    material: '',
+                    motif: '',
+                    variant: '',
+                    sku:'',
+                    priceDefault: 0,
+                    priceDropship: 0,
+                    discountType:1,
+                    discountValue:0,
+                    images:[]
+                }
+            ])
+        }
         
         fetchDataMaterial();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -33,21 +70,8 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
         // eslint-disable-next-line react-hooks/exhaustive-deps
         fetchDataCategory()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        setDataSales([
-            {
-                material: '',
-                motif: '',
-                variant: '',
-                sku:'',
-                priceDefault: 0,
-                priceDropship: 0,
-                discountType:1,
-                discountValue:0,
-                images:[]
-            }
-        ])
-
-    }, [])
+        
+    }, [dataDetail])
 
    
     const handleAddSales = () => {
@@ -227,7 +251,12 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                 details: dataSales
             }
 
-            await ApiPostRequest(`product/item`, formData)
+            if (uuidData) {
+                await ApiPutRequest(`product/item/${uuidData}`, formData)
+            } else {
+                await ApiPostRequest(`product/item`, formData)
+            }
+            
             onUpdateStep('')
             onClickProduct()
         } catch (error) {

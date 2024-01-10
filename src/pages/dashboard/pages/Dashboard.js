@@ -110,11 +110,7 @@ const Dashboard = () => {
                                     <Col xs={18}>
                                         <span>Total Pesanan</span>
                                         <Title level={3}>
-                                            100 <smal
-                                                className='bnb2'
-                                            >
-
-                                            </smal>
+                                            100
                                         </Title>
                                     </Col>
                                     <Col xs={6}>
@@ -144,11 +140,7 @@ const Dashboard = () => {
                                     <Col xs={18}>
                                         <span>Proses Produksi</span>
                                         <Title level={3}>
-                                            100 <smal
-                                                className='bnb2'
-                                            >
-
-                                            </smal>
+                                            100
                                         </Title>
                                     </Col>
                                     <Col xs={6}>
@@ -178,11 +170,7 @@ const Dashboard = () => {
                                     <Col xs={18}>
                                         <span>Selesai Packing</span>
                                         <Title level={3}>
-                                            100 <smal
-                                                className='bnb2'
-                                            >
-
-                                            </smal>
+                                            100
                                         </Title>
                                     </Col>
                                     <Col xs={6}>
@@ -212,11 +200,7 @@ const Dashboard = () => {
                                     <Col xs={18}>
                                         <span>Shipping</span>
                                         <Title level={3}>
-                                            100 <smal
-                                                className='bnb2'
-                                            >
-
-                                            </smal>
+                                            100
                                         </Title>
                                     </Col>
                                     <Col xs={6}>
@@ -262,11 +246,7 @@ const Dashboard = () => {
                                             <Col xs={18}>
                                                 <span>Cutting</span>
                                                 <Title level={3}>
-                                                    100 <smal
-                                                        className='bnb2'
-                                                    >
-
-                                                    </smal>
+                                                    100
                                                 </Title>
                                             </Col>
                                             <Col xs={6}>
@@ -296,11 +276,7 @@ const Dashboard = () => {
                                             <Col xs={18}>
                                                 <span>Printing</span>
                                                 <Title level={3}>
-                                                    100 <smal
-                                                        className='bnb2'
-                                                    >
-
-                                                    </smal>
+                                                    100
                                                 </Title>
                                             </Col>
                                             <Col xs={6}>
@@ -330,11 +306,7 @@ const Dashboard = () => {
                                             <Col xs={18}>
                                                 <span>Pendapatan Bulan Ini</span>
                                                 <Title level={3}>
-                                                    100 <smal
-                                                        className='bnb2'
-                                                    >
-
-                                                    </smal>
+                                                    100
                                                 </Title>
                                             </Col>
                                             <Col xs={6}>

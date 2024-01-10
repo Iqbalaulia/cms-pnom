@@ -213,7 +213,7 @@ const iconCalendarEvent = [
     width="24"
     height="22"
     xmlns="http://www.w3.org/2000/svg"
-    class="bi bi-calendar-event"
+    className="bi bi-calendar-event"
     viewBox="0 0 16 18"> 
     <path
       fillRule="evenodd"
@@ -232,7 +232,7 @@ const iconSetting = [
     stroke-width="2" 
     stroke-linecap="round" 
     stroke-linejoin="round"  
-    class="feather feather-settings">
+    className="feather feather-settings">
       <circle cx="12" cy="12" r="3"></circle>
       <path 
         fillRule="evenodd"

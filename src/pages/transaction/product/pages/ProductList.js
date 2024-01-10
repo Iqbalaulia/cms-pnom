@@ -47,7 +47,7 @@ const ProductList = () => {
     },
     {
       title: 'Jumlah Product',
-      render: (item) => `${item.details.length + ` ` + ` Produk`}`
+      render: (item) => `${item.details.length} Produk`
     },
     {
       title: 'Rekomendasi',
