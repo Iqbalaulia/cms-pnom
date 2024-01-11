@@ -7,6 +7,7 @@ const paymentMethodModel = {
     name: '',
     value:'',
     image:'',
+    imageThumb:'',
     status: null
 }
 
@@ -14,6 +15,7 @@ const contactModel = {
     name: '',
     value:'',
     image:'',
+    imageThumb: '',
     status: null
 }
 

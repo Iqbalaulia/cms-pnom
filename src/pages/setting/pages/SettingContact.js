@@ -102,6 +102,7 @@ const SettingContact = () => {
         name: item.name,
         value: item.value,
         status: item.status,
+        imageThumb: item.image,
         parentUuid: parentUuid
       })
       setUuid(item.uuid)
@@ -135,9 +136,8 @@ const SettingContact = () => {
     const handleUploadImage = async (event) => {
       try {
         const formDataUpload = new FormData();
+        const selectedFile = event.target.files[0]
 
-        setSelectedFile(event.target.files[0])
-        
         formDataUpload.append("file", selectedFile, selectedFile.name);
 
         const response = await ApiPostMultipart(`file-upload`, formDataUpload)
@@ -145,6 +145,7 @@ const SettingContact = () => {
         setFormData({
           ...formData,
           image: response.data.data.filename,
+          imageThumb: URL.createObjectURL(selectedFile)
         })
        
       } catch (error) {
@@ -327,14 +328,19 @@ const SettingContact = () => {
                           </Form.Item>
                         </Col>
                         <Col md={{ span: 24 }}>
-                          <Form.Item
-                            className="username mb-2"
-                            label="Upload Banner"
-                            name="upload_banner"
-                            >
-                          
-                            <input type="file" id="file-upload" multiple onChange={handleUploadImage} accept="image/*" />
-                          </Form.Item>
+                                <Form.Item
+                                  className="username mb-2"
+                                  label="Upload Banner"
+                                  name="upload_banner"
+                                  >
+                                
+                                  <input type="file" id="file-upload" multiple onChange={handleUploadImage} accept="image/*" />
+                                </Form.Item>
+
+                                <Image
+                                    width={550}
+                                    src={formData.imageThumb}
+                                />
                         </Col>
                       </Row>
                     </Form>

@@ -22,7 +22,6 @@ const SettingPaymentMethod = () => {
     const [ dataTable, setDataTable ] = useState([]);
 
     const [ parentUuid, setParentUuid ] = useState(null);
-    const [ selectedFile, setSelectedFile ] = useState(null);
 
     const [ isModalShow, setIsModalShow ] = useState(false);
     const [ loading, setLoading ] = useState(false);
@@ -103,6 +102,7 @@ const SettingPaymentMethod = () => {
         name: item.name,
         value: item.value,
         status: item.status,
+        imageThumb: item.image,
         parentUuid: parentUuid
       })
       setUuid(item.uuid)
@@ -135,9 +135,8 @@ const SettingPaymentMethod = () => {
     const handleUploadImage = async (event) => {
       try {
         const formDataUpload = new FormData();
+        const selectedFile = event.target.files[0]
 
-        setSelectedFile(event.target.files[0])
-        
         formDataUpload.append("file", selectedFile, selectedFile.name);
 
         const response = await ApiPostMultipart(`file-upload`, formDataUpload)
@@ -145,6 +144,7 @@ const SettingPaymentMethod = () => {
         setFormData({
           ...formData,
           image: response.data.data.filename,
+          imageThumb: URL.createObjectURL(selectedFile)
         })
        
       } catch (error) {
@@ -327,14 +327,20 @@ const SettingPaymentMethod = () => {
                           </Form.Item>
                         </Col>
                         <Col md={{ span: 24 }}>
-                          <Form.Item
-                            className="username mb-2"
-                            label="Upload Banner"
-                            name="upload_banner"
-                            >
-                          
-                            <input type="file" id="file-upload" multiple onChange={handleUploadImage} accept="image/*" />
-                          </Form.Item>
+
+                                <Form.Item
+                                  className="username mb-2"
+                                  label="Upload Banner"
+                                  name="upload_banner"
+                                  >
+                                
+                                  <input type="file" id="file-upload" multiple onChange={handleUploadImage} accept="image/*" />
+                                </Form.Item>
+
+                                <Image
+                                    width={550}
+                                    src={formData.imageThumb}
+                                />
                         </Col>
                       </Row>
                     </Form>

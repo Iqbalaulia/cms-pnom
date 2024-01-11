@@ -14,6 +14,11 @@ body {
 .ant-layout.ant-layout-has-sider {
   flex-direction: row;
 }
+
+.ant-image-preview {
+  width: ;
+}
+
 .layout-dashboard {
   background: transparent;
   text-align: left;
@@ -33,7 +38,8 @@ body {
   height: 100vh;
   overflow: auto;
   margin: 0;
-  padding: 33px 20px;
+  padding: 20px 20px;
+  border-right: 2px solid #e4dfdf;
 }
 .layout-dashboard .ant-layout-sider.sider-primary .brand img {
   height: 50px;
@@ -1648,6 +1654,7 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav
 .ant-table.ant-table-middle tfoot > tr > th,
 .ant-table.ant-table-middle tfoot > tr > td {
   padding: 16px 25px;
+  border: 1px solid #cccccc !important;
 }
 
 .avatar-sm {
@@ -1904,7 +1911,7 @@ body {
 }
 .ant-input {
   height: 3rem;
-  border: 1px solid #d9d9d9;
+  border: 1px solid #cccccc;
 }
 .font-bold {
   font-weight: 700;
@@ -2222,8 +2229,9 @@ button.ant-btn.bell strong {
 }
 
 .layout-dashboard .ant-layout-content {
-  padding: 0;
-  margin: 0 20px 0;
+  padding: 20px;
+  background-color: #e4dfdf;
+  margin: 0 0px 0;
 }
 .m-10,
 .mr-10,
@@ -3074,5 +3082,5 @@ section.ant-layout.ant-layout-has-sider.layout-dashboard.layout-profile
 .ant-picker{
   padding: 14px 10px 10px;
   width: 100%;
-  border-radius: 6px;
+  border: 1px solid #cccccc;
 }
