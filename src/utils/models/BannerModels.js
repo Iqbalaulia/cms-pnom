@@ -2,10 +2,11 @@ const bannerModel = {
     title:'',
     description:'',
     image:'',
+    imageThumb: '',
     startAt:'',
     endAt:'',
     actionUrl:'',
-    status: 1
+    status: null
 }
 
 export {

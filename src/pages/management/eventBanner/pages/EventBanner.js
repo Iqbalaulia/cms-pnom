@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 
-import { Select, Image, Table, Col, Card, Button, Space,Form,Input,Row,Layout, DatePicker } from 'antd';
+import { Select, Image, Table, Col, Card, Button, Space,Form,Input,Row,Layout, DatePicker, Tag } from 'antd';
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 import { paginationModel, statusModel } from 'composables/useSetting';
@@ -27,7 +27,6 @@ const EventBanner = () => {
     const [ loading, setLoading ] = useState(false)
     const [ isModalForm, setIsModalForm ] = useState(false)
 
-    const [ selectedFile, setSelectedFile ] = useState(null);
     const [ uuidData, setUuidData] = useState(null)
 
     const [ tableParams, setTableParams ] = useState(paginationModel)
@@ -36,7 +35,7 @@ const EventBanner = () => {
       startAt:"",
       endAt:"",
       search:"",
-      status: 1
+      status: null
     })
 
     const columnsBanner = [
@@ -66,9 +65,11 @@ const EventBanner = () => {
             render: (item) => `${moment(item.endAt).format('DD MMMM YYYY')}`,
           },
           {
-            title: 'Status Banner',
+            title: 'Status',
             sorter: true,
-            render: (item) => `${item.status === '1' ? 'Aktif' : 'Tidak Aktif'}`,
+            render: (item) => (
+              <Tag color={item.status === '1' ? 'green' : 'red'}>{item.status === '1' ? 'Aktif' : 'Tidak Aktif'}</Tag>
+            ),          
           },
           {
             title: 'Gambar',
@@ -101,7 +102,7 @@ const EventBanner = () => {
     }, []);
 
     const handleFilterStatus = (event) => {
-      setFilterData({...filterData, status:event})
+      setFilterData(filterData => ({...filterData, status:event}))
       getFetchData()
     }
 
@@ -121,10 +122,11 @@ const EventBanner = () => {
           title:'',
           description:'',
           image:'',
+          imageThumb: '',
           startAt:'',
           endAt:'',
           actionUrl:'',
-          status: 1
+          status: null
         })
     }
 
@@ -146,7 +148,9 @@ const EventBanner = () => {
         title: item.title,
         startAt: moment(item.startAt),
         endAt:moment(item.endAt),
-        status: 1,
+        status: parseInt(item.status),
+        actionUrl: item.actionUrl,
+        imageThumb: item.image,
         description: item.description
       })
 
@@ -177,8 +181,7 @@ const EventBanner = () => {
     const handleUploadImage = async (event) => {
       try {
         const formDataUpload = new FormData();
-
-        setSelectedFile(event.target.files[0])
+        const selectedFile = event.target.files[0]
         
         formDataUpload.append("file", selectedFile, selectedFile.name);
 
@@ -187,6 +190,7 @@ const EventBanner = () => {
         setFormData({
           ...formData,
           image: response.data.data.filename,
+          imageThumb: URL.createObjectURL(selectedFile)
         })
        
       } catch (error) {
@@ -320,6 +324,7 @@ const EventBanner = () => {
                                 value={filterData.status}
                                 onChange={handleFilterStatus}
                                 options={statusModel}
+                                placeholder='Pilih Status'
                               />
                             </Col>
                             <Col md={{span: 4}} className='d-flex justify-end'>
@@ -411,6 +416,22 @@ const EventBanner = () => {
                           />
                       </Form.Item>
                       <Form.Item
+                            className="username mb-0"
+                            label="Status"
+                            >
+                              <Select
+                               value={formData.status}
+                               onSelect={(e) => setFormData(
+                                 {
+                                   ...formData,
+                                   status: e
+                                 }
+                               )} 
+                               placeholder="Status"
+                               options={statusModel}
+                              />
+                          </Form.Item>
+                      <Form.Item
                         className="username mb-2"
                         label="Url"
                         rules={[
@@ -452,6 +473,10 @@ const EventBanner = () => {
                         
                           <input type="file" id="file-upload" multiple onChange={handleUploadImage} accept="image/*" />
                         </Form.Item>
+                        <Image
+                                    width={550}
+                                    src={formData.imageThumb}
+                                />
                       </Col>
                   </Row>
               </Form>

@@ -20,6 +20,17 @@ const statusModel = [
     }
 ]
 
+const statusReadModel = [
+    {
+        value: 1,
+        label:'Sudah Dibaca'
+    },
+    {
+        value: 0,
+        label:'Belum Dibaca'
+    }
+]
+
 const discountModel = [
     {
         value: 1,
@@ -73,5 +84,6 @@ export {
     statusModel,
     rolesPermissionModel,
     discountModel,
-    recommendationModel
+    recommendationModel,
+    statusReadModel
 }

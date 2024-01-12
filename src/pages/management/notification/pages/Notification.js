@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Input, Row, Select, Space, Table, Tag } from 'antd';
 import { EyeOutlined, CheckCircleOutlined } from '@ant-design/icons';
 
-import { statusModel, paginationModel } from 'composables/useSetting';
+import { statusReadModel, paginationModel } from 'composables/useSetting';
 
 import { notificationError } from 'utils/general/general';
 import { ApiGetRequest, ApiPutRequest } from 'utils/api/config';
@@ -77,7 +77,7 @@ const Notification = () => {
 
    
     const handleOnChangeStatus = (event) => {
-        setFilterData({...filterData, status:event})
+        setFilterData(filterData => ({...filterData, status:event}))
         getFetchData()
     }
     const handleReadNotification = async (uuid) => {
@@ -141,7 +141,7 @@ const Notification = () => {
                             <Col md={{span: 4}}>
                               <Select
                                 value={filterData.status}
-                                options={statusModel}
+                                options={statusReadModel}
                                 onChange={handleOnChangeStatus}
                                 placeholder='Pilih Status'
                               />
