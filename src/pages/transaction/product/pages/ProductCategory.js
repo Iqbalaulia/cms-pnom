@@ -1,8 +1,8 @@
 import React, { useEffect, useState, } from 'react';
-import { Table, Col, Button, Space,Form,Input,Row,Layout, Tag, Image } from 'antd';
+import { Table, Col, Button, Space,Form,Input,Row,Layout, Tag, Image, Select } from 'antd';
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
-import { paginationModel } from 'composables/useSetting';
+import { paginationModel, statusModel } from 'composables/useSetting';
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
@@ -23,7 +23,6 @@ const ProductCategory = () => {
   const [ isModalShow, setIsModalForm ] = useState(false)
 
   const [ uuidData, setUuidData] = useState(null)
-  const [ selectedFile, setSelectedFile ] = useState(null);
 
   const [ tableParams, setTableParams ] = useState(paginationModel);
   const [ formData, setFormData ] = useState(productCategoryModel)
@@ -88,7 +87,9 @@ const ProductCategory = () => {
   const handleEditModalForm = (item) => {
     setFormData({
       ...formData,
-      name: item.name
+      name: item.name,
+      status: parseInt(item.status),
+      imageThumb: item.image,
     })
     setUuidData(item.uuid)
     setIsModalForm(true)
@@ -121,8 +122,7 @@ const ProductCategory = () => {
   const handleUploadImage = async (event) => {
     try {
       const formDataUpload = new FormData();
-
-      setSelectedFile(event.target.files[0])
+      const selectedFile = event.target.files[0]
       
       formDataUpload.append("file", selectedFile, selectedFile.name);
 
@@ -131,6 +131,7 @@ const ProductCategory = () => {
       setFormData({
         ...formData,
         image: response.data.data.filename,
+        imageThumb: URL.createObjectURL(selectedFile)
       })
      
     } catch (error) {
@@ -164,7 +165,8 @@ const ProductCategory = () => {
 
       let formDataProductCategory = {
         name: formData.name,
-        image: formData.image
+        image: formData.image,
+        status: formData.status
       }
       await ApiPostRequest(`product/category`, formDataProductCategory)
       await fetchDataCategory()
@@ -262,6 +264,24 @@ const ProductCategory = () => {
                         />
                       </Form.Item>
                     </Col>
+                    <Col md={{ span: 24}}>
+                          <Form.Item
+                            className="username mb-0"
+                            label="Status"
+                            >
+                              <Select
+                               value={formData.status}
+                               onSelect={(e) => setFormData(
+                                 {
+                                   ...formData,
+                                   status: e
+                                 }
+                               )} 
+                               placeholder="Status"
+                               options={statusModel}
+                              />
+                          </Form.Item>
+                        </Col>
                     <Col md={{ span: 24 }}>
                         <Form.Item
                           className="username mb-2"
@@ -271,6 +291,10 @@ const ProductCategory = () => {
                         
                           <input type="file" id="file-upload" multiple onChange={handleUploadImage} accept="image/*" />
                         </Form.Item>
+                        <Image
+                                    width={550}
+                                    src={formData.imageThumb}
+                                />
                       </Col>
                   </Row>
               </Form>

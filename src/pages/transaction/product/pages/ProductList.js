@@ -46,8 +46,8 @@ const ProductList = () => {
       render: (item) => `${item.category.name}`
     },
     {
-      title: 'Jumlah Product',
-      render: (item) => `${item.details.length} Produk`
+      title: 'Variasi',
+      render: (item) => `${item.details.length} Variasi`
     },
     {
       title: 'Rekomendasi',

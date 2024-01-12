@@ -3,7 +3,7 @@ import { Col, Card, Tabs } from 'antd';
 
 import ProductList from './ProductList'
 import ProductCategory from './ProductCategory'
-import ProductRecomended from './ProductRecomended'
+// import ProductRecomended from './ProductRecomended'
 
 const ProductPage = () => {
     const { TabPane } = Tabs
@@ -13,7 +13,7 @@ const ProductPage = () => {
     function callback(key) {
         if(key === '1') setHeader('Daftar Produk') 
         if(key === '2') setHeader('Kategori Produk')
-        if(key === '3') setHeader('Produk Rekomendasi')    
+        // if(key === '3') setHeader('Produk Rekomendasi')    
     }
 
     return(
@@ -33,9 +33,9 @@ const ProductPage = () => {
                             <TabPane tab="Kategori Produk" key="2">
                                 <ProductCategory/>
                             </TabPane>
-                            <TabPane tab="Produk Rekomendasi" key="3">
+                            {/* <TabPane tab="Produk Rekomendasi" key="3">
                                 <ProductRecomended/>
-                            </TabPane>
+                            </TabPane> */}
                         </Tabs>
                     </Card>
                 </Col>

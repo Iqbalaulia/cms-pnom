@@ -1,6 +1,8 @@
 const productCategoryModel = {
     name: '',
-    image: ''
+    image: '',
+    imageThumb:'',
+    status: null
 }
 
 const productModel = {
