@@ -23,7 +23,6 @@ const SettingOnlineStore = () => {
     const [ dataTable, setDataTable ] = useState([]);
 
     const [ parentUuid, setParentUuid ] = useState(null);
-    const [ selectedFile, setSelectedFile ] = useState(null);
 
     const [ isModalShow, setIsModalShow ] = useState(false);
     const [ loading, setLoading ] = useState(false);
@@ -50,14 +49,14 @@ const SettingOnlineStore = () => {
             title: 'Nama Toko Online',
             sorter: true,
             render: (item) => (
-              <label className=''>{item.value}</label>
+              <label className=''>{item.name}</label>
             )
           },
           {
-            title: 'Tipe',
+            title: 'Link Toko',
             sorter: true,
             render: (item) => (
-              <label className='text-capitalize'>{item.name}</label>
+              <a className='text-capitalize' href={item.value} target='_blank' rel='noreferrer'>Link {item.name}</a>
             )
           },
           {
@@ -104,7 +103,8 @@ const SettingOnlineStore = () => {
         ...formData,
         name: item.name,
         value: item.value,
-        status: item.status,
+        status: parseInt(item.status),
+        imageThumb: item.image,
         parentUuid: parentUuid
       })
       setUuid(item.uuid)
@@ -137,8 +137,7 @@ const SettingOnlineStore = () => {
     const handleUploadImage = async (event) => {
       try {
         const formDataUpload = new FormData();
-
-        setSelectedFile(event.target.files[0])
+        const selectedFile = event.target.files[0]
         
         formDataUpload.append("file", selectedFile, selectedFile.name);
 
@@ -147,6 +146,7 @@ const SettingOnlineStore = () => {
         setFormData({
           ...formData,
           image: response.data.data.filename,
+          imageThumb: URL.createObjectURL(selectedFile)
         })
        
       } catch (error) {
@@ -158,7 +158,7 @@ const SettingOnlineStore = () => {
       }
     };
     const handleOnChangeStatus = (event) => {
-      setFilterData({...filterData, status:event})
+      setFilterData(filterData => ({...filterData, status:event}))
       getDataOnlineStore()
     }
 
@@ -338,6 +338,10 @@ const SettingOnlineStore = () => {
                           
                             <input type="file" id="file-upload" multiple onChange={handleUploadImage} accept="image/*" />
                           </Form.Item>
+                              <Image
+                                    width={550}
+                                    src={formData.imageThumb}
+                                />
                         </Col>
                       </Row>
                     </Form>

@@ -21,7 +21,6 @@ const SettingContact = () => {
     const [ dataTable, setDataTable ] = useState([]);
 
     const [ parentUuid, setParentUuid ] = useState(null);
-    const [ selectedFile, setSelectedFile ] = useState(null);
 
     const [ isModalShow, setIsModalShow ] = useState(false);
     const [ loading, setLoading ] = useState(false);
@@ -131,7 +130,6 @@ const SettingContact = () => {
     }
     const handleResetField = () => {
       setFormData({...contactModel})
-      setSelectedFile(null)
     }
     const handleUploadImage = async (event) => {
       try {

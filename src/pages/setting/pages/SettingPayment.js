@@ -101,7 +101,7 @@ const SettingPaymentMethod = () => {
         ...formData,
         name: item.name,
         value: item.value,
-        status: item.status,
+        status: parseInt(item.status),
         imageThumb: item.image,
         parentUuid: parentUuid
       })

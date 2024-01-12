@@ -204,6 +204,7 @@ body {
   align-items: center;
   margin-right: 11px;
   vertical-align: middle;
+  border: 0.5px solid #ccc;
 }
 
 .layout-dashboard

@@ -5,7 +5,7 @@ import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 import { paginationModel, statusModel } from 'composables/useSetting';
 
-import { contactModel } from 'utils/models/SettingModels';
+import { socialMediaModel } from 'utils/models/SettingModels';
 import { notificationError } from 'utils/general/general';
 import { ApiGetRequest, ApiPostMultipart, ApiPostRequest, ApiPutRequest } from 'utils/api/config';
 
@@ -22,12 +22,11 @@ const SettingSocialMedia = () => {
     const [ dataTable, setDataTable ] = useState([]);
 
     const [ parentUuid, setParentUuid ] = useState(null);
-    const [ selectedFile, setSelectedFile ] = useState(null);
 
     const [ isModalShow, setIsModalShow ] = useState(false);
     const [ loading, setLoading ] = useState(false);
 
-    const [ formData, setFormData ] = useState(contactModel);
+    const [ formData, setFormData ] = useState(socialMediaModel);
     const [ tableParams, setTableParams ] = useState(paginationModel);
     const [ filterData, setFilterData ] = useState({
       search:"",
@@ -102,7 +101,8 @@ const SettingSocialMedia = () => {
         ...formData,
         name: item.name,
         value: item.value,
-        status: item.status,
+        status: parseInt(item.status),
+        imageThumb: item.image,
         parentUuid: parentUuid
       })
       setUuid(item.uuid)
@@ -130,14 +130,12 @@ const SettingSocialMedia = () => {
       if (pagination.pageSize !== tableParams.pagination?.pageSize) setDataTable([]);
     }
     const handleResetField = () => {
-      setFormData({...contactModel})
-      setSelectedFile(null)
+      setFormData({...socialMediaModel})
     }
     const handleUploadImage = async (event) => {
       try {
         const formDataUpload = new FormData();
-
-        setSelectedFile(event.target.files[0])
+        const selectedFile = event.target.files[0]
         
         formDataUpload.append("file", selectedFile, selectedFile.name);
 
@@ -146,6 +144,7 @@ const SettingSocialMedia = () => {
         setFormData({
           ...formData,
           image: response.data.data.filename,
+          imageThumb: URL.createObjectURL(selectedFile)
         })
        
       } catch (error) {
@@ -336,6 +335,10 @@ const SettingSocialMedia = () => {
                           
                             <input type="file" id="file-upload" multiple onChange={handleUploadImage} accept="image/*" />
                           </Form.Item>
+                          <Image
+                                    width={550}
+                                    src={formData.imageThumb}
+                                />
                         </Col>
                       </Row>
                     </Form>

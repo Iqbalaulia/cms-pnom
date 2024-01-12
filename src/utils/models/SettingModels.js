@@ -1,6 +1,9 @@
 const socialMediaModel = {
-    social_name: '',
-    link: ''
+    name: '',
+    value:'',
+    image:'',
+    imageThumb: '',
+    status: null
 }
 
 const paymentMethodModel = {
