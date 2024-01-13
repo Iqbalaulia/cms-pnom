@@ -21,7 +21,7 @@ const DataAdmin = () => {
     const [ loading, setLoading ] = useState(false)
     const [ isModalForm, setIsModalForm ] = useState(false)
 
-    const [ isStepAction, setStepAction ] = useState('save-data')
+    const [ stepAction, setStepAction ] = useState('save-data')
     const [ isTitleModal, setTitleModal ] = useState('Tambah Data')
     const [ isUuid, setUuid ] = useState('')
 
@@ -118,8 +118,8 @@ const DataAdmin = () => {
       setTitleModal('Edit Data')
     }
     const handleSubmit = () => {
-        if(isStepAction === `save-data`)  saveDataForm()
-        if(isStepAction === `update-data`) updateDataForm(isUuid)
+        if(stepAction === `save-data`)  saveDataForm()
+        if(stepAction === `update-data`) updateDataForm(isUuid)
         
         setIsModalForm(false)
         handleResetField()
@@ -324,6 +324,7 @@ const DataAdmin = () => {
             onCancel={handleCancelSubmit} 
             visible={isModalForm}
             title={isTitleModal}
+            isAction={stepAction}
             width={600}
           >
             <Content className="form-data">
@@ -352,7 +353,7 @@ const DataAdmin = () => {
                         />
                       </Form.Item>
                       {
-                        isStepAction === 'save-data' ? (formPassword) : ''
+                        stepAction === 'save-data' ? (formPassword) : ''
                       }
                     </Col>
                     <Col md={{ span: 24 }}>

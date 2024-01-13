@@ -16,7 +16,7 @@ import PnomNotification from 'components/layout/Notification';
 const SettingOnlineStore = () => {
     const { Content } = Layout
     
-    const [ isStepAction, setStepAction ] = useState('save-data')
+    const [ stepAction, setStepAction ] = useState('save-data')
     const [ isTitleModal, setTitleModal ] = useState('Tambah Data')
     const [ isUuid, setUuid ] = useState('')
 
@@ -113,8 +113,8 @@ const SettingOnlineStore = () => {
       setTitleModal('Edit Data')
     }
     const handleSubmit = () => {
-      if(isStepAction === `save-data`)  saveDataForm()
-      if(isStepAction === `update-data`) updateDataForm(isUuid)
+      if(stepAction === `save-data`)  saveDataForm()
+      if(stepAction === `update-data`) updateDataForm(isUuid)
         
       setIsModalShow(false)
       handleResetField()
@@ -281,6 +281,7 @@ const SettingOnlineStore = () => {
                   onCancel={handleCancelSubmit}
                   visible={isModalShow}
                   title={isTitleModal}
+                  isAction={stepAction}
                   width={600}
                 >
                   <Content className='form-data'>

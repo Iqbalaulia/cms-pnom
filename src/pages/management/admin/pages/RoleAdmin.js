@@ -20,7 +20,7 @@ const RoleAdmin = () => {
     const [ loading, setLoading ] = useState(false)
     const [ isModalForm, setIsModalForm ] = useState(false)
 
-    const [ isStepAction, setStepAction ] = useState('save-data')
+    const [ stepAction, setStepAction ] = useState('save-data')
     const [ isTitleModal, setTitleModal ] = useState('Tambah Data')
     const [ isUuid, setUuid ] = useState('')
 
@@ -101,8 +101,8 @@ const RoleAdmin = () => {
       setTitleModal('Edit Data')
     }
     const handleSubmit = () => {
-        if(isStepAction === `save-data`)  saveDataForm()
-        if(isStepAction === `update-data`) updateDataForm(isUuid)
+        if(stepAction === `save-data`)  saveDataForm()
+        if(stepAction === `update-data`) updateDataForm(isUuid)
         
         setIsModalForm(false)
         handleResetField()
@@ -261,6 +261,7 @@ const RoleAdmin = () => {
             onCancel={handleCancelSubmit} 
             visible={isModalForm}
             title={isTitleModal}
+            isAction={stepAction}
             width={600}
           >
             <Content className="form-data">

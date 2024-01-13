@@ -21,7 +21,7 @@ import Setting from './pages/setting/pages/Setting'
 
 // Transaction
 import TransactionProduct from './pages/transaction/product/pages/Product'
-import TransactionCreate from './pages/transaction/product/pages/actionProduct'
+import TransactionCreate from './pages/transaction/product/pages/action/ProductAction'
 import TransactionCustomer from './pages/transaction/customer/pages/Customer'
 import TransactionData from './pages/transaction/transaction/pages/Transaction'
 import TransactionOrder from './pages/transaction/order/pages/Order'
@@ -31,6 +31,7 @@ import "./assets/styles/main.css";
 import "./assets/styles/responsive.css";
 import './assets/styles/override.css';
 import './assets/styles/loading.css';
+import './assets/styles/table.css';
 
 import { getDataFromLocalStorage } from "utils/function";
 

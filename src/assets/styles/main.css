@@ -15,8 +15,20 @@ body {
   flex-direction: row;
 }
 
-.ant-image-preview {
-  width: ;
+.padding-0 {
+  padding: 0 !important;
+}
+
+.informasi-detail {
+  padding: 4px;
+  margin-top: 12px;
+  background-color: #d5e8ff;
+  text-transform: uppercase;
+}
+
+.informasi-detail label {
+  font-weight: bold;
+  font-size: 24px;
 }
 
 .layout-dashboard {

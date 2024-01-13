@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Button } from 'antd';
 
 const PnomModal = (props) => {
-  const { title, width, children , visible, onOk, onCancel } = props;
+  const { title, width, children , visible, onOk, onCancel, stepAction } = props;
   
   return (
     <Modal
@@ -16,7 +16,7 @@ const PnomModal = (props) => {
           Cancel
         </Button>,
         <Button key="ok" type="primary" onClick={onOk}>
-          Simpan
+          {stepAction === 'save-data' ? 'Simpan Data': 'Ubah Data'}
         </Button>,
       ]}
     >

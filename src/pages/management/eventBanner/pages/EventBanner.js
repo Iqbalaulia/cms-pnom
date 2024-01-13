@@ -21,7 +21,7 @@ const EventBanner = () => {
 
     const [ dataTable, setDataTable ] = useState([])
 
-    const [ isStepAction, setStepAction ] = useState('save-data')
+    const [ stepAction, setStepAction ] = useState('save-data')
     const [ isTitleModal, setTitleModal ] = useState('Tambah Data')
 
     const [ loading, setLoading ] = useState(false)
@@ -161,8 +161,8 @@ const EventBanner = () => {
     }
 
     const handleSubmit = () => {
-        if(isStepAction === `save-data`)  saveDataForm()
-        if(isStepAction === `update-data`) updateDataForm()
+        if(stepAction === `save-data`)  saveDataForm()
+        if(stepAction === `update-data`) updateDataForm()
         
         setIsModalForm(false)
         handleResetField()
@@ -360,6 +360,7 @@ const EventBanner = () => {
             onCancel={handleCancelSubmit} 
             visible={isModalForm}
             title={isTitleModal}
+            isAction={stepAction}
             width={600}
           >
             <Content className="form-data">

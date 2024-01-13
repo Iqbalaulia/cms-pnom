@@ -6,7 +6,7 @@ import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { paginationModel } from 'composables/useSetting';
 
 import PnomNotification from 'components/layout/Notification';
-import CreateProduct from './actionProduct';
+import CreateProduct from './action/ProductAction';
 
 import { ApiGetRequest } from 'utils/api/config';
 import { subStringText } from 'utils/function';
@@ -65,7 +65,7 @@ const ProductList = () => {
       title: 'Actions',
       render: (item) => (
         <Space size={8}>
-          <Button onClick={() => handleEditForm(item)} type="primary" icon={<EditOutlined />} size={'large'} />
+          <Button onClick={() => handleEditForm(item)} type="primary" ghost icon={<EditOutlined />} size={'large'} />
         </Space>        
       )
     },
@@ -154,14 +154,14 @@ const ProductList = () => {
                 <Row>
                     <Col md={{span: 24}}>
                         <Table
-                        size={'middle'}
-                        bordered={true}
-                        columns={columnsProductList}
-                        dataSource={data}
-                        pagination={tableParams.pagination}
-                        loading={loading}
-                        onChange={handleTableChange}
-                        className='ant-border-space'
+                          size={'middle'}
+                          bordered={true}
+                          columns={columnsProductList}
+                          dataSource={data}
+                          pagination={tableParams.pagination}
+                          loading={loading}
+                          onChange={handleTableChange}  
+                          className='ant-border-space'
                         />
                     </Col>
                 </Row>

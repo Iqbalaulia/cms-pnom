@@ -245,6 +245,7 @@ const ProductCategory = () => {
           onCancel={handleCancelSubmit} 
           visible={isModalShow}
           title={isTitleModal}
+          isAction={stepAction}
           width={600}
           >
             <Content className="form-data">

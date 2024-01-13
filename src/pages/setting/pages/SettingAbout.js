@@ -11,7 +11,7 @@ import PnomNotification from 'components/layout/Notification';
 const SettingAboutus = () => {
     const { TextArea } = Input;
 
-    const [ isStepAction, setStepAction ] = useState('save-data')
+    const [ stepAction, setStepAction ] = useState('save-data')
     const [ isUuid, setUuid ] = useState('')
 
     const [ dataAboutUs, setDataAboutUs ] = useState({});
@@ -23,8 +23,8 @@ const SettingAboutus = () => {
     }, [])
 
     const handleSubmit = () => {
-      if(isStepAction === `save-data`)  saveDataForm()
-      if(isStepAction === `update-data`) updateDataForm(isUuid)
+      if(stepAction === `save-data`)  saveDataForm()
+      if(stepAction === `update-data`) updateDataForm(isUuid)
     }
 
     const getDataAboutUs = async () => {

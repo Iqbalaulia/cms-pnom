@@ -1,0 +1,20 @@
+.ant-pagination-item-link {
+    border: 2px solid #cccccc !important;
+}
+
+.ant-pagination.mini .ant-pagination-prev, .ant-pagination.mini .ant-pagination-next {
+    min-width: 40px !important;
+    height: 40px !important;
+    margin: 2px !important;
+}
+
+.ant-pagination.mini .ant-pagination-item {
+    min-width: 40px !important;
+    height: 40px !important;
+    margin: 2px !important;
+    line-height: 36px !important;
+}
+
+.ant-pagination-item-active a {
+    color: #114f98 !important;
+}

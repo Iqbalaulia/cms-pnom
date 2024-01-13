@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Button, Card, Col, Divider, Form, Input, Row, Select } from "antd";
+import { Button, Card, Col, Form, Input, Row, Select } from "antd";
 
 import { ApiGetRequest, ApiPostMultipart, ApiPostRequest, ApiPutRequest } from "utils/api/config";
 import { notificationError } from "utils/general/general";
@@ -277,8 +277,14 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                        >
                         <Form>
                             <Row className="mb-2" gutter={[24,0]}>
-                                <Col md={{span: 24}}>
-                                    <Divider orientation="left">Informasi Produk</Divider>
+                                <Col md={{span: 24}} className="padding-0">
+                                    <Row gutter={{span: 24}} className="mt-2 mb-2">
+                                        <Col md={{span: 24}}>
+                                            <div className="informasi-detail">
+                                                <label>Informasi</label>
+                                            </div>
+                                        </Col>
+                                    </Row>
                                     <Form.Item
                                         className="username mb-0"
                                         label="Nama Produk"
@@ -362,10 +368,16 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
 
                                     </Form.Item>
                                 </Col>
-                                <Col md={{span: 24}}>
-                                    <Divider orientation="left">Informasi Penjualan</Divider>
+                                <Col md={{span: 24}} className="padding-0">
                                     <Row gutter={{span: 24}} className="mt-2 mb-2">
-                                        <Col md={{span: 24}} offset={21}>
+                                        <Col md={{span: 24}}>
+                                            <div className="informasi-detail">
+                                                <label>Detail Produk</label>
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                    <Row justify="end" gutter={{span: 24}} className="mt-2 mb-2">
+                                        <Col>
                                             <Button onClick={() => handleAddSales()} ghost type="primary">Tambah Variasi</Button>
                                         </Col>
                                     </Row>
@@ -514,8 +526,8 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                                     ))}
                                 </Col>
                             </Row>
-                            <Row gutter={{span: 24}} className="mt-4">
-                                <Col offset={22}>
+                            <Row justify="end" className="mb-2 mt-4" gutter={[24,0]}>
+                                <Col className="padding-0">
                                     <Button onClick={() => handleSaveData()} type="primary">{valueStepAction === `update-action` ? 'Ubah Data' : 'Simpan'}</Button>
                                 </Col>
                             </Row>
