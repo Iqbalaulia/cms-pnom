@@ -130,8 +130,10 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
         }
     };
     const handleDeleteDetail = (index) => {
-        const sliceData = dataSales.slice(index)
-        setDataSales(sliceData)
+        setDataSales((prevData) => {
+            const updatedData = prevData.filter((item, i) => i !== index);
+            return updatedData;
+        });
     }
     const handleMaterialChange = (index, value) => {
         setDataSales((prevData) => {
@@ -403,7 +405,7 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                                         </Col>
                                     </Row>
                                     {dataSales.map((item, index) => (
-                                        <Row gutter={[24, 0]} key={index}>
+                                        <Row key={index + 1} gutter={[24, 0]}>
                                             <Col className="mb-1" md={{span: 5}}>
                                                 <Form.Item
                                                     key={index}
@@ -519,7 +521,9 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                                             </Col>
                                            
                                             {
-                                               index !== 0 ? (
+                                               dataSales.length > 1 ? (
+                                                <Button onClick={() => handleDeleteDetail(index)} type="danger">X</Button>
+                                               ) : index !== 0 ? (
                                                 <Button onClick={() => handleDeleteDetail(index)} type="danger">X</Button>
                                                ) : (
                                                 ''
