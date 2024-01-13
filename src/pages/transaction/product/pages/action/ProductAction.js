@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Form, Input, Row, Select } from "antd";
 
 import { ApiGetRequest, ApiPostMultipart, ApiPostRequest, ApiPutRequest } from "utils/api/config";
-import { notificationError } from "utils/general/general";
+import { notificationError, notificationSuccess } from "utils/general/general";
 import { productModel } from "utils/models/ProductModels";
 
 import { discountModel, recommendationModel, statusModel } from "composables/useSetting";
@@ -44,6 +44,7 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                     priceDropship: parseInt(item.priceDropship),
                     discountType: parseInt(item.discountType),
                     discountValue:parseInt(item.discountValue),
+                    images: item.images
             })))
 
         } else {
@@ -96,10 +97,12 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
           formDataUpload.append("file", selectedFile);
       
           const response = await ApiPostMultipart(`file-upload`, formDataUpload);
-      
-          // Create a copy of the dataSales array
           const newDataSales = [...dataSales];
       
+          if (newDataSales[index].images.length > 0) {
+            newDataSales[index].images.slice(index)
+          }
+
           newDataSales[index] = {
             ...newDataSales[index],
             images: [...newDataSales[index].images, response.data.data.filename],
@@ -253,9 +256,13 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
 
             if (uuidData) {
                 await ApiPutRequest(`product/item/${uuidData}`, formData)
+                notificationSuccess('Data berhasil diubah!')
             } else {
                 await ApiPostRequest(`product/item`, formData)
+                notificationSuccess('Data berhasil disimpan!')
             }
+
+
             
             onUpdateStep('')
             onClickProduct()
@@ -527,8 +534,11 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                                 </Col>
                             </Row>
                             <Row justify="end" className="mb-2 mt-4" gutter={[24,0]}>
+                                <Col>
+                                    <Button onClick={() => onUpdateStep('')} ghost type="primary"> Kembali </Button>
+                                </Col>
                                 <Col className="padding-0">
-                                    <Button onClick={() => handleSaveData()} type="primary">{valueStepAction === `update-action` ? 'Ubah Data' : 'Simpan'}</Button>
+                                    <Button className="mr-2" onClick={() => handleSaveData()} type="primary">{valueStepAction === `update-action` ? 'Ubah Data' : 'Simpan'}</Button>
                                 </Col>
                             </Row>
                         </Form>

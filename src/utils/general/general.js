@@ -4,7 +4,7 @@ const notificationSuccess = (message) => {
   notification.success({
     message: 'Successfully!',
     description: JSON.stringify(message),
-    placement: 'bottomRight',
+    placement: 'topRight',
   });
 };
 
@@ -12,7 +12,7 @@ const notificationError = (message) => {
     notification.error({
       message: 'Opps!',
       description: message ?  message.message : 'Mohon periksa kembali jaringan anda. Atau menghubungi call center',
-      placement: 'bottomRight',
+      placement: 'topRight',
     });
 };
 
