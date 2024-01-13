@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Button, Card, Col, Form, Input, Row, Select } from "antd";
+import { Button, Card, Col, Form, Input, Row, Select, Image } from "antd";
 
 import { ApiGetRequest, ApiPostMultipart, ApiPostRequest, ApiPutRequest } from "utils/api/config";
 import { notificationError, notificationSuccess } from "utils/general/general";
@@ -74,6 +74,16 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
         
     }, [dataDetail])
 
+    const componentImage = (dataImages) => {
+        return (
+            dataImages.map(item => (
+                <Image 
+                    width={150}
+                    src={item.imageThumb}
+                />
+            ))
+        )
+    }
    
     const handleAddSales = () => {
         const newItem = {
@@ -84,31 +94,37 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
             priceDefault: 0,
             priceDropship: 0,
             discountType:1,
-            discountValue:0
+            discountValue:0,
+            images:[]
         }
 
-        setDataSales(prevData => [...prevData, newItem])
+        setDataSales(prevData => {
+            const newData = [...prevData, newItem];
+            return newData;
+        });
     }
     const handleUploadImage = async (event, index) => {
         try {
-          const formDataUpload = new FormData();
-          const selectedFile = event.target.files[0];
-      
-          formDataUpload.append("file", selectedFile);
-      
-          const response = await ApiPostMultipart(`file-upload`, formDataUpload);
-          const newDataSales = [...dataSales];
-      
-          if (newDataSales[index].images.length > 0) {
-            newDataSales[index].images.slice(index)
-          }
-
-          newDataSales[index] = {
-            ...newDataSales[index],
-            images: [...newDataSales[index].images, response.data.data.filename],
-          };
-      
-          setDataSales(newDataSales);
+            const formDataUpload = new FormData();
+            const selectedFile = event.target.files[0];
+    
+            formDataUpload.append("file", selectedFile);
+    
+            const response = await ApiPostMultipart(`file-upload`, formDataUpload);
+            const newDataSales = [...dataSales];
+    
+            if (newDataSales[index].images.length > 0) {
+                newDataSales[index].images.slice(index)
+            }
+    
+            newDataSales[index] = {
+                ...newDataSales[index],
+                images: [...newDataSales[index].images, response.data.data.filename],
+            };
+    
+            setDataSales(newDataSales);
+    
+          
         } catch (error) {
           notificationError(error);
         }
@@ -262,8 +278,6 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                 notificationSuccess('Data berhasil disimpan!')
             }
 
-
-            
             onUpdateStep('')
             onClickProduct()
         } catch (error) {
@@ -297,7 +311,7 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                                         label="Nama Produk"
                                     >
                                         <Input
-                                            showCount 
+                                             
                                             maxLength={255} 
                                             value={dataProduct.name}
                                             onChange={
@@ -511,14 +525,14 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                                                 ''
                                                )
                                             }
+                                            
                                              <Col className="mb-1" md={{span: 24}}>
                                                  <Form.Item
-                                                    key={index}
+                                                    key={index + 1}
                                                     className="username mb-2"
                                                     label="Upload Foto"
-                                                    name="upload_banner"
+                                                    name={`upload_banner-${index}`}
                                                     >
-                                                    
                                                         <input
                                                             type="file"
                                                             id={`file-upload-${index}`}
@@ -527,6 +541,13 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                                                             accept="image/*"
                                                         />
                                                 </Form.Item>
+                                                
+                                                {
+                                                    item.images.length > 0 ? (
+                                                        componentImage(item.images)
+                                                    )
+                                                    : ''
+                                                }
                                             </Col>
                                         </Row>
                                         

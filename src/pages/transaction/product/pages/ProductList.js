@@ -78,6 +78,7 @@ const ProductList = () => {
 
   const handleShowForm = () => {
     setStepAction('save-action')
+    setDataDetail({})
     // window.location.href = `/product/create`
   }
 
