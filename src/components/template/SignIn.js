@@ -94,10 +94,7 @@ const SignIn = () => {
               lg={{ span: 6, offset: 2 }}
               md={{ span: 12 }}
             >
-              <Title className="mb-15">PNOM Dashboard</Title>
-              <Title className="font-regular text-muted" level={5}>
-                Masukkan username dan password dengan benar
-              </Title>
+              <Title className="">Internal PNOM</Title>
               <Form
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}

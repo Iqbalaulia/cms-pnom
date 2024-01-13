@@ -13,7 +13,7 @@ import icons from 'composables/useIcon'
 
 const ButtonContainer = styled.div`
   .ant-btn-primary {
-    background-color: #1890ff;
+    background-color: #0C2D55;
   }
   .ant-btn-success {
     background-color: #52c41a;
@@ -28,7 +28,7 @@ const ButtonContainer = styled.div`
     border-radius: 5px;
   }
   .ant-switch-active {
-    background-color: #1890ff;
+    background-color: #0C2D55;
   }
 `;
 const logsetting = [
@@ -268,7 +268,7 @@ function Header({
                       <ButtonContainer>
                       <Button
                         type="primary"
-                        onClick={() => handleSidenavColor("#1890ff")}
+                        onClick={() => handleSidenavColor("#0C2D55")}
                       >
                         1
                       </Button>

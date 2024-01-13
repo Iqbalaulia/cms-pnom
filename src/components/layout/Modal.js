@@ -16,7 +16,7 @@ const PnomModal = (props) => {
           Cancel
         </Button>,
         <Button key="ok" type="primary" onClick={onOk}>
-          OK
+          Simpan
         </Button>,
       ]}
     >

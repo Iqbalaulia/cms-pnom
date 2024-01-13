@@ -1,7 +1,7 @@
 
 
 
-const color = "#1890ff"
+const color = "#0C2D55"
 const iconDashboard = [
     <svg
       width="20"
