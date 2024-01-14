@@ -116,6 +116,8 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
             if (newDataSales[index].images.length > 0) {
                 newDataSales[index].images.slice(index)
             }
+
+            console.log('newDataSales[index].images', newDataSales)
     
             newDataSales[index] = {
                 ...newDataSales[index],
@@ -138,21 +140,21 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
     const handleMaterialChange = (index, value) => {
         setDataSales((prevData) => {
             const newData = [...prevData];
-            newData[index].material = value;
+            newData[index].material = value[0];
             return newData;
         });
     };
     const handleMotifChange = (index, value) => {
         setDataSales((prevData) => {
             const newData = [...prevData];
-            newData[index].motif = value;
+            newData[index].motif = value[0];
             return newData;
         });
     };
     const handleVariantChange = (index, value) => {
         setDataSales((prevData) => {
             const newData = [...prevData];
-            newData[index].variant = value;
+            newData[index].variant = value[0];
             return newData;
         });
     };
@@ -426,6 +428,7 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                                                     label="Material"
                                                     >
                                                     <Select
+                                                        mode="tags"
                                                         showSearch
                                                         value={item.material}
                                                         options={dataMaterial}
@@ -441,6 +444,7 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                                                     label="Motif"
                                                     >
                                                     <Select
+                                                        mode="tags"
                                                         showSearch
                                                         value={item.motif}
                                                         options={dataMotif}
@@ -456,6 +460,7 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                                                     label="Variant"
                                                     >
                                                     <Select
+                                                        mode="tags"
                                                         showSearch
                                                         value={item.variant}
                                                         options={dataVariant}
