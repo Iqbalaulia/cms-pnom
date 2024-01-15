@@ -31,12 +31,12 @@ function Sidenav({ color }) {
           routerLink:'/product',
           name:'Produk'
         },
-        {
-          id:'2',
-          icons: icons.iconTransaction,
-          routerLink:'/transaction',
-          name:'Transaksi'
-        },
+        // {
+        //   id:'2',
+        //   icons: icons.iconTransaction,
+        //   routerLink:'/transaction',
+        //   name:'Transaksi'
+        // },
         // {
         //   id:'3',
         //   icons: icons.iconOrder,

@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 
 import { Button, Card, Col, Form, Input, Row, Select, Image } from "antd";
 
-import { ApiGetRequest, ApiPostMultipart, ApiPostRequest, ApiPutRequest } from "utils/api/config";
+import { ApiDeleteRequest, ApiGetRequest, ApiPostMultipart, ApiPostRequest, ApiPutRequest } from "utils/api/config";
 import { notificationError, notificationSuccess } from "utils/general/general";
 import { productModel } from "utils/models/ProductModels";
 
 import { discountModel, recommendationModel, statusModel } from "composables/useSetting";
+import { DeleteOutlined } from "@ant-design/icons";
 
 
 const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, dataDetail }) => {
@@ -22,6 +23,7 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
     const [ uuidData, setUuidData ] = useState('')
 
     useEffect(() => {
+        
         const objectLength = Object.keys(dataDetail).length
         if (objectLength > 0) {
             setDataProduct({
@@ -76,15 +78,27 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
 
     const componentImage = (dataImages) => {
         return (
-            dataImages.map(item => (
-                <Image 
-                    width={150}
-                    src={item.imageThumb}
-                />
-            ))
+            <Row gutter={[24,0]} className="images-viewer">
+                {
+                      dataImages.images.map((item, index) => (
+                            <Col md={4}>
+                                { item.imageThumb === undefined ? '' : (
+                                    <Button onClick={() => handleDeleteImage(dataImages, index) } className="trash"><DeleteOutlined /></Button>
+                                )}
+                                <Image
+                                    className="images-viewer" 
+                                    width={200}
+                                    src={item.imageThumb}
+                                />
+                            </Col>
+                    ))
+                }
+           </Row>
+
+           
         )
     }
-   
+
     const handleAddSales = () => {
         const newItem = {
             material: '',
@@ -113,16 +127,16 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
             const response = await ApiPostMultipart(`file-upload`, formDataUpload);
             const newDataSales = [...dataSales];
     
-            if (newDataSales[index].images.length > 0) {
-                newDataSales[index].images.slice(index)
-            }
 
-            console.log('newDataSales[index].images', newDataSales)
     
             newDataSales[index] = {
                 ...newDataSales[index],
                 images: [...newDataSales[index].images, response.data.data.filename],
             };
+
+            if (newDataSales[index].images.length > 1) {
+                newDataSales[index].images.splice(index, 1)
+            }
     
             setDataSales(newDataSales);
     
@@ -131,6 +145,11 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
           notificationError(error);
         }
     };
+    const handleDeleteImage = async (item, index) => {
+        await deleteImageDetail(uuidData, item.uuid, item.images[index].uuid )
+        onUpdateStep('')
+        onClickProduct();
+    }
     const handleDeleteDetail = (index) => {
         setDataSales((prevData) => {
             const updatedData = prevData.filter((item, i) => i !== index);
@@ -257,6 +276,14 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                 value: element.uuid,
                 label: element.name
             })));
+        } catch (error) {
+            notificationError(error)
+        }
+    }
+
+    const deleteImageDetail = async (uuid, uuidDetail, uuidDetailImage) => {
+        try {
+            await ApiDeleteRequest(`product/item/${uuid}/detail/${uuidDetail}/image/${uuidDetailImage}`)
         } catch (error) {
             notificationError(error)
         }
@@ -538,7 +565,7 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                                              <Col className="mb-1" md={{span: 24}}>
                                                  <Form.Item
                                                     key={index + 1}
-                                                    className="username mb-2"
+                                                    className="username mb-5"
                                                     label="Upload Foto"
                                                     name={`upload_banner-${index}`}
                                                     >
@@ -553,7 +580,7 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                                                 
                                                 {
                                                     item.images.length > 0 ? (
-                                                        componentImage(item.images)
+                                                        componentImage(item)
                                                     )
                                                     : ''
                                                 }
