@@ -21,6 +21,7 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
     const [ dataCategory, setDataCategory ] = useState([])
     const [ dataProduct, setDataProduct ] = useState(productModel)
     const [ uuidData, setUuidData ] = useState('')
+    const [ updateImage, setUpdateImage ] = useState(false)
 
     useEffect(() => {
         
@@ -127,15 +128,19 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
             const response = await ApiPostMultipart(`file-upload`, formDataUpload);
             const newDataSales = [...dataSales];
     
-
-    
             newDataSales[index] = {
                 ...newDataSales[index],
                 images: [...newDataSales[index].images, response.data.data.filename],
             };
 
             if (newDataSales[index].images.length > 1) {
+                setUpdateImage(true)
+                await deleteImageDetail(uuidData,  newDataSales[index].uuid, newDataSales[index].images[index].uuid )
                 newDataSales[index].images.splice(index, 1)
+            } else if (newDataSales[index].images.length > 0 && uuidData) {
+                setUpdateImage(true)
+            } else {
+                setUpdateImage(false)
             }
     
             setDataSales(newDataSales);
@@ -146,9 +151,10 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
         }
     };
     const handleDeleteImage = async (item, index) => {
+        const newDataSales = [...dataSales]
         await deleteImageDetail(uuidData, item.uuid, item.images[index].uuid )
-        onUpdateStep('')
-        onClickProduct();
+        item.images.splice(index, 1)
+        setDataSales(newDataSales)
     }
     const handleDeleteDetail = (index) => {
         setDataSales((prevData) => {
@@ -229,7 +235,6 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
     }
 
 
-
     const fetchDataMaterial = async () => {
         try {
             const response = await ApiGetRequest(`product/item/option/material`)
@@ -291,6 +296,34 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
 
     const submitDataProduct = async () => {
         try {
+            let dataSalesDetails = []
+            if (updateImage === true) {
+                dataSalesDetails = dataSales.map(item => ({
+                    uuid: item.uuid,
+                    material: item.material,
+                    motif: item.motif,
+                    variant: item.variant,
+                    sku: item.sku,
+                    priceDefault: parseInt(item.priceDefault),
+                    priceDropship: parseInt(item.priceDropship),
+                    discountType: parseInt(item.discountType),
+                    discountValue:parseInt(item.discountValue),
+                    images: item.images
+                }));
+            } else {
+                dataSalesDetails = dataSales.map(item => ({
+                    uuid: item.uuid,
+                    material: item.material,
+                    motif: item.motif,
+                    variant: item.variant,
+                    sku: item.sku,
+                    priceDefault: parseInt(item.priceDefault),
+                    priceDropship: parseInt(item.priceDropship),
+                    discountType: parseInt(item.discountType),
+                    discountValue:parseInt(item.discountValue),
+                }));
+            }
+           
 
             let formData = {
                 name: dataProduct.name,
@@ -298,8 +331,9 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                 categoryUuid: dataProduct.categoryUuid,
                 recommendation: dataProduct.recommendation,
                 status: dataProduct.status,
-                details: dataSales
+                details: dataSalesDetails
             }
+
 
             if (uuidData) {
                 await ApiPutRequest(`product/item/${uuidData}`, formData)
@@ -459,6 +493,7 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                                                         showSearch
                                                         value={item.material}
                                                         options={dataMaterial}
+                                                        maxTagCount={1}
                                                         onChange={(value) => handleMaterialChange(index, value)}
                                                         placeholder="Pilih Produk Rekomendasi"
                                                     />
@@ -475,6 +510,7 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                                                         showSearch
                                                         value={item.motif}
                                                         options={dataMotif}
+                                                        maxTagCount={1}
                                                         onChange={(value) => handleMotifChange(index, value)}
                                                         placeholder="Pilih Motif"
                                                     />
@@ -491,6 +527,7 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                                                         showSearch
                                                         value={item.variant}
                                                         options={dataVariant}
+                                                        maxTagCount={1}
                                                         onChange={(value) => handleVariantChange(index, value)}
                                                         placeholder="Pilih Variant"
                                                     />
@@ -572,7 +609,6 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                                                         <input
                                                             type="file"
                                                             id={`file-upload-${index}`}
-                                                            multiple
                                                             onChange={(event) => handleUploadImage(event, index)}
                                                             accept="image/*"
                                                         />
