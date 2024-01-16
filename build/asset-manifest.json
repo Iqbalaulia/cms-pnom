@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/static/css/main.c535ce67.chunk.css",
+    "main.css": "/static/css/main.b4d9d04c.chunk.css",
     "main.js": "/static/js/main.b320308d.chunk.js",
     "main.js.map": "/static/js/main.b320308d.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.65980b1a.js",
@@ -10,7 +10,7 @@
     "static/js/2.fbbcc183.chunk.js.map": "/static/js/2.fbbcc183.chunk.js.map",
     "index.html": "/index.html",
     "static/css/2.b4d0dacd.chunk.css.map": "/static/css/2.b4d0dacd.chunk.css.map",
-    "static/css/main.c535ce67.chunk.css.map": "/static/css/main.c535ce67.chunk.css.map",
+    "static/css/main.b4d9d04c.chunk.css.map": "/static/css/main.b4d9d04c.chunk.css.map",
     "static/js/2.fbbcc183.chunk.js.LICENSE.txt": "/static/js/2.fbbcc183.chunk.js.LICENSE.txt",
     "static/js/main.b320308d.chunk.js.LICENSE.txt": "/static/js/main.b320308d.chunk.js.LICENSE.txt",
     "static/media/Google__G__Logo.svg.bb49f97a.png": "/static/media/Google__G__Logo.svg.bb49f97a.png",
@@ -43,7 +43,7 @@
     "static/js/runtime-main.65980b1a.js",
     "static/css/2.b4d0dacd.chunk.css",
     "static/js/2.fbbcc183.chunk.js",
-    "static/css/main.c535ce67.chunk.css",
+    "static/css/main.b4d9d04c.chunk.css",
     "static/js/main.b320308d.chunk.js"
   ]
 }
