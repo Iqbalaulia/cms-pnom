@@ -228,6 +228,7 @@ const DataAdmin = () => {
         try {
           setLoading(true)
           await ApiPutRequest(`admin/account/${uuid}`, formData)
+          
           PnomNotification({
             type: 'success',
             message: 'Berhasil diupdate!',
@@ -345,8 +346,9 @@ const DataAdmin = () => {
             width={600}
           >
             <Content className="form-data">
-              <Form form={formInputData}  
-                    initialValues={{
+              <Form 
+                  form={formInputData}  
+                  initialValues={{
                     remember: true,
                    }}
                 >

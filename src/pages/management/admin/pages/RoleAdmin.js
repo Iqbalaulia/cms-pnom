@@ -10,6 +10,7 @@ import PnomNotification from 'components/layout/Notification';
 
 import { ApiGetRequest, ApiPostRequest, ApiPutRequest } from 'utils/api/config';
 import { roleModel } from 'utils/models/AdminModels';
+import { notificationError } from 'utils/general/general';
 
 
 const RoleAdmin = () => {
@@ -95,6 +96,12 @@ const RoleAdmin = () => {
         name: item.name,
         status: parseInt(item.status)
       });
+
+      formInputData.setFieldsValue({
+        name: item.name,
+        status: parseInt(item.status)
+      });
+
       setUuid(item.uuid)
       setIsModalForm(true)
       setStepAction('update-data')
@@ -102,11 +109,7 @@ const RoleAdmin = () => {
     }
     const handleSubmit = () => {
         if(stepAction === `save-data`)  saveDataForm()
-        if(stepAction === `update-data`) updateDataForm(isUuid)
-        
-        setIsModalForm(false)
-        handleResetField()
-       
+        if(stepAction === `update-data`) updateDataForm(isUuid) 
     }
     const handleTableChange = (pagination, filters, sorter) => {
         setTableParams({
@@ -146,57 +149,62 @@ const RoleAdmin = () => {
         }
     }
     const saveDataForm = async () => {
-      try {
         const validateValue  = await formInputData.validateFields()
-        console.log('validateValue', validateValue)
         if(validateValue) { 
+          try {
+            setLoading(true)
+              let formRoleAdmin = {
+                name: formData.name,
+                permission: rolesPermissionModel.permission
+              }
+      
+              await ApiPostRequest(`admin/role`, formRoleAdmin)
+              PnomNotification({
+                type: 'success',
+                message: 'Berhasil disimpan!',
+                description:'Data admin berhasil disimpan!',
+              })
+              
+              setIsModalForm(false)
+              handleResetField()
+              await getFetchData()
+          } catch (error) {
+            PnomNotification({
+              type: 'error',
+              message: 'Maaf terjadi kesalahan!',
+              description: error.message,
+           })
+          } finally {
+            setLoading(false)
+          }
+        }
+
+      
+    }
+    const updateDataForm = async (uuid) => {
+      const validateValue = await formInputData.validateFields()
+
+      if (validateValue) {
+        try {
           setLoading(true)
           let formRoleAdmin = {
             name: formData.name,
+            status: formData.status,
             permission: rolesPermissionModel.permission
           }
-  
-          await ApiPostRequest(`admin/role`, formRoleAdmin)
+          await ApiPutRequest(`admin/role/${uuid}`, formRoleAdmin)
+
           PnomNotification({
             type: 'success',
-            message: 'Berhasil disimpan!',
-            description:'Data admin berhasil disimpan!',
+            message: 'Berhasil diupdate!',
+            description:'Data admin berhasil diupdate!',
           })
-          getFetchData()
+          await getFetchData()
+        } catch (error) {
+          notificationError(error)
+        } finally {
+          setLoading(false)
         }
-      } catch (error) {
-        PnomNotification({
-          type: 'error',
-          message: 'Maaf terjadi kesalahan!',
-          description: error.message,
-       })
-      } finally {
-        setLoading(false)
-      }
-    }
-    const updateDataForm = async (uuid) => {
-      try {
-        setLoading(true)
-        let formRoleAdmin = {
-          name: formData.name,
-          status: formData.status,
-          permission: rolesPermissionModel.permission
-        }
-        await ApiPutRequest(`admin/role/${uuid}`, formRoleAdmin)
-        PnomNotification({
-          type: 'success',
-          message: 'Berhasil diupdate!',
-          description:'Data admin berhasil diupdate!',
-        })
-        await getFetchData()
-      } catch (error) {
-        PnomNotification({
-          type: 'error',
-          message: 'Maaf terjadi kesalahan!',
-          description: error.message,
-       })
-      } finally {
-        setLoading(false)
       }
     }
 
@@ -265,12 +273,18 @@ const RoleAdmin = () => {
             width={600}
           >
             <Content className="form-data">
-              <Form form={formInputData}>
+              <Form 
+                 form={formInputData}  
+                 initialValues={{
+                   remember: true,
+                 }}
+                >
                   <Row gutter={[24,0]}>
                     <Col md={{ span: 24 }}>
                       <Form.Item
                         className="username mb-0"
                         label="Nama"
+                        name="name"
                         rules={[
                           {
                             required: true,
@@ -294,6 +308,7 @@ const RoleAdmin = () => {
                     <Form.Item
                         className="username"
                         label="Status"
+                        name="status"
                         rules={[
                           {
                             required: true,
