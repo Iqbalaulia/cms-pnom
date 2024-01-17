@@ -10,6 +10,7 @@ import PnomNotification from 'components/layout/Notification';
 
 import { ApiGetRequest, ApiPostRequest, ApiPutRequest } from 'utils/api/config';
 import { adminModel } from 'utils/models/AdminModels';
+import { notificationError } from 'utils/general/general';
 
 
 const DataAdmin = () => {
@@ -104,6 +105,8 @@ const DataAdmin = () => {
         setTitleModal('Tambah Data')
     }
     const handleEditModalForm = async (item) => {
+      await getRoleData()
+
       setFormData({
         ...formData,
         name: item.name,
@@ -111,7 +114,14 @@ const DataAdmin = () => {
         status: parseInt(item.status),
         role_uuid: item.role.uuid,
       });
-      await getRoleData()
+
+      formInputData.setFieldsValue({
+        name: item.name,
+        login: item.login,
+        status: parseInt(item.status),
+        role_uuid: item.role.uuid,
+      });
+  
       setUuid(item.uuid)
       setIsModalForm(true)
       setStepAction('update-data')
@@ -119,11 +129,7 @@ const DataAdmin = () => {
     }
     const handleSubmit = () => {
         if(stepAction === `save-data`)  saveDataForm()
-        if(stepAction === `update-data`) updateDataForm(isUuid)
-        
-        setIsModalForm(false)
-        handleResetField()
-       
+        if(stepAction === `update-data`) updateDataForm(isUuid)     
     }
     const handleOnChangeStatus = (event) => {
       setFilterData({...filterData, status:event})
@@ -187,68 +193,79 @@ const DataAdmin = () => {
     }
     }
     const saveDataForm = async () => {
-      try {
-        const validateValue  = await formInputData.validateFields()
+      const validateValue  = await formInputData.validateFields()
         if(validateValue) { 
-          setLoading(true)
-          let formDataAdmin = {
-            name: formData.name,
-            login: formData.name,
-            password:btoa(formData.password),
-            status: formData.status,
-            role_uuid: formData.role_uuid
+          try {
+            setLoading(true)
+              let formDataAdmin = {
+                name: formData.name,
+                login: formData.name.replace(/ /g, "_"),
+                password:btoa(formData.password),
+                status: formData.status,
+                role_uuid: formData.role_uuid
+              }
+      
+              await ApiPostRequest(`admin/account`, formDataAdmin)
+              PnomNotification({
+                type: 'success',
+                message: 'Berhasil disimpan!',
+                description:'Data admin berhasil disimpan!',
+              })
+              setIsModalForm(false)
+              handleResetField()
+              await getFetchData()
+          } catch (error) {
+            notificationError(error)
+          } finally {
+            setLoading(false)
           }
-  
-          await ApiPostRequest(`admin/account`, formDataAdmin)
-          PnomNotification({
-            type: 'success',
-            message: 'Berhasil disimpan!',
-            description:'Data admin berhasil disimpan!',
-          })
-          getFetchData()
         }
-      } catch (error) {
-        PnomNotification({
-          type: 'error',
-          message: 'Maaf terjadi kesalahan!',
-          description: error.message,
-       })
-      } finally {
-        setLoading(false)
-      }
+     
     }
     const updateDataForm = async (uuid) => {
-      try {
-        setLoading(true)
-        await ApiPutRequest(`admin/account/${uuid}`, formData)
-        PnomNotification({
-          type: 'success',
-          message: 'Berhasil diupdate!',
-          description:'Data admin berhasil diupdate!',
-        })
-        await getFetchData()
-      } catch (error) {
-        PnomNotification({
-          type: 'error',
-          message: 'Maaf terjadi kesalahan!',
-          description: error.message,
-       })
-      } finally {
-        setLoading(false)
+      const validateValue  = await formInputData.validateFields()
+      if(validateValue) { 
+        try {
+          setLoading(true)
+          await ApiPutRequest(`admin/account/${uuid}`, formData)
+          PnomNotification({
+            type: 'success',
+            message: 'Berhasil diupdate!',
+            description:'Data admin berhasil diupdate!',
+          })
+           
+          setIsModalForm(false)
+          handleResetField()
+          await getFetchData()
+        } catch (error) {
+          PnomNotification({
+            type: 'error',
+            message: 'Maaf terjadi kesalahan!',
+            description: error.message,
+         })
+        } finally {
+          setLoading(false)
+        }
       }
+      
     }
 
     const formPassword = (
       <Form.Item
         className="username mb-2"
         label="Password"
+        name="password"
         rules={[
           {
             required: true,
             message: "Input data password!",
           },
+          {
+            pattern: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+            message: 'Password harus berupa kombinasi huruf, angka, dan simbol',
+          }, 
         ]}>
-        <Input 
+        <Input.Password
           value={formData.password}
           onChange={e => setFormData(
             {
@@ -328,17 +345,22 @@ const DataAdmin = () => {
             width={600}
           >
             <Content className="form-data">
-              <Form form={formInputData}>
+              <Form form={formInputData}  
+                    initialValues={{
+                    remember: true,
+                   }}
+                >
                   <Row gutter={[24,0]}>
                     <Col md={{ span: 24 }}>
                       <Form.Item
                         className="username mb-0"
                         label="Nama"
+                        name="name"
                         rules={[
                           {
                             required: true,
                             message: "Input data nama!",
-                          },
+                          },  
                         ]}
                       >
                         <Input
@@ -360,6 +382,7 @@ const DataAdmin = () => {
                       <Form.Item
                         className="username"
                         label="Role"
+                        name="role_uuid"
                         rules={[
                           {
                             required: true,
@@ -382,6 +405,7 @@ const DataAdmin = () => {
                       <Form.Item
                         className="username"
                         label="Status"
+                        name="status"
                         rules={[
                           {
                             required: true,
