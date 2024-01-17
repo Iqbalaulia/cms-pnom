@@ -136,7 +136,6 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
             if (newDataSales[index].images.length > 1) {
                 setUpdateImage(true)
                 await deleteImageDetail(uuidData,  newDataSales[index].uuid, newDataSales[index].images[index].uuid )
-                newDataSales[index].images.splice(index, 1)
             } else if (newDataSales[index].images.length > 0 && uuidData) {
                 setUpdateImage(true)
             } else {
@@ -297,6 +296,18 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
     const submitDataProduct = async () => {
         try {
             let dataSalesDetails = []
+
+            const newDataSales = [...dataSales];
+
+            newDataSales.forEach((element) => {
+                if (Object.keys(element.images[0]).length <= 10) {
+                    element.images.splice(0, 1)
+                }
+            });
+
+            setDataSales(newDataSales);
+
+
             if (updateImage === true) {
                 dataSalesDetails = dataSales.map(item => ({
                     uuid: item.uuid,
