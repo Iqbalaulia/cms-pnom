@@ -310,6 +310,18 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                     discountValue:parseInt(item.discountValue),
                     images: item.images
                 }));
+            } else if (updateImage === false && uuidData) {
+                dataSalesDetails = dataSales.map(item => ({
+                    uuid: item.uuid,
+                    material: item.material,
+                    motif: item.motif,
+                    variant: item.variant,
+                    sku: item.sku,
+                    priceDefault: parseInt(item.priceDefault),
+                    priceDropship: parseInt(item.priceDropship),
+                    discountType: parseInt(item.discountType),
+                    discountValue:parseInt(item.discountValue),
+                }));
             } else {
                 dataSalesDetails = dataSales.map(item => ({
                     uuid: item.uuid,
@@ -321,6 +333,7 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                     priceDropship: parseInt(item.priceDropship),
                     discountType: parseInt(item.discountType),
                     discountValue:parseInt(item.discountValue),
+                    images: item.images
                 }));
             }
            
