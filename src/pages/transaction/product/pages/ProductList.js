@@ -1,24 +1,25 @@
 import React, { useEffect, useState, } from 'react';
 
-import { Table, Col, Button, Space, Input, Row, Tag } from 'antd';
+import { Table, Col, Button, Space, Input, Row, Tag, Select } from 'antd';
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 import { paginationModel } from 'composables/useSetting';
 
-import PnomNotification from 'components/layout/Notification';
 import CreateProduct from './action/ProductAction';
 
 import { ApiGetRequest } from 'utils/api/config';
 import { subStringText } from 'utils/function';
+import { notificationError } from 'utils/general/general';
 
 const ProductList = () => {
   const [ data, setData ] = useState([]);
-  
+  const [ dataCategory, setDataCategory ] = useState([])
   const [ loading, setLoading ] = useState(false);
   
   const [ tableParams, setTableParams ] = useState(paginationModel);
   const [ filterData, setFilterData ] = useState({
-    search:''
+    search:'',
+    categoryUuid: ''
   })
   const [ stepAction, setStepAction ] = useState('')
   const [ dataDetail, setDataDetail ] = useState({})
@@ -74,8 +75,17 @@ const ProductList = () => {
   useEffect(() => {
     fetchDataProduct();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    fetchDataCategory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterData.search]);
 
+  const handleOnChangeCategory = (event) => {
+    setFilterData({...filterData, categoryUuid: event})
+    setTimeout(() => {
+      fetchDataProduct();
+    }, 1000);
+  }
+  
   const handleShowForm = () => {
     setStepAction('save-action')
     setDataDetail({})
@@ -105,18 +115,30 @@ const ProductList = () => {
   const fetchDataProduct = async () => {
     try {
       let params = {
-        search: filterData.search
+        search: filterData.search,
+        categoryUuid: filterData.categoryUuid
       }
 
       setLoading(true);
       const response = await ApiGetRequest(`product/item`, params)
       setData(response.data.data) 
     } catch (error) {
-      PnomNotification({
-        type: 'error',
-        message: 'Maaf terjadi kesalahan!',
-        description:error
-      })
+      notificationError(error)
+    } finally {
+      setLoading(false)
+    }
+  };
+
+  const fetchDataCategory = async () => {
+    try {
+      setLoading(true);
+      const response = await ApiGetRequest(`product/category`)
+      setDataCategory(response.data.data.map(element => ({
+        value: element.uuid,
+        label: element.name
+      })))
+    } catch (error) {
+        notificationError(error)
     } finally {
       setLoading(false)
     }
@@ -127,9 +149,8 @@ const ProductList = () => {
     <div className='admin-table'>   
         {
             stepAction === `save-action` || stepAction === `update-action` ? <CreateProduct dataDetail={dataDetail} onClickProduct={()=> fetchDataProduct()} onUpdateStep={handleUpdateStepAction} valueStepAction={stepAction} /> : (
-            <row gutter={[24,0]}>
-            <Col xs="24" xl={24}>
-                <Row className='mb-2'>
+            <div>
+            <Row gutter={[24,0]}  className='mb-2'>
                       <Col md={{span: 6}}>
                         <Input
                            value={filterData.search}
@@ -139,7 +160,16 @@ const ProductList = () => {
                            placeholder="Pencarian..."
                         />
                       </Col>
-                      <Col md={{span: 18}} className='d-flex justify-end'>
+                     
+                      <Col md={{span: 5}}>
+                        <Select 
+                          onChange={handleOnChangeCategory}
+                          options={dataCategory}
+                          value={filterData.categoryUuid}
+                          placeholder='Pilih Kategori'
+                        />
+                      </Col>
+                      <Col md={{span: 13}} className='d-flex justify-end'>
                         <Space align='start'>
                           <Button  
                             type="primary" 
@@ -166,8 +196,7 @@ const ProductList = () => {
                         />
                     </Col>
                 </Row>
-            </Col>
-            </row>
+            </div>
           )
         }
     </div>
