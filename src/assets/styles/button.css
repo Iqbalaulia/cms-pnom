@@ -1,0 +1,7 @@
+.button-non-rounded {
+    border-radius: 0px;
+}
+
+.button-large {
+    height: 60px;
+}

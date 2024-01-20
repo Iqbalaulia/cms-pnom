@@ -32,6 +32,8 @@ import "./assets/styles/responsive.css";
 import './assets/styles/override.css';
 import './assets/styles/loading.css';
 import './assets/styles/table.css';
+import './assets/styles/button.css';
+import './assets/styles/pages/login.css';
 
 import { getDataFromLocalStorage } from "utils/function";
 

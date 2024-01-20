@@ -7,7 +7,7 @@ import {
   Typography,
   Form,
   Input,
-  Switch,
+  // Switch,
 } from "antd";
 import signinbg from "assets/images/png/img-signin.png";
 import { signInModel } from "pages/signIn/data/setting";
@@ -16,14 +16,15 @@ import { notificationSuccess, notificationError  } from "utils/general/general";
 
 
 const SignIn = () => {
-  function onChange(checked) {
-    console.log(`switch to ${checked}`);
-  }
+  // function onChange(checked) {
+  //   console.log(`switch to ${checked}`);
+  // }
   const [form] = Form.useForm();
   const { Title } = Typography;
   const { Content } = Layout;
 
   const [formData, setFormData] = useState(signInModel)
+  const [loading, setLoading ] = useState(false)
 
   const handleChange = (event) => {
     setFormData({
@@ -52,25 +53,27 @@ const SignIn = () => {
   }
 
   const submitSignIn = async () => {
-    try {
-      let formDataLogin = {
-        login: formData.login,
-        password: btoa(formData.password)
+    setLoading(true)
+    setTimeout( async () => {
+      try {
+        let formDataLogin = {
+          login: formData.login,
+          password: btoa(formData.password)
+        }
+        
+        const response = await ApiPostRequest(`login`, formDataLogin)
+        localStorage.setItem('accessToken', JSON.stringify(response.data.accessToken))
+        
+        if (response) {
+          getAuth()
+        }
+  
+      } catch (error) {
+        notificationError(error)
+      } finally {
+        setLoading(false)
       }
-      
-      const response = await ApiPostRequest(`login`, formDataLogin)
-      localStorage.setItem('accessToken', JSON.stringify(response.data.accessToken))
-      
-      if (response) {
-        getAuth()
-      }
-
-      notificationSuccess('Berhasil Login')
-    } catch (error) {
-      notificationError(error)
-    } finally {
-
-    }
+    }, 1000);
   }
 
   const getAuth = async () => {
@@ -78,8 +81,11 @@ const SignIn = () => {
       const response = await ApiGetRequest(`auth`)
       localStorage.setItem('userData', JSON.stringify(response.data.data))
       window.location.href = '/dashboard'
+      notificationSuccess('Berhasil Login')
     } catch (error) {
       notificationError(error)
+    } finally {
+      
     }
   }
   
@@ -141,21 +147,23 @@ const SignIn = () => {
                   />
                 </Form.Item>
   
-                <Form.Item
+                {/* <Form.Item
                   name="remember"
                   className="aligin-center"
                   valuePropName="checked"
                 >
                   <Switch defaultChecked onChange={onChange} />
                   Remember me
-                </Form.Item>
+                </Form.Item> */}
   
                 <Form.Item>
                   <Button
+                    className="button-large button-non-rounded button-login"
                     type="primary"
+                    htmlType="submit"
+                    loading={loading}
                     onClick={handleSubmit}
                     style={{ width: "100%" }}
-                    htmlType="submit"
                   >
                     SIGN IN
                   </Button>
