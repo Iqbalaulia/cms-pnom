@@ -9,7 +9,7 @@ import PnomNotification from 'components/layout/Notification';
 
 import { ApiGetRequest, ApiPostMultipart, ApiPostRequest, ApiPutRequest } from 'utils/api/config';
 import { productCategoryModel } from 'utils/models/ProductModels';
-import { notificationError } from 'utils/general/general';
+import { notificationError, notificationSuccess } from 'utils/general/general';
 
 const ProductCategory = () => {
   const { Content } = Layout
@@ -26,6 +26,7 @@ const ProductCategory = () => {
 
   const [ tableParams, setTableParams ] = useState(paginationModel);
   const [ formData, setFormData ] = useState(productCategoryModel)
+  const [ formInputData ] = Form.useForm()
   const [ filterData, setFilterData ] = useState({
     search:''
   })
@@ -78,6 +79,10 @@ const ProductCategory = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleCloseModal = () => {  
+    setIsModalForm(false);
+    handleResetField()
+  }
   const handleShowForm = () => {
     setIsModalForm(true)
     handleResetField()
@@ -91,6 +96,13 @@ const ProductCategory = () => {
       status: parseInt(item.status),
       imageThumb: item.image,
     })
+
+    formInputData.setFieldsValue({
+      name: item.name,
+      status: parseInt(item.status),
+      imageThumb: item.image,
+    });
+
     setUuidData(item.uuid)
     setIsModalForm(true)
     setStepAction('update-data')
@@ -99,9 +111,6 @@ const ProductCategory = () => {
   const handleSubmit = () => {
     if(stepAction === `save-data`)  saveDataForm()
     if(stepAction === `update-data`) updateDataForm()
-    
-    setIsModalForm(false);
-    handleResetField()
   };
   const handleCancelSubmit = () => {
     setIsModalForm(false);
@@ -160,35 +169,44 @@ const ProductCategory = () => {
     }
   };
   const saveDataForm = async () => {
-    try {
-      setLoading(true)
-
-      let formDataProductCategory = {
-        name: formData.name,
-        image: formData.image,
-        status: formData.status
+    const validateValue = await formInputData.validateFields()
+    if (validateValue) {
+      try {
+        setLoading(true)
+        let formDataProductCategory = {
+          name: formData.name,
+          image: formData.image,
+          status: formData.status
+        }
+        await ApiPostRequest(`product/category`, formDataProductCategory)
+        await fetchDataCategory()
+        handleCloseModal()
+      } catch (error) {
+        notificationError(error)
+      } finally {
+        setLoading(false)
       }
-      await ApiPostRequest(`product/category`, formDataProductCategory)
-      await fetchDataCategory()
-    } catch (error) {
-      notificationError(error)
-    } finally {
-      setLoading(false)
     }
   }
   const updateDataForm = async () => {
-    try {
-      setLoading(true)
-      let formDataProductCategory = {
-        name: formData.name,
-        image: formData.image
+    const validateValue = await formInputData.validateFields()
+    if (validateValue) { 
+      try {
+        setLoading(true)
+        let formDataProductCategory = {
+          name: formData.name,
+          image: formData.image,
+          status: formData.status
+        }
+        await ApiPutRequest(`product/category/${uuidData}`, formDataProductCategory)
+        notificationSuccess('Data berhasil diubah!')
+        await fetchDataCategory()
+        handleCloseModal()
+      } catch (error) {
+        notificationError(error)
+      } finally {
+        setLoading(false)
       }
-      await ApiPutRequest(`product/category/${uuidData}`, formDataProductCategory)
-      await fetchDataCategory()
-    } catch (error) {
-      notificationError(error)
-    } finally {
-      setLoading(false)
     }
   }
   
@@ -223,15 +241,15 @@ const ProductCategory = () => {
                 <Row>
                     <Col md={{span: 24}}>
                         <Table
-                        size={'middle'}
-                        bordered={true}
-                        columns={columnsProductCategory}
-                        rowKey={(record) => record.id}
-                        dataSource={dataTable}
-                        pagination={tableParams.pagination}
-                        loading={loading}
-                        onChange={handleTableChange}
-                        className='ant-border-space'
+                          size={'middle'}
+                          bordered={true}
+                          columns={columnsProductCategory}
+                          rowKey={(record) => record.id}
+                          dataSource={dataTable}
+                          pagination={tableParams.pagination}
+                          loading={loading}
+                          onChange={handleTableChange}
+                          className='ant-border-space'
                         />
                     </Col>
                     
@@ -249,12 +267,24 @@ const ProductCategory = () => {
           width={600}
           >
             <Content className="form-data">
-              <Form>
+              <Form 
+                form={formInputData}  
+                initialValues={{
+                  remember: true,
+                }}
+               >
                   <Row gutter={[24,0]}>
                     <Col md={{ span: 24 }}>
                       <Form.Item
                         className="username mb-0"
-                        label="Nama"
+                        label="Nama*"
+                        name="name"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Wajib diisi!",
+                          },  
+                        ]}
                         >
                         <Input
                           value={formData.name}
@@ -268,7 +298,14 @@ const ProductCategory = () => {
                     <Col md={{ span: 24}}>
                           <Form.Item
                             className="username mb-0"
-                            label="Status"
+                            label="Status*"
+                            name="status"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Wajib diisi!",
+                              },  
+                            ]}
                             >
                               <Select
                                value={formData.status}
