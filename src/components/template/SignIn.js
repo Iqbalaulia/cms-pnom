@@ -80,9 +80,7 @@ const SignIn = () => {
       window.location.href = '/dashboard'
     } catch (error) {
       notificationError(error)
-    } finally {
-      
-    }
+    } 
   }
   
   
