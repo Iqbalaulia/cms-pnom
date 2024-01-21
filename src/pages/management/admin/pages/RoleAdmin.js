@@ -333,7 +333,7 @@ const RoleAdmin = () => {
             visible={isModalForm}
             title={isTitleModal}
             isAction={stepAction}
-            width={600}
+            width={800}
           >
             <Content className="form-data">
               <Form 

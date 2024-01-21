@@ -108,15 +108,15 @@ const EventBanner = () => {
       getFetchData()
     }
 
-    const handleFilterEndAt = (event) => {
-      setFilterData({...filterData, endAt:event})
-      getFetchData()
-    }
+    // const handleFilterEndAt = (event) => {
+    //   setFilterData({...filterData, endAt:event})
+    //   getFetchData()
+    // }
 
-    const handleFilterStartAt = (event) => {
-      setFilterData({...filterData, startAt:event})
-      getFetchData()
-    }
+    // const handleFilterStartAt = (event) => {
+    //   setFilterData({...filterData, startAt:event})
+    //   getFetchData()
+    // }
 
     const handleResetField = () => {
         setFormData({
