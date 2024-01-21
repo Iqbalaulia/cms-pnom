@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 
-import { Select, Table, Col, Button, Space, Form, Input, Row, Layout, Tag } from 'antd';
+import { Select, Table, Col, Button, Space, Form, Input, Row, Layout, Tag, Tooltip } from 'antd';
 import { CheckCircleOutlined, EditOutlined, InfoCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
-import { statusModel, paginationModel } from 'composables/useSetting';
+import { adminStatusModel, paginationModel } from 'composables/useSetting';
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
@@ -75,28 +75,34 @@ const DataAdmin = () => {
             title: 'Actions',
             render: (item) => (
               <Space size={8}>
-                <Button 
-                    onClick={() => handleEditModalForm(item)} 
-                    type="primary" 
-                    icon={<EditOutlined />} 
-                    size={'large'} 
-                />
+                <Tooltip placement="topLeft" title='Edit Data'>
+                  <Button 
+                      onClick={() => handleEditModalForm(item)} 
+                      type="primary" 
+                      icon={<EditOutlined />} 
+                      size={'large'} 
+                  />
+                </Tooltip>
                  {
                   filterData.status === 1 ? (
-                    <Button 
-                      onClick={() => handleUpdateStatusUser(item)} 
-                      type="danger" 
-                      icon={<InfoCircleOutlined />} 
-                      size={'large'} 
-                    />
+                    <Tooltip placement="topLeft" title='Non aktif user'>
+                      <Button 
+                        onClick={() => handleUpdateStatusUser(item)} 
+                        type="danger" 
+                        icon={<InfoCircleOutlined />} 
+                        size={'large'} 
+                      />
+                    </Tooltip>
                   ) : (
-                    <Button 
-                      onClick={() => handleUpdateStatusUser(item)} 
-                      type="primary" 
-                      ghost
-                      icon={<CheckCircleOutlined />} 
-                      size={'large'} 
-                    />
+                    <Tooltip placement="topLeft" title='Aktifasi user'>
+                      <Button 
+                        onClick={() => handleUpdateStatusUser(item)} 
+                        type="primary" 
+                        ghost
+                        icon={<CheckCircleOutlined />} 
+                        size={'large'} 
+                      />
+                    </Tooltip>
                   )
                  }
               </Space>        
@@ -369,7 +375,7 @@ const DataAdmin = () => {
                                   <Select
                                       value={filterData.status}
                                       onChange={handleOnChangeStatus}
-                                      options={statusModel}
+                                      options={adminStatusModel}
                                       placeholder='Pilih Status'
                                   />
                                 </Form.Item>
@@ -494,7 +500,7 @@ const DataAdmin = () => {
                             }
                           )} 
                           placeholder="Status"
-                          options={statusModel}
+                          options={adminStatusModel}
                         />
                       </Form.Item>
                       {

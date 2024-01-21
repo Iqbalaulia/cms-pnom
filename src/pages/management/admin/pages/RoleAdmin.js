@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 
-import { Select, Table, Col, Button, Space, Form, Input, Row, Layout, Tag } from 'antd';
-import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Select, Table, Col, Button, Space, Form, Input, Row, Layout, Tag, Tooltip } from 'antd';
+import { CheckCircleOutlined, EditOutlined, InfoCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 import { paginationModel, rolesPermissionModel, statusModel } from 'composables/useSetting';
 
@@ -10,7 +10,7 @@ import PnomNotification from 'components/layout/Notification';
 
 import { ApiGetRequest, ApiPostRequest, ApiPutRequest } from 'utils/api/config';
 import { roleModel } from 'utils/models/AdminModels';
-import { notificationError } from 'utils/general/general';
+import { notificationError, notificationSuccess } from 'utils/general/general';
 
 
 const RoleAdmin = () => {
@@ -31,7 +31,7 @@ const RoleAdmin = () => {
       startDate:"",
       endDate:"",
       search:"",
-      status: null
+      status: 1
     })
     const [ formInputData ] = Form.useForm()
 
@@ -67,6 +67,28 @@ const RoleAdmin = () => {
                     icon={<EditOutlined />} 
                     size={'large'} 
                 />
+                {
+                  filterData.status === 1 ? (
+                    <Tooltip placement="topLeft" title='Non aktif role'>
+                      <Button 
+                        onClick={() => handleUpdateStatus(item)} 
+                        type="danger" 
+                        icon={<InfoCircleOutlined/>} 
+                        size={'large'} 
+                      />
+                    </Tooltip>
+                  ) : (
+                    <Tooltip placement="topLeft" title='Aktifasi role'>
+                      <Button 
+                        onClick={() => handleUpdateStatus(item)} 
+                        type="primary" 
+                        ghost
+                        icon={<CheckCircleOutlined />} 
+                        size={'large'} 
+                      />
+                    </Tooltip>
+                  )
+                 }
               </Space>        
             )
           },
@@ -75,8 +97,14 @@ const RoleAdmin = () => {
     useEffect(() => {
         getFetchData()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [
+      filterData.search,
+      filterData.status
+    ]);
 
+    const handleUpdateStatus = (item) => {
+      updateStatusRole(item)
+    }
     const handleResetField = () => {
         setFormData({...roleModel})
     }
@@ -159,21 +187,12 @@ const RoleAdmin = () => {
               }
       
               await ApiPostRequest(`admin/role`, formRoleAdmin)
-              PnomNotification({
-                type: 'success',
-                message: 'Berhasil disimpan!',
-                description:'Data admin berhasil disimpan!',
-              })
-              
+              notificationSuccess('Data admin berhasil disimpan!')
               setIsModalForm(false)
               handleResetField()
               await getFetchData()
           } catch (error) {
-            PnomNotification({
-              type: 'error',
-              message: 'Maaf terjadi kesalahan!',
-              description: error.message,
-           })
+            notificationError(error)
           } finally {
             setLoading(false)
           }
@@ -207,27 +226,71 @@ const RoleAdmin = () => {
         }
       }
     }
+    const updateStatusRole = async (item) => {    
+      try {
+        setLoading(true)
+        let formRoleStatus = {
+          name: item.name,
+          permission: rolesPermissionModel.permission
+        }
+        
+        if (filterData.status === 1) {
+          formRoleStatus.status = 0
+        } else {
+          formRoleStatus.statu = 1
+        }
+        
+        await ApiPutRequest(`admin/role/${item.uuid}`, formRoleStatus)
+
+        if (filterData.status === 1) {
+          notificationSuccess('Data berhasil di non aktifkan!')
+        } else {
+          notificationSuccess('Data berhasil di aktifkan!')
+        }
+        setIsModalForm(false)
+        handleResetField()
+        await getFetchData()
+      } catch (error) {
+        PnomNotification({
+          type: 'error',
+          message: 'Maaf terjadi kesalahan!',
+          description: error.message,
+       })
+      } finally {
+        setLoading(false)
+      }
+    }
 
     return(
         <>
           <div className='admin-table'>
             <Row gutter={[24,0]}  className='mb-2'>
                               <Col md={{span: 6}}>
-                                  <Input
-                                      placeholder="Pencarian..."
-                                      value={filterData.search}
-                                      onChange={
-                                        (event) => setFilterData({...filterData, search: event.target.value})
-                                      }
-                                  />
+                                  <Form.Item
+                                     className="username"
+                                     label="Pencarian"
+                                  >
+                                    <Input
+                                        placeholder="Pencarian..."
+                                        value={filterData.search}
+                                        onChange={
+                                          (event) => setFilterData({...filterData, search: event.target.value})
+                                        }
+                                    />
+                                  </Form.Item>
                               </Col>
                               <Col md={{span: 5}}>
-                                <Select
-                                    value={filterData.status}
-                                    onChange={handleOnChangeStatus}
-                                    options={statusModel}
-                                    placeholder='Pilih Status'
+                                <Form.Item
+                                  className="username"
+                                  label="Status"
+                                >
+                                  <Select
+                                      value={filterData.status}
+                                      onChange={handleOnChangeStatus}
+                                      options={statusModel}
+                                      placeholder='Pilih Status'
                                   />
+                                </Form.Item>
                               </Col>
                               <Col md={{span: 5}}>
                               </Col>
@@ -241,7 +304,7 @@ const RoleAdmin = () => {
                                           icon={<PlusCircleOutlined />} 
                                           className='w-50'
                                           onClick={handleShowModalForm} 
-                                          size={'default'} >
+                                          size={'large'} >
                                           Tambah Data
                                       </Button>
                                   </Space>

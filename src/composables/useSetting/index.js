@@ -20,6 +20,17 @@ const statusModel = [
     }
 ]
 
+const adminStatusModel = [
+    {
+        value: 1,
+        label:'Aktif'
+    },
+    {
+        value: 0,
+        label:'Tidak Aktif'
+    }
+]
+
 const statusReadModel = [
     {
         value: 1,
@@ -85,5 +96,6 @@ export {
     rolesPermissionModel,
     discountModel,
     recommendationModel,
-    statusReadModel
+    statusReadModel,
+    adminStatusModel
 }
