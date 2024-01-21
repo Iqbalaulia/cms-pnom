@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 
 import { Select, Table, Col, Button, Space, Form, Input, Row, Layout, Tag } from 'antd';
-import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, EditOutlined, InfoCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 import { statusModel, paginationModel } from 'composables/useSetting';
 
@@ -10,7 +10,7 @@ import PnomNotification from 'components/layout/Notification';
 
 import { ApiGetRequest, ApiPostRequest, ApiPutRequest } from 'utils/api/config';
 import { adminModel } from 'utils/models/AdminModels';
-import { notificationError } from 'utils/general/general';
+import { notificationError, notificationSuccess } from 'utils/general/general';
 
 
 const DataAdmin = () => {
@@ -21,6 +21,7 @@ const DataAdmin = () => {
 
     const [ loading, setLoading ] = useState(false)
     const [ isModalForm, setIsModalForm ] = useState(false)
+    const [ updatePassword, setUpdatePassword] = useState(false)
 
     const [ stepAction, setStepAction ] = useState('save-data')
     const [ isTitleModal, setTitleModal ] = useState('Tambah Data')
@@ -34,7 +35,7 @@ const DataAdmin = () => {
       startDate:"",
       endDate:"",
       search:"",
-      status: null
+      status: 1
     })
 
     const columnsDataAdmin = [
@@ -80,6 +81,24 @@ const DataAdmin = () => {
                     icon={<EditOutlined />} 
                     size={'large'} 
                 />
+                 {
+                  filterData.status === 1 ? (
+                    <Button 
+                      onClick={() => handleUpdateStatusUser(item)} 
+                      type="danger" 
+                      icon={<InfoCircleOutlined />} 
+                      size={'large'} 
+                    />
+                  ) : (
+                    <Button 
+                      onClick={() => handleUpdateStatusUser(item)} 
+                      type="primary" 
+                      ghost
+                      icon={<CheckCircleOutlined />} 
+                      size={'large'} 
+                    />
+                  )
+                 }
               </Space>        
             )
           },
@@ -88,19 +107,30 @@ const DataAdmin = () => {
     useEffect(() => {
         getFetchData()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [
+      filterData.search,
+      filterData.status
+    ]);
 
+    const handleUpdatePassword = () => {
+      setUpdatePassword(true)
+    }
+    const handleUpdateStatusUser = (item) => {
+      updateStatusUser(item)
+    }
     const handleResetField = () => {
         setFormData({...adminModel})
     }
     const handleCancelSubmit = () => {
         setIsModalForm(false);
+        setUpdatePassword(false);
         handleResetField()
     }
     const handleShowModalForm = () => {
         getRoleData()
-        setIsModalForm(true)
         handleResetField()
+        setIsModalForm(true)
+        setUpdatePassword(false);
         setStepAction('save-data')
         setTitleModal('Tambah Data')
     }
@@ -133,7 +163,6 @@ const DataAdmin = () => {
     }
     const handleOnChangeStatus = (event) => {
       setFilterData({...filterData, status:event})
-      getFetchData()
     }
     const handleTableChange = (pagination, filters, sorter) => {
         setTableParams({
@@ -227,28 +256,62 @@ const DataAdmin = () => {
       if(validateValue) { 
         try {
           setLoading(true)
-          await ApiPutRequest(`admin/account/${uuid}`, formData)
+          let formDataAdmin = {
+            name: formData.name,
+            login: formData.name.replace(/ /g, "_"),
+            password:btoa(formData.password),
+            status: formData.status,
+            role_uuid: formData.role_uuid
+          }
+          await ApiPutRequest(`admin/account/${uuid}`, formDataAdmin)
           
-          PnomNotification({
-            type: 'success',
-            message: 'Berhasil diupdate!',
-            description:'Data admin berhasil diupdate!',
-          })
-           
+          notificationSuccess('Data admin berhasil diupdate!')
           setIsModalForm(false)
+          setUpdatePassword(false);
           handleResetField()
           await getFetchData()
         } catch (error) {
-          PnomNotification({
-            type: 'error',
-            message: 'Maaf terjadi kesalahan!',
-            description: error.message,
-         })
+          notificationError(error)
         } finally {
           setLoading(false)
         }
       }
       
+    }
+    const updateStatusUser = async (item) => {    
+      try {
+        setLoading(true)
+        let formDataUpdateStatus = {
+          name: item.name,
+          password:'',
+          role_uuid: item.role.uuid
+        }
+        
+        if (filterData.status === 1) {
+          formDataUpdateStatus.status = 0
+        } else {
+          formDataUpdateStatus.statu = 1
+        }
+        
+        await ApiPutRequest(`admin/account/${item.uuid}`, formDataUpdateStatus)
+
+        if (filterData.status === 1) {
+          notificationSuccess('Data berhasil di non aktifkan!')
+        } else {
+          notificationSuccess('Data berhasil di aktifkan!')
+        }
+        setIsModalForm(false)
+        handleResetField()
+        await getFetchData()
+      } catch (error) {
+        PnomNotification({
+          type: 'error',
+          message: 'Maaf terjadi kesalahan!',
+          description: error.message,
+       })
+      } finally {
+        setLoading(false)
+      }
     }
 
     const formPassword = (
@@ -285,21 +348,31 @@ const DataAdmin = () => {
           <div className='admin-table'>
             <Row gutter={[24,0]}  className='mb-2'>
                               <Col md={{span: 6}}>
-                                  <Input
-                                      placeholder="Pencarian..."
-                                      value={filterData.search}
-                                      onChange={
-                                        (event) => setFilterData({...filterData, search: event.target.value})
-                                      }
-                                  />
+                                  <Form.Item
+                                     className="username"
+                                     label="Pencarian"
+                                  >
+                                    <Input
+                                        placeholder="Pencarian..."
+                                        value={filterData.search}
+                                        onChange={
+                                          (event) => setFilterData({...filterData, search: event.target.value})
+                                        }
+                                    />
+                                  </Form.Item>
                               </Col>
                               <Col md={{span: 5}}>
-                                <Select
-                                    value={filterData.status}
-                                    onChange={handleOnChangeStatus}
-                                    options={statusModel}
-                                    placeholder='Pilih Status'
+                                <Form.Item
+                                  className="username"
+                                  label="Status"
+                                >
+                                  <Select
+                                      value={filterData.status}
+                                      onChange={handleOnChangeStatus}
+                                      options={statusModel}
+                                      placeholder='Pilih Status'
                                   />
+                                </Form.Item>
                               </Col>
                               <Col md={{span: 5}}>
                               </Col>
@@ -312,7 +385,7 @@ const DataAdmin = () => {
                                           type="primary" 
                                           icon={<PlusCircleOutlined />} 
                                           className='w-50'
-                                          onClick={handleShowModalForm} 
+                                          onClick={() => handleShowModalForm()} 
                                           size={'default'} >
                                           Tambah Data
                                       </Button>
@@ -376,9 +449,6 @@ const DataAdmin = () => {
                           placeholder="Nama"
                         />
                       </Form.Item>
-                      {
-                        stepAction === 'save-data' ? (formPassword) : ''
-                      }
                     </Col>
                     <Col md={{ span: 24 }}>
                       <Form.Item
@@ -427,6 +497,23 @@ const DataAdmin = () => {
                           options={statusModel}
                         />
                       </Form.Item>
+                      {
+                        stepAction === `update-data` ? (
+                          <label className='link-password' onClick={() => handleUpdatePassword()}>
+                          {
+                            updatePassword === true ? `Ubah Password` : `Ubah Password ?`
+                          }
+                          </label>
+                        ) : ``
+                      }
+                      {
+                        stepAction === 'save-data' ? 
+                        (formPassword) : 
+                        updatePassword === true ? 
+                        (formPassword) : 
+                        ''
+                      }
+                     
                     </Col>
                   </Row>
               </Form>

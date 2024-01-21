@@ -77,7 +77,10 @@ const ProductList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     fetchDataCategory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterData.search, filterData.categoryUuid]);
+  }, [
+    filterData.search, 
+    filterData.categoryUuid
+  ]);
 
   const handleOnChangeCategory = (event) => {
     setFilterData({...filterData, categoryUuid: event})
