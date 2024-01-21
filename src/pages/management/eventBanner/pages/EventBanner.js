@@ -35,7 +35,7 @@ const EventBanner = () => {
       startAt:"",
       endAt:"",
       search:"",
-      status: null
+      status: 1
     })
 
     const columnsBanner = [
@@ -87,7 +87,6 @@ const EventBanner = () => {
                 <Button 
                     onClick={() => handleEditModalForm(item)} 
                     type="primary"
-                    ghost 
                     icon={<EditOutlined />} 
                     size={'large'} 
                 />
@@ -99,9 +98,12 @@ const EventBanner = () => {
     useEffect(() => {
         getFetchData()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [
+      filterData.search,
+      filterData.status
+    ]);
 
-    const handleFilterStatus = (event) => {
+    const handleOnChangeStatus = (event) => {
       setFilterData(filterData => ({...filterData, status:event}))
       getFetchData()
     }
@@ -299,15 +301,21 @@ const EventBanner = () => {
                         <h2 className='font-bold'>Banner Acara</h2>
                         <Row gutter={[24,0]}  className='mb-2'>
                             <Col md={{span: 6}}>
-                                <Input
-                                    placeholder="Pencarian..."
-                                    value={filterData.search}
-                                    onChange={
-                                      (event) => setFilterData({...filterData, search: event.target.value})
-                                    }
-                                />
+
+                                <Form.Item
+                                     className="username"
+                                     label="Pencarian"
+                                  >
+                                    <Input
+                                        placeholder="Pencarian..."
+                                        value={filterData.search}
+                                        onChange={
+                                          (event) => setFilterData({...filterData, search: event.target.value})
+                                        }
+                                    />
+                                  </Form.Item>
                             </Col>
-                            <Col md={{span: 5}}>
+                            {/* <Col md={{span: 5}}>
                               <DatePicker 
                                 placeholder='Tanggal Mulai' 
                                 onChange={handleFilterStartAt}
@@ -318,16 +326,21 @@ const EventBanner = () => {
                                 placeholder='Tanggal Akhir'  
                                 onChange={handleFilterEndAt} 
                               />
-                            </Col>
+                            </Col> */}
                             <Col md={{span: 4}}>
-                              <Select
-                                value={filterData.status}
-                                onChange={handleFilterStatus}
-                                options={statusModel}
-                                placeholder='Pilih Status'
-                              />
+                              <Form.Item
+                                  className="username"
+                                  label="Status"
+                                >
+                                  <Select
+                                      value={filterData.status}
+                                      onChange={handleOnChangeStatus}
+                                      options={statusModel}
+                                      placeholder='Pilih Status'
+                                  />
+                                </Form.Item>
                             </Col>
-                            <Col md={{span: 4}} className='d-flex justify-end'>
+                            <Col md={{span: 14}} className='d-flex justify-end'>
                                 <Space align='start'>
                                     <Button  
                                         type="primary" 

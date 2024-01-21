@@ -66,7 +66,7 @@ const ProductList = () => {
       title: 'Actions',
       render: (item) => (
         <Space size={8}>
-          <Button onClick={() => handleEditForm(item)} type="primary" ghost icon={<EditOutlined />} size={'large'} />
+          <Button onClick={() => handleEditForm(item)} type="primary" icon={<EditOutlined />} size={'large'} />
         </Space>        
       )
     },

@@ -80,7 +80,7 @@ const SettingOnlineStore = () => {
             width: '20%',
             render: (item) => (
               <Space size={8}>
-                <Button onClick={() => handleEditModalForm(item)} type="primary" ghost icon={<EditOutlined />} size={'large'} />
+                <Button onClick={() => handleEditModalForm(item)} type="primary"  icon={<EditOutlined />} size={'large'} />
               </Space>        
             )
           },
