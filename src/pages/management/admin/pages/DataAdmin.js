@@ -331,7 +331,7 @@ const DataAdmin = () => {
             message: "Input data password!",
           },
           {
-            pattern: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+            pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{5,20}$/,
             message: 'Password harus berupa kombinasi huruf, angka, dan simbol',
           }, 
         ]}>
@@ -441,7 +441,11 @@ const DataAdmin = () => {
                           {
                             required: true,
                             message: "Input data nama!",
-                          },  
+                          },
+                          {
+                            pattern: /^[a-zA-Z0-9 _-]{1,32}$/,
+                            message: 'Maksimal 32 Karakter',
+                          }, 
                         ]}
                       >
                         <Input

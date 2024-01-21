@@ -63,11 +63,7 @@ const SignIn = () => {
         
         const response = await ApiPostRequest(`login`, formDataLogin)
         localStorage.setItem('accessToken', JSON.stringify(response.data.accessToken))
-        
-        if (response) {
-          getAuth()
-        }
-  
+        await getAuth()
       } catch (error) {
         notificationError(error)
       } finally {
@@ -80,8 +76,8 @@ const SignIn = () => {
     try {
       const response = await ApiGetRequest(`auth`)
       localStorage.setItem('userData', JSON.stringify(response.data.data))
-      window.location.href = '/dashboard'
       notificationSuccess('Berhasil Login')
+      window.location.href = '/dashboard'
     } catch (error) {
       notificationError(error)
     } finally {
