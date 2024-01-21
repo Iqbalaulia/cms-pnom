@@ -1,6 +1,6 @@
 import React, { useEffect, useState, } from 'react';
 
-import { Table, Col, Button, Space, Input, Row, Tag, Select } from 'antd';
+import { Table, Col, Button, Space, Input, Row, Tag, Select, Form } from 'antd';
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 import { paginationModel } from 'composables/useSetting';
@@ -149,22 +149,32 @@ const ProductList = () => {
             <div>
             <Row gutter={[24,0]}  className='mb-2'>
                       <Col md={{span: 6}}>
+                       <Form.Item
+                        className="username"
+                        label="Pencarian"
+                       >
                         <Input
-                           value={filterData.search}
-                           onChange={
-                             (event) => setFilterData({...filterData, search: event.target.value})
-                           }
-                           placeholder="Pencarian..."
-                        />
+                            value={filterData.search}
+                            onChange={
+                              (event) => setFilterData({...filterData, search: event.target.value})
+                            }
+                            placeholder="Pencarian..."
+                          />
+                       </Form.Item>
                       </Col>
                      
                       <Col md={{span: 5}}>
-                        <Select 
-                          onChange={handleOnChangeCategory}
-                          options={dataCategory}
-                          value={filterData.categoryUuid}
-                          placeholder='Pilih Kategori'
-                        />
+                          <Form.Item
+                           className="username"
+                           label="Kategori"
+                          >
+                            <Select 
+                              onChange={handleOnChangeCategory}
+                              options={dataCategory}
+                              value={filterData.categoryUuid}
+                              placeholder='Pilih Kategori'
+                            />
+                          </Form.Item>
                       </Col>
                       <Col md={{span: 13}} className='d-flex justify-end'>
                         <Space align='start'>

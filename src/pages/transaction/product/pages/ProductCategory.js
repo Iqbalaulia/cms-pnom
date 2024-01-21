@@ -77,7 +77,7 @@ const ProductCategory = () => {
   useEffect(() => {
     fetchDataCategory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [filterData.search]);
 
   const handleCloseModal = () => {  
     setIsModalForm(false);
@@ -217,13 +217,18 @@ const ProductCategory = () => {
             <Col xs="24" xl={24}>
                 <Row className='mb-2'>
                       <Col md={{span: 6}}>
-                        <Input
-                          value={filterData.search}
-                          onChange={
-                            (event) => setFilterData({...filterData, search: event.target.value})
-                          }
-                          placeholder="Pencarian..."
-                        />
+                        <Form.Item
+                          className="username"
+                          label="Pencarian"
+                        >
+                          <Input
+                            value={filterData.search}
+                            onChange={
+                              (event) => setFilterData({...filterData, search: event.target.value})
+                            }
+                            placeholder="Pencarian..."
+                          />
+                        </Form.Item>
                       </Col>
                       <Col md={{span: 18}} className='d-flex justify-end'>
                         <Space align='start'>

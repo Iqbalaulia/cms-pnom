@@ -88,3 +88,7 @@
     left: 180px;
     align-items: center;
 }
+
+.ant-tabs-nav-wrap{
+    border-bottom: 1px solid #cccccc !important;
+}
