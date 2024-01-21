@@ -296,7 +296,7 @@ const DataAdmin = () => {
         if (filterData.status === 1) {
           formDataUpdateStatus.status = 0
         } else {
-          formDataUpdateStatus.statu = 1
+          formDataUpdateStatus.status = 1
         }
         
         await ApiPutRequest(`admin/account/${item.uuid}`, formDataUpdateStatus)

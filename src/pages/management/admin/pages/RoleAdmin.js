@@ -237,7 +237,7 @@ const RoleAdmin = () => {
         if (filterData.status === 1) {
           formRoleStatus.status = 0
         } else {
-          formRoleStatus.statu = 1
+          formRoleStatus.status = 1
         }
         
         await ApiPutRequest(`admin/role/${item.uuid}`, formRoleStatus)
