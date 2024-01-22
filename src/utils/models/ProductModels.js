@@ -7,6 +7,8 @@ const productCategoryModel = {
 
 const productModel = {
     name: '',
+    imageCover:'',
+    imageCoverName:'',
     description: '',
     categoryUuid: '',
     recommendation: 1,

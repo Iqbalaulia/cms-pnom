@@ -22,13 +22,15 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
     const [ dataProduct, setDataProduct ] = useState(productModel)
     const [ uuidData, setUuidData ] = useState('')
     const [ updateImage, setUpdateImage ] = useState(false)
+    const [ updateImageCover, setUpdateImageCover] = useState(false)
 
     useEffect(() => {
-        
         const objectLength = Object.keys(dataDetail).length
         if (objectLength > 0) {
             setDataProduct({
                 name: dataDetail.name,
+                imageCover: dataDetail.imageCover,
+                imageCoverName: dataDetail.imageCoverName,
                 description: dataDetail.description,
                 categoryUuid: dataDetail.category.uuid,
                 recommendation: parseInt(dataDetail.recommendation),
@@ -79,7 +81,7 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
 
     const componentImage = (dataImages) => {
         return (
-            <Row gutter={[24,0]} className="images-viewer">
+            <Row gutter={[24,0]} className="images-viewer-product">
                 {
                       dataImages.images.map((item, index) => (
                             <Col md={4}>
@@ -118,7 +120,24 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
             return newData;
         });
     }
-    const handleUploadImage = async (event, index) => {
+    const handleUploadImageCover = async (event) => {
+        try {
+            const formDataUploadConver = new FormData();
+            const selectedFileCover = event.target.files[0]
+
+            formDataUploadConver.append("file", selectedFileCover)
+            const response = await ApiPostMultipart(`file-upload`, formDataUploadConver);
+
+            setDataProduct({
+                ...dataProduct,
+                imageCover: response.data.data.filename
+            })
+            setUpdateImageCover(true)
+        } catch (error) {
+            notificationError(error);
+        }
+    }
+    const handleUploadImageVariant = async (event, index) => {
         try {
             const formDataUpload = new FormData();
             const selectedFile = event.target.files[0];
@@ -143,7 +162,6 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
             }
     
             setDataSales(newDataSales);
-    
           
         } catch (error) {
           notificationError(error);
@@ -154,6 +172,13 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
         await deleteImageDetail(uuidData, item.uuid, item.images[index].uuid )
         item.images.splice(index, 1)
         setDataSales(newDataSales)
+    }
+    const handleDeleteImageCover = () => {
+        setDataProduct({
+            ...dataProduct,
+            imageCover: '',
+            imageCoverName: ''
+        })
     }
     const handleDeleteDetail = (index) => {
         setDataSales((prevData) => {
@@ -356,7 +381,11 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                 recommendation: dataProduct.recommendation,
                 status: dataProduct.status,
                 details: dataSalesDetails
-            }
+            }  
+
+            console.log('updateImageCover', updateImageCover)
+            
+            if (updateImageCover === true) formData.imageCover = dataProduct.imageCover
 
 
             if (uuidData) {
@@ -371,7 +400,6 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
             onClickProduct()
         } catch (error) {
             notificationError(error)
-           
         }
     }
 
@@ -388,13 +416,40 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                         <Form>
                             <Row className="mb-2" gutter={[24,0]}>
                                 <Col md={{span: 24}} className="padding-0">
-                                    <Row gutter={{span: 24}} className="mt-2 mb-2">
+                                    <Row gutter={{span: 24}} className="mt-2 mb-5">
                                         <Col md={{span: 24}}>
                                             <div className="informasi-detail">
                                                 <label>Informasi</label>
                                             </div>
                                         </Col>
                                     </Row>
+                                    {
+                                        dataProduct.imageCoverName ? (
+                                            <div className="images-viewer-cover">
+                                                <Button onClick={() => handleDeleteImageCover() } className="trash"><DeleteOutlined /></Button>
+                                                <Image
+                                                    className="images-viewer" 
+                                                    width={200}
+                                                    src={dataProduct.imageCover}
+                                                />
+                                            </div>
+                                            
+                                        ) : (
+                                            <Form.Item
+                                                className="username"
+                                                label="Cover Produk"
+                                                name={`upload_cover`}
+                                                >
+                                                    <input
+                                                        type="file"
+                                                        id={`file-upload-cover`}
+                                                        onChange={(event) => handleUploadImageCover(event)}
+                                                        accept="image/*"
+                                                    />
+                                            </Form.Item>
+                                        )
+                                    }
+
                                     <Form.Item
                                         className="username mb-0"
                                         label="Nama Produk"
@@ -633,7 +688,7 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                                                         <input
                                                             type="file"
                                                             id={`file-upload-${index}`}
-                                                            onChange={(event) => handleUploadImage(event, index)}
+                                                            onChange={(event) => handleUploadImageVariant(event, index)}
                                                             accept="image/*"
                                                         />
                                                 </Form.Item>
