@@ -5,7 +5,6 @@ import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { paginationModel, statusModel } from 'composables/useSetting';
 
 import PnomModal from 'components/layout/Modal';
-import PnomNotification from 'components/layout/Notification';
 
 import { ApiGetRequest, ApiPostMultipart, ApiPostRequest, ApiPutRequest } from 'utils/api/config';
 import { productCategoryModel } from 'utils/models/ProductModels';
@@ -95,6 +94,7 @@ const ProductCategory = () => {
       name: item.name,
       status: parseInt(item.status),
       imageThumb: item.image,
+      image: item.imageName
     })
 
     formInputData.setFieldsValue({
@@ -144,11 +144,7 @@ const ProductCategory = () => {
       })
      
     } catch (error) {
-      PnomNotification({
-        type: 'error',
-        message: 'Maaf terjadi kesalahan!',
-        description: 'Mohon periksa kembali jaringan anda. Atau menghubungi call center',
-      })
+      notificationError(error)
     }
   };
 
