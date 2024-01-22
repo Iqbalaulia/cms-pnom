@@ -382,8 +382,6 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
                 status: dataProduct.status,
                 details: dataSalesDetails
             }  
-
-            console.log('updateImageCover', updateImageCover)
             
             if (updateImageCover === true) formData.imageCover = dataProduct.imageCover
 

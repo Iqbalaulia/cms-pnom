@@ -20,6 +20,7 @@ const ProductCategory = () => {
 
   const [ loading, setLoading ] = useState(false);
   const [ isModalShow, setIsModalForm ] = useState(false)
+  const [ updateImage, setUpdateImage ] = useState(false)
 
   const [ uuidData, setUuidData] = useState(null)
 
@@ -142,7 +143,7 @@ const ProductCategory = () => {
         image: response.data.data.filename,
         imageThumb: URL.createObjectURL(selectedFile)
       })
-     
+      setUpdateImage(true)
     } catch (error) {
       notificationError(error)
     }
@@ -191,9 +192,11 @@ const ProductCategory = () => {
         setLoading(true)
         let formDataProductCategory = {
           name: formData.name,
-          image: formData.image,
           status: formData.status
         }
+
+        if (updateImage === true) formDataProductCategory.image = formData.image
+
         await ApiPutRequest(`product/category/${uuidData}`, formDataProductCategory)
         notificationSuccess('Data berhasil diubah!')
         await fetchDataCategory()
