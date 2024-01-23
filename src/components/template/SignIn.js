@@ -7,7 +7,6 @@ import {
   Typography,
   Form,
   Input,
-  // Switch,
 } from "antd";
 import signinbg from "assets/images/png/img-signin.png";
 import { signInModel } from "pages/signIn/data/setting";
@@ -16,9 +15,7 @@ import { notificationSuccess, notificationError  } from "utils/general/general";
 
 
 const SignIn = () => {
-  // function onChange(checked) {
-  //   console.log(`switch to ${checked}`);
-  // }
+
   const [form] = Form.useForm();
   const { Title } = Typography;
   const { Content } = Layout;

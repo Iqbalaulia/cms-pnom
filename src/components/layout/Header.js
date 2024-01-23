@@ -206,7 +206,7 @@ function Header({
               className="ant-page-header-heading-title"
               style={{ textTransform: "capitalize" }}
             >
-              {subName.replace("/", " ")}
+              {subName.replace("/", " ")} - ( {userData.role.name} )
             </span>
           </div>
         </Col>

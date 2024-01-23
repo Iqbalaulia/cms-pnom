@@ -7,9 +7,10 @@ import { paginationModel, rolesPermissionModel, statusModel } from 'composables/
 
 import PnomModal from 'components/layout/Modal';
 import PnomNotification from 'components/layout/Notification';
+import MenuComponent from 'components/layout/MenuComponent';
 
 import { ApiGetRequest, ApiPostRequest, ApiPutRequest } from 'utils/api/config';
-import { roleModel } from 'utils/models/AdminModels';
+import { roleModel, enableMenuModel } from 'utils/models/AdminModels';
 import { notificationError, notificationSuccess } from 'utils/general/general';
 
 
@@ -102,6 +103,7 @@ const RoleAdmin = () => {
       filterData.status
     ]);
 
+
     const handleUpdateStatus = (item) => {
       updateStatusRole(item)
     }
@@ -183,9 +185,9 @@ const RoleAdmin = () => {
             setLoading(true)
               let formRoleAdmin = {
                 name: formData.name,
-                permission: rolesPermissionModel.permission
+                permission: formData.permission,
+                status: 1
               }
-      
               await ApiPostRequest(`admin/role`, formRoleAdmin)
               notificationSuccess('Data admin berhasil disimpan!')
               setIsModalForm(false)
@@ -368,7 +370,7 @@ const RoleAdmin = () => {
                       </Form.Item>
                     </Col>
                     <Col md={{ span: 24 }}>
-                    <Form.Item
+                      <Form.Item
                         className="username"
                         label="Status"
                         name="status"
@@ -391,6 +393,12 @@ const RoleAdmin = () => {
                           options={statusModel}
                         />
                       </Form.Item>
+                    </Col>
+                    <Col md={{span: 24}}>
+                      <MenuComponent
+                        enableMenuModel={enableMenuModel}
+                        setFormData={setFormData}
+                      />
                     </Col>
                   </Row>
               </Form>
