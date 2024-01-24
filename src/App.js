@@ -52,7 +52,7 @@ function App() {
       component: ManagementAdmin
     },
     {
-      routerLink:'/event-banner',
+      routerLink:'/banner',
       component: ManagementEventBanner
     },
     {
@@ -60,7 +60,7 @@ function App() {
       component: ManagementNotification
     },
     {
-      routerLink:'/pengaturan',
+      routerLink:'/master_setting',
       component: Setting
     },
     {

@@ -189,7 +189,6 @@ const RoleAdmin = () => {
                 status: 1
               }
               await ApiPostRequest(`admin/role`, formRoleAdmin)
-              notificationSuccess('Data admin berhasil disimpan!')
               setIsModalForm(false)
               handleResetField()
               await getFetchData()
@@ -211,15 +210,12 @@ const RoleAdmin = () => {
           let formRoleAdmin = {
             name: formData.name,
             status: formData.status,
-            permission: rolesPermissionModel.permission
+            permission: formData.permission,
           }
           await ApiPutRequest(`admin/role/${uuid}`, formRoleAdmin)
 
-          PnomNotification({
-            type: 'success',
-            message: 'Berhasil diupdate!',
-            description:'Data admin berhasil diupdate!',
-          })
+          notificationSuccess('Data admin berhasil diupdate!')
+          setIsModalForm(false)
           await getFetchData()
         } catch (error) {
           notificationError(error)

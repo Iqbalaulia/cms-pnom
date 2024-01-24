@@ -33,19 +33,19 @@ function Sidenav({ color }) {
           id:'1',
           icons: icons.iconProduct,
           routerLink:'/product',
-          name:'Produk'
+          name:'product'
         },
         // {
         //   id:'2',
         //   icons: icons.iconTransaction,
         //   routerLink:'/transaction',
-        //   name:'Transaksi'
+        //   name:'transaction'
         // },
         // {
         //   id:'3',
         //   icons: icons.iconOrder,
         //   routerLink:'/order',
-        //   name:'Order'
+        //   name:'order'
         // },
         // {
         //   id:'4',
@@ -63,31 +63,31 @@ function Sidenav({ color }) {
           id:'1',
           icons: icons.iconAdminPanel,
           routerLink:'/admin',
-          name:'Admin'
+          name:'admin'
         },
         {
           id:'2',
           icons: icons.iconCalendarEvent,
-          routerLink:'/event-banner',
-          name:'Banner Acara'
+          routerLink:'/banner',
+          name:'banner'
         },
         {
           id:'3',
           icons: icons.iconBell,
           routerLink:'/notification',
-          name:'Notifikasi'
+          name:'notification'
         }
       ]
     },
     {
       id:'33',
-      pages:'Pengaturan',
+      pages:'Setting',
       data:[
         {
           id:'6',
           icons: icons.iconRtl,
-          routerLink:'/pengaturan',
-          name:'Setting'
+          routerLink:'/setting',
+          name:'master_setting'
         },
       ]
     }
@@ -135,7 +135,7 @@ function Sidenav({ color }) {
       <Menu theme="light" mode="inline">
         {dataMenu.map((item) => {
             const hasVisibleMenu = item.data.some((itemSub) => {
-              const menuKey = itemSub.routerLink.replace("/", "");
+              const menuKey = itemSub.name.replace("/", "");
               const hasPermissionMenu = hasPermission(menuKey)
               return hasPermissionMenu
             });          
@@ -146,7 +146,7 @@ function Sidenav({ color }) {
                   {
                     item.data.map((itemSub) => {
 
-                      const menuKey = itemSub.routerLink.replace("/", "");
+                      const menuKey = itemSub.name.replace("/", "");
                       const hasPermissionMenu = hasPermission(menuKey)
 
                       return(

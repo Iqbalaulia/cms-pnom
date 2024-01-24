@@ -180,7 +180,7 @@ const DataAdmin = () => {
         if (pagination.pageSize !== tableParams.pagination?.pageSize) setDataTable([])
     }
 
-
+    
     const getFetchData = async () => {
         try {
             let params = {

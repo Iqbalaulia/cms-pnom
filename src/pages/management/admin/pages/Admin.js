@@ -15,22 +15,17 @@ const AdminPage = () => {
   }
 
   return (
-    <>
-      <div className="admin-page">
-        <Row gutter={[24, 0]}>
-          <Col xs={24} xl={24}>
-            <Card
-              bordered={false}
-              className="criclebox mb-24"
-            >
-                <h2 className="font-bold">
-                  {header}
-                </h2>
-
-                <Tabs
-                  defaultActiveKey="1"
-                  onChange={tabsChange}
-                >
+    <div className="admin-page">
+      <Row gutter={[24, 0]}>
+        <Col xs={24} xl={24}>
+          <Card
+            bordered={false}
+            className="criclebox mb-24"
+          >
+              <h2 className="font-bold">
+                {header}
+              </h2>
+              <Tabs defaultActiveKey="1" onChange={tabsChange}>
                     <TabPane
                       tab="Data Admin"
                       key="1"
@@ -41,14 +36,13 @@ const AdminPage = () => {
                       tab="Role Admin"
                       key="2"
                     >
-                      <RoleAdmin/>
-                    </TabPane>
-                </Tabs>
-            </Card>
-          </Col>
-        </Row>
-      </div>
-    </>
+                    <RoleAdmin/>
+                  </TabPane>
+              </Tabs>
+          </Card>
+        </Col>
+      </Row>
+  </div>
   )
 }
 
