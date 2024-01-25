@@ -1,5 +1,4 @@
 
-// import { useState } from "react";
 import { Menu } from "antd";
 import { NavLink, useLocation } from "react-router-dom";
 import icons from '../../composables/useIcon'
@@ -162,7 +161,7 @@ function Sidenav({ color }) {
                                 >
                                 {itemSub.icons}
                                 </span>
-                                <span className="label">{itemSub.name}</span>
+                                <span className="label">{itemSub.name.replace(/_/g, " ")}</span>
                               </NavLink>
                           </Menu.Item>
                         )

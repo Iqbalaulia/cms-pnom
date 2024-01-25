@@ -96,10 +96,8 @@ const ShippingOrder = () => {
         })
     }
     const handleOkNextProcess = () => {
-        console.log('Handle Ok')
     }
     const handleCancelNextProcess = () => {
-        console.log('Handle Cancel')
     }
     const handleDownloadData = () => {
         PnomNotification({

@@ -60,7 +60,7 @@ function App() {
       component: ManagementNotification
     },
     {
-      routerLink:'/master_setting',
+      routerLink:'/setting',
       component: Setting
     },
     {

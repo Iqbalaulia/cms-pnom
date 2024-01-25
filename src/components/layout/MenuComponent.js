@@ -25,7 +25,7 @@ const MenuComponent = ({ enableMenuModel, setFormData }) => {
               }}
             >
               <Checkbox value={menuKey}>
-                {menuKey}
+                {menuKey.replace(/_/g, " ")}
               </Checkbox>
             </Checkbox.Group>
           </Col>

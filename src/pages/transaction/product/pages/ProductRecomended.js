@@ -52,18 +52,9 @@ const ProductRecomended = () => {
   }, []);
 
   const handleNonActive = () => {
-    // PnomConfirm({
-    //   onOkConfirm: handleOkDelete,
-    //   onCancelConfirm: handleCancelDelete,
-    //   content: 'Your confirmation message here'
-    // })
+   
   }
-  // const handleOkDelete = () => {
-  //   console.log('Delete confirmed');
-  // }
-  // const handleCancelDelete = () => {
-  //   console.log('Delete canceled');
-  // }
+
   const handleTableChange = (pagination, filters, sorter) => {
     setTableParams({
       pagination,
