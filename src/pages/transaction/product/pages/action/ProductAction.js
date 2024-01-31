@@ -8,6 +8,7 @@ import { productModel } from "utils/models/ProductModels";
 
 import { discountModel, recommendationModel, statusModel } from "composables/useSetting";
 import { DeleteOutlined } from "@ant-design/icons";
+import { Content } from "antd/lib/layout/layout";
 
 
 const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, dataDetail }) => {
@@ -84,15 +85,17 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
             <Row gutter={[24,0]} className="images-viewer-product">
                 {
                       dataImages.images.map((item, index) => (
-                            <Col md={4}>
+                            <Col xs={24}>
                                 { item.imageThumb === undefined ? '' : (
                                     <Button onClick={() => handleDeleteImage(dataImages, index) } className="trash"><DeleteOutlined /></Button>
                                 )}
-                                <Image
-                                    className="images-viewer" 
-                                    width={200}
-                                    src={item.imageThumb}
-                                />
+                                <div className="images-product-detail">
+                                    <Image
+                                        className="images-viewer" 
+                                        width={200}
+                                        src={item.imageThumb}
+                                    />
+                                </div>
                             </Col>
                     ))
                 }
@@ -405,316 +408,321 @@ const ProductCreatePage = ({ onUpdateStep, onClickProduct, valueStepAction, data
     return(
         <>
             <div className="create-product">
-                <row gutter={[24,0]}>
+                <Row gutter={[24,0]}>
                     <Col xs={24} xl={24}>
                        <Card
                          bordered={false}
                          className='criclebox mb-14'
                        >
-                        <Form>
-                            <Row className="mb-2" gutter={[24,0]}>
-                                <Col md={{span: 24}} className="padding-0">
-                                    <Row gutter={{span: 24}} className="mt-2 mb-5">
-                                        <Col md={{span: 24}}>
-                                            <div className="informasi-detail">
-                                                <label>Informasi</label>
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    {
-                                        dataProduct.imageCoverName ? (
-                                            <div className="images-viewer-cover">
-                                                <Button onClick={() => handleDeleteImageCover() } className="trash"><DeleteOutlined /></Button>
-                                                <Image
-                                                    className="images-viewer" 
-                                                    width={200}
-                                                    src={dataProduct.imageCover}
-                                                />
-                                            </div>
-                                            
-                                        ) : (
-                                            <Form.Item
-                                                className="username"
-                                                label="Cover Produk"
-                                                name={`upload_cover`}
-                                                >
-                                                    <input
-                                                        type="file"
-                                                        id={`file-upload-cover`}
-                                                        onChange={(event) => handleUploadImageCover(event)}
-                                                        accept="image/*"
-                                                    />
-                                            </Form.Item>
-                                        )
-                                    }
-
-                                    <Form.Item
-                                        className="username mb-0"
-                                        label="Nama Produk"
-                                    >
-                                        <Input
-                                             
-                                            maxLength={255} 
-                                            value={dataProduct.name}
-                                            onChange={
-                                                (event) => setDataProduct({...dataProduct, name: event.target.value})
-                                            }
-                                            placeholder="Masukkan Nama Produk disini"
-                                        />
-                                    </Form.Item>
-                                    <Form.Item
-                                        className="username mb-0"
-                                        label="Kategori"
-                                    >
-                                        <Select
-                                            showSearch
-                                            value={dataProduct.categoryUuid}
-                                            options={dataCategory}
-                                            onSelect={(e) => setDataProduct(
-                                                {
-                                                  ...dataProduct,
-                                                  categoryUuid: e
-                                                }
-                                              )} 
-                                            placeholder="Pilih Kategori Produk"
-                                        />
-
-                                    </Form.Item>
-                                    <Form.Item
-                                        className="username mb-0"
-                                        label="Rekomendasi"
-                                    >
-                                        <Select
-                                            showSearch
-                                            value={dataProduct.recommendation}
-                                            onSelect={(e) => setDataProduct(
-                                                {
-                                                  ...dataProduct,
-                                                  recommendation: e
-                                                }
-                                              )} 
-                                            options={recommendationModel}
-                                            placeholder="Pilih Produk Rekomendasi"
-                                        />
-
-                                    </Form.Item>
-                                    <Form.Item
-                                        className="username mb-0"
-                                        label="Status"
-                                    >
-                                        <Select
-                                            showSearch
-                                            value={dataProduct.status}
-                                            onSelect={(e) => setDataProduct(
-                                                {
-                                                  ...dataProduct,
-                                                  status: e
-                                                }
-                                              )} 
-                                            placeholder="Status"
-                                            options={statusModel}
-                                        />
-
-                                    </Form.Item>
-                                    <Form.Item
-                                        className="username mb-0"
-                                        label="Deskripsi Produk"
-                                    >
-                                        <TextArea
-                                            rows={10}
-                                            value={dataProduct.description}
-                                            onChange={
-                                                (event) => setDataProduct({...dataProduct, description: event.target.value})
-                                            } 
-                                            placeholder="Pilih Kategori Produk"
-                                        />
-
-                                    </Form.Item>
-                                </Col>
-                                <Col md={{span: 24}} className="padding-0">
-                                    <Row gutter={{span: 24}} className="mt-2 mb-2">
-                                        <Col md={{span: 24}}>
-                                            <div className="informasi-detail">
-                                                <label>Detail Produk</label>
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Row justify="end" gutter={{span: 24}} className="mt-2 mb-2">
-                                        <Col>
-                                            <Button onClick={() => handleAddSales()} ghost type="primary">Tambah Variasi</Button>
-                                        </Col>
-                                    </Row>
-                                    {dataSales.map((item, index) => (
-                                        <Row key={index + 1} gutter={[24, 0]}>
-                                            <Col className="mb-1" md={{span: 5}}>
-                                                <Form.Item
-                                                    key={index}
-                                                    className="username mb-0"
-                                                    label="SKU"
-                                                    >
-                                                    <Input
-                                                        value={item.sku}
-                                                        onChange={(e) => handleSkuChange(index, e.target.value)}
-                                                        placeholder="SKU" 
-                                                    />
-                                                </Form.Item>
+                        <Content className="product-content">
+                            <Form>
+                                <Row className="mb-2" gutter={[24,0]}>
+                                    <Col md={{span: 24}} xs={{ span: 24 }} className="padding-0">
+                                        <Row gutter={{span: 24}} className="mt-2 mb-5">
+                                            <Col md={{span: 24}}>
+                                                <div className="informasi-detail">
+                                                    <label>Informasi</label>
+                                                </div>
                                             </Col>
-                                            <Col className="mb-1" md={{span: 6}}>
-                                                <Form.Item
-                                                    key={index}
-                                                    className="username mb-0"
-                                                    label="Material"
-                                                    >
-                                                    <Select
-                                                        mode="tags"
-                                                        showSearch
-                                                        value={item.material}
-                                                        options={dataMaterial}
-                                                        maxTagCount={1}
-                                                        onChange={(value) => handleMaterialChange(index, value)}
-                                                        placeholder="Pilih Produk Rekomendasi"
+                                        </Row>
+                                        {
+                                            dataProduct.imageCoverName ? (
+                                                <div className="images-viewer-cover">
+                                                    <Button onClick={() => handleDeleteImageCover() } className="trash"><DeleteOutlined /></Button>
+                                                    <Image
+                                                        className="images-viewer" 
+                                                        width={200}
+                                                        src={dataProduct.imageCover}
                                                     />
-                                                </Form.Item>
-                                            </Col>
-                                            <Col className="mb-1" md={{span: 6}}>
+                                                </div>
+                                                
+                                            ) : (
                                                 <Form.Item
-                                                    key={index}
-                                                    className="username mb-0"
-                                                    label="Motif"
-                                                    >
-                                                    <Select
-                                                        mode="tags"
-                                                        showSearch
-                                                        value={item.motif}
-                                                        options={dataMotif}
-                                                        maxTagCount={1}
-                                                        onChange={(value) => handleMotifChange(index, value)}
-                                                        placeholder="Pilih Motif"
-                                                    />
-                                                </Form.Item>
-                                            </Col>
-                                            <Col className="mb-1" md={{span: 6}}>
-                                                <Form.Item
-                                                    key={index}
-                                                    className="username mb-0"
-                                                    label="Variant"
-                                                    >
-                                                    <Select
-                                                        mode="tags"
-                                                        showSearch
-                                                        value={item.variant}
-                                                        options={dataVariant}
-                                                        maxTagCount={1}
-                                                        onChange={(value) => handleVariantChange(index, value)}
-                                                        placeholder="Pilih Variant"
-                                                    />
-                                                </Form.Item>
-                                            </Col>
-                                          
-                                            <Col className="mb-1" md={{span: 5}}>
-                                                <Form.Item
-                                                    key={index}
-                                                    className="username mb-0"
-                                                    label="Tipe Diskon"
-                                                    >
-                                                    <Select
-                                                        showSearch
-                                                        value={item.discountType}
-                                                        options={discountModel}
-                                                        onChange={(value) => handleDiscountTypeChange(index, value)}
-                                                        placeholder="Pilih Tipe Diskon"
-                                                    />
-                                                </Form.Item>
-                                            </Col>
-                                            <Col className="mb-1" md={{span: 6}}>
-                                                <Form.Item
-                                                    key={index}
-                                                    className="username mb-0"
-                                                    label="Nominal Diskon"
-                                                    >
-                                                    <Input
-                                                        value={item.discountValue}
-                                                        onChange={(e) => handleDiscountValueChange(index, e.target.value)}
-                                                        placeholder="Nama Kategori" 
-                                                    />
-                                                </Form.Item>
-                                            </Col>
-                                            <Col className="mb-1" md={{span: 6}}>
-                                                <Form.Item
-                                                    key={index}
-                                                    className="username mb-0"
-                                                    label="Harga Normal"
-                                                    >
-                                                    <Input
-                                                        value={item.priceDefault}
-                                                        onChange={(e) => handlePriceDefaultChange(index, e.target.value)}
-                                                        placeholder="Nama Kategori" 
-                                                    />
-                                                </Form.Item>
-                                            </Col>
-                                            <Col className="mb-1" md={{span: 6}}>
-                                                <Form.Item
-                                                    key={index}
-                                                    className="username mb-0"
-                                                    label="Harga Dropship"
-                                                    >
-                                                    <Input
-                                                        value={item.priceDropship}
-                                                        onChange={(e) => handlePriceDropshipChange(index, e.target.value)}
-                                                        placeholder="Nama Kategori" 
-                                                    />
-                                                </Form.Item>
-                                            </Col>
-                                           
-                                            {
-                                               dataSales.length > 1 ? (
-                                                <Button onClick={() => handleDeleteDetail(index)} type="danger">X</Button>
-                                               ) : index !== 0 ? (
-                                                <Button onClick={() => handleDeleteDetail(index)} type="danger">X</Button>
-                                               ) : (
-                                                ''
-                                               )
-                                            }
-                                            
-                                             <Col className="mb-1" md={{span: 24}}>
-                                                 <Form.Item
-                                                    key={index + 1}
-                                                    className="username mb-5"
-                                                    label="Upload Foto"
-                                                    name={`upload_banner-${index}`}
+                                                    className="username"
+                                                    label="Cover Produk"
+                                                    name={`upload_cover`}
                                                     >
                                                         <input
                                                             type="file"
-                                                            id={`file-upload-${index}`}
-                                                            onChange={(event) => handleUploadImageVariant(event, index)}
+                                                            id={`file-upload-cover`}
+                                                            onChange={(event) => handleUploadImageCover(event)}
                                                             accept="image/*"
                                                         />
                                                 </Form.Item>
+                                            )
+                                        }
+
+                                        <Form.Item
+                                            className="username mb-0"
+                                            label="Nama Produk"
+                                        >
+                                            <Input
                                                 
-                                                {
-                                                    item.images.length > 0 ? (
-                                                        componentImage(item)
-                                                    )
-                                                    : ''
+                                                maxLength={255} 
+                                                value={dataProduct.name}
+                                                onChange={
+                                                    (event) => setDataProduct({...dataProduct, name: event.target.value})
                                                 }
+                                                placeholder="Masukkan Nama Produk disini"
+                                            />
+                                        </Form.Item>
+                                        <Form.Item
+                                            className="username mb-0"
+                                            label="Kategori"
+                                        >
+                                            <Select
+                                                showSearch
+                                                value={dataProduct.categoryUuid}
+                                                options={dataCategory}
+                                                onSelect={(e) => setDataProduct(
+                                                    {
+                                                    ...dataProduct,
+                                                    categoryUuid: e
+                                                    }
+                                                )} 
+                                                placeholder="Pilih Kategori Produk"
+                                            />
+
+                                        </Form.Item>
+                                        <Form.Item
+                                            className="username mb-0"
+                                            label="Rekomendasi"
+                                        >
+                                            <Select
+                                                showSearch
+                                                value={dataProduct.recommendation}
+                                                onSelect={(e) => setDataProduct(
+                                                    {
+                                                    ...dataProduct,
+                                                    recommendation: e
+                                                    }
+                                                )} 
+                                                options={recommendationModel}
+                                                placeholder="Pilih Produk Rekomendasi"
+                                            />
+
+                                        </Form.Item>
+                                        <Form.Item
+                                            className="username mb-0"
+                                            label="Status"
+                                        >
+                                            <Select
+                                                showSearch
+                                                value={dataProduct.status}
+                                                onSelect={(e) => setDataProduct(
+                                                    {
+                                                    ...dataProduct,
+                                                    status: e
+                                                    }
+                                                )} 
+                                                placeholder="Status"
+                                                options={statusModel}
+                                            />
+
+                                        </Form.Item>
+                                        <Form.Item
+                                            className="username mb-0"
+                                            label="Deskripsi Produk"
+                                        >
+                                            <TextArea
+                                                rows={10}
+                                                value={dataProduct.description}
+                                                onChange={
+                                                    (event) => setDataProduct({...dataProduct, description: event.target.value})
+                                                } 
+                                                placeholder="Pilih Kategori Produk"
+                                            />
+
+                                        </Form.Item>
+                                    </Col>
+                                    <Col md={{span: 24}} xs={{ span: 24 }} className="padding-0">
+                                        <Row gutter={{span: 24}} className="mt-2 mb-2">
+                                            <Col 
+                                                md={{span: 24}}
+                                                xs={{ span: 24 }}
+                                            >
+                                                <div className="informasi-detail">
+                                                    <label>Detail Produk</label>
+                                                </div>
                                             </Col>
                                         </Row>
-                                        
-                                    ))}
-                                </Col>
-                            </Row>
-                            <Row justify="end" className="mb-2 mt-4" gutter={[24,0]}>
-                                <Col>
-                                    <Button onClick={() => onUpdateStep('')} ghost type="primary"> Kembali </Button>
-                                </Col>
-                                <Col className="padding-0">
-                                    <Button className="mr-2" onClick={() => handleSaveData()} type="primary">{valueStepAction === `update-action` ? 'Ubah Data' : 'Simpan'}</Button>
-                                </Col>
-                            </Row>
-                        </Form>
+                                        <Row justify="end" gutter={{span: 24}} className="mt-2 mb-2">
+                                            <Col >
+                                                <Button onClick={() => handleAddSales()} ghost type="primary">Tambah Variasi</Button>
+                                            </Col>
+                                        </Row>
+                                        {dataSales.map((item, index) => (
+                                            <Row key={index + 1} gutter={[24, 0]}>
+                                                <Col className="mb-1" md={{span: 5}} xs={{ span: 24 }}>
+                                                    <Form.Item
+                                                        key={index}
+                                                        className="username mb-0"
+                                                        label="SKU"
+                                                        >
+                                                        <Input
+                                                            value={item.sku}
+                                                            onChange={(e) => handleSkuChange(index, e.target.value)}
+                                                            placeholder="SKU" 
+                                                        />
+                                                    </Form.Item>
+                                                </Col>
+                                                <Col className="mb-1" md={{span: 6}} xs={{ span: 24 }}>
+                                                    <Form.Item
+                                                        key={index}
+                                                        className="username mb-0"
+                                                        label="Material"
+                                                        >
+                                                        <Select
+                                                            mode="tags"
+                                                            showSearch
+                                                            value={item.material}
+                                                            options={dataMaterial}
+                                                            maxTagCount={1}
+                                                            onChange={(value) => handleMaterialChange(index, value)}
+                                                            placeholder="Pilih Produk Rekomendasi"
+                                                        />
+                                                    </Form.Item>
+                                                </Col>
+                                                <Col className="mb-1" md={{span: 6}} xs={{ span: 24 }}>
+                                                    <Form.Item
+                                                        key={index}
+                                                        className="username mb-0"
+                                                        label="Motif"
+                                                        >
+                                                        <Select
+                                                            mode="tags"
+                                                            showSearch
+                                                            value={item.motif}
+                                                            options={dataMotif}
+                                                            maxTagCount={1}
+                                                            onChange={(value) => handleMotifChange(index, value)}
+                                                            placeholder="Pilih Motif"
+                                                        />
+                                                    </Form.Item>
+                                                </Col>
+                                                <Col className="mb-1" md={{span: 6}} xs={{ span: 24 }}>
+                                                    <Form.Item
+                                                        key={index}
+                                                        className="username mb-0"
+                                                        label="Variant"
+                                                        >
+                                                        <Select
+                                                            mode="tags"
+                                                            showSearch
+                                                            value={item.variant}
+                                                            options={dataVariant}
+                                                            maxTagCount={1}
+                                                            onChange={(value) => handleVariantChange(index, value)}
+                                                            placeholder="Pilih Variant"
+                                                        />
+                                                    </Form.Item>
+                                                </Col>
+                                            
+                                                <Col className="mb-1" md={{span: 5}} xs={{ span: 24 }}>
+                                                    <Form.Item
+                                                        key={index}
+                                                        className="username mb-0"
+                                                        label="Tipe Diskon"
+                                                        >
+                                                        <Select
+                                                            showSearch
+                                                            value={item.discountType}
+                                                            options={discountModel}
+                                                            onChange={(value) => handleDiscountTypeChange(index, value)}
+                                                            placeholder="Pilih Tipe Diskon"
+                                                        />
+                                                    </Form.Item>
+                                                </Col>
+                                                <Col className="mb-1" md={{span: 6}} xs={{ span: 24 }}>
+                                                    <Form.Item
+                                                        key={index}
+                                                        className="username mb-0"
+                                                        label="Nominal Diskon"
+                                                        >
+                                                        <Input
+                                                            value={item.discountValue}
+                                                            onChange={(e) => handleDiscountValueChange(index, e.target.value)}
+                                                            placeholder="Nama Kategori" 
+                                                        />
+                                                    </Form.Item>
+                                                </Col>
+                                                <Col className="mb-1" md={{span: 6}} xs={{ span: 24 }}>
+                                                    <Form.Item
+                                                        key={index}
+                                                        className="username mb-0"
+                                                        label="Harga Normal"
+                                                        >
+                                                        <Input
+                                                            value={item.priceDefault}
+                                                            onChange={(e) => handlePriceDefaultChange(index, e.target.value)}
+                                                            placeholder="Nama Kategori" 
+                                                        />
+                                                    </Form.Item>
+                                                </Col>
+                                                <Col className="mb-1" md={{span: 6}} xs={{ span: 24 }}>
+                                                    <Form.Item
+                                                        key={index}
+                                                        className="username mb-0"
+                                                        label="Harga Dropship"
+                                                        >
+                                                        <Input
+                                                            value={item.priceDropship}
+                                                            onChange={(e) => handlePriceDropshipChange(index, e.target.value)}
+                                                            placeholder="Nama Kategori" 
+                                                        />
+                                                    </Form.Item>
+                                                </Col>
+                                            
+                                                {
+                                                dataSales.length > 1 ? (
+                                                    <Button onClick={() => handleDeleteDetail(index)} type="danger">X</Button>
+                                                ) : index !== 0 ? (
+                                                    <Button onClick={() => handleDeleteDetail(index)} type="danger">X</Button>
+                                                ) : (
+                                                    ''
+                                                )
+                                                }
+                                                
+                                                <Col className="mb-1" md={{span: 24}} xs={{ span: 24 }}>
+                                                    <Form.Item
+                                                        key={index + 1}
+                                                        className="username mb-5"
+                                                        label="Upload Foto"
+                                                        name={`upload_banner-${index}`}
+                                                        >
+                                                            <input
+                                                                type="file"
+                                                                id={`file-upload-${index}`}
+                                                                onChange={(event) => handleUploadImageVariant(event, index)}
+                                                                accept="image/*"
+                                                            />
+                                                    </Form.Item>
+                                                    
+                                                    {
+                                                        item.images.length > 0 ? (
+                                                            componentImage(item)
+                                                        )
+                                                        : ''
+                                                    }
+                                                </Col>
+                                            </Row>
+                                            
+                                        ))}
+                                    </Col>
+                                </Row>
+                                <Row justify="end" className="mb-2 mt-4" gutter={[24,0]}>
+                                    <Col>
+                                        <Button onClick={() => onUpdateStep('')} ghost type="primary"> Kembali </Button>
+                                    </Col>
+                                    <Col className="padding-0">
+                                        <Button className="mr-2" onClick={() => handleSaveData()} type="primary">{valueStepAction === `update-action` ? 'Ubah Data' : 'Simpan'}</Button>
+                                    </Col>
+                                </Row>
+                            </Form>
+                        </Content>
                        </Card>
                     </Col>
-                </row>
+                </Row>
             </div>  
         </>
     )

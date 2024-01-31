@@ -214,36 +214,49 @@ const ProductCategory = () => {
     <div className='admin-table'>
         <Row gutter={[24,0]}>
             <Col xs="24" xl={24}>
-                <Row className='mb-2'>
-                      <Col md={{span: 6}}>
-                        <Form.Item
-                          className="username"
-                          label="Pencarian"
-                        >
-                          <Input
+                <Row gutter={[24,0]} className='mb-2'>
+                      <Col 
+                        md={{span: 6}}
+                        xs={{span: 24}}
+                      >
+                        <Input
                             value={filterData.search}
                             onChange={
                               (event) => setFilterData({...filterData, search: event.target.value})
                             }
                             placeholder="Pencarian..."
                           />
-                        </Form.Item>
                       </Col>
-                      <Col md={{span: 18}} className='d-flex justify-end'>
-                        <Space align='start'>
+                      <Col
+                        md={{span: 6}}
+                        xs={{span: 24}}
+                      ></Col>
+                      <Col
+                        md={{span: 6}}
+                        xs={{span: 24}}
+                      ></Col>
+                      <Col
+                        md={{span: 3}}
+                        xs={{span: 24}}
+                      ></Col>
+                      <Col 
+                        md={{span: 3}} 
+                        xs={{span: 24}}
+                        className='d-flex justify-end'>
                           <Button  
                             type="primary" 
                             icon={<PlusCircleOutlined />} 
                             className='w-50'
                             onClick={handleShowForm} 
-                            size={'default'} >
+                            size="large"
+                            block
+                          >
                             Tambah Data
                           </Button>
-                        </Space>
                       </Col>
                 </Row>
-                <Row>
-                    <Col md={{span: 24}}>
+                <Row gutter={[24,0]}>
+                    <Col md={{span: 24}} xl={24}>
                         <Table
                           size={'middle'}
                           bordered={true}
@@ -253,6 +266,7 @@ const ProductCategory = () => {
                           pagination={tableParams.pagination}
                           loading={loading}
                           onChange={handleTableChange}
+                          scroll={{x: 1300}}
                           className='ant-border-space'
                         />
                     </Col>
@@ -278,7 +292,10 @@ const ProductCategory = () => {
                 }}
                >
                   <Row gutter={[24,0]}>
-                    <Col md={{ span: 24 }}>
+                    <Col 
+                      md={{ span: 24 }}
+                      xs={{span: 24}}
+                    >
                       <Form.Item
                         className="username mb-0"
                         label="Nama*"
@@ -299,7 +316,10 @@ const ProductCategory = () => {
                         />
                       </Form.Item>
                     </Col>
-                    <Col md={{ span: 24}}>
+                    <Col 
+                      md={{ span: 24}}
+                      xs={{span: 24}}
+                    >
                           <Form.Item
                             className="username mb-0"
                             label="Status*"
@@ -324,7 +344,10 @@ const ProductCategory = () => {
                               />
                           </Form.Item>
                         </Col>
-                    <Col md={{ span: 24 }}>
+                    <Col 
+                      md={{ span: 24 }}
+                      xs={{span: 24}}
+                    >
                         <Form.Item
                           className="username mb-2"
                           label="Upload Banner"
@@ -334,7 +357,7 @@ const ProductCategory = () => {
                           <input type="file" id="file-upload" multiple onChange={handleUploadImage} accept="image/*" />
                         </Form.Item>
                         <Image
-                                    width={550}
+                                    width={260}
                                     src={formData.imageThumb}
                                 />
                       </Col>

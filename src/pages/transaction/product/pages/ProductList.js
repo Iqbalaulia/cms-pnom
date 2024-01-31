@@ -1,6 +1,6 @@
 import React, { useEffect, useState, } from 'react';
 
-import { Table, Col, Button, Space, Input, Row, Tag, Select, Form } from 'antd';
+import { Table, Col, Button, Space, Input, Row, Tag, Select } from 'antd';
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 import { paginationModel } from 'composables/useSetting';
@@ -151,48 +151,55 @@ const ProductList = () => {
             stepAction === `save-action` || stepAction === `update-action` ? <CreateProduct dataDetail={dataDetail} onClickProduct={()=> fetchDataProduct()} onUpdateStep={handleUpdateStepAction} valueStepAction={stepAction} /> : (
             <div>
             <Row gutter={[24,0]}  className='mb-2'>
-                      <Col md={{span: 6}}>
-                       <Form.Item
-                        className="username"
-                        label="Pencarian"
-                       >
-                        <Input
+                      <Col 
+                        md={{span: 6}}
+                        xs={{ span: 24 }}
+                      >
+                       <Input
                             value={filterData.search}
                             onChange={
                               (event) => setFilterData({...filterData, search: event.target.value})
                             }
                             placeholder="Pencarian..."
                           />
-                       </Form.Item>
                       </Col>
                      
-                      <Col md={{span: 5}}>
-                          <Form.Item
-                           className="username"
-                           label="Kategori"
-                          >
-                            <Select 
+                      <Col 
+                        md={{span: 6}}
+                        xs={{ span: 24 }}
+                      >
+                          <Select 
                               onChange={handleOnChangeCategory}
                               options={dataCategory}
                               value={filterData.categoryUuid}
                               placeholder='Pilih Kategori'
                             />
-                          </Form.Item>
                       </Col>
-                      <Col md={{span: 13}} className='d-flex justify-end'>
-                        <Space align='start'>
-                          <Button  
+                      <Col
+                        md={{span: 6}}
+                        xs={{span: 24}}
+                      ></Col>
+                      <Col
+                        md={{span: 3}}
+                        xs={{span: 24}}
+                      ></Col>
+                      <Col 
+                        md={{span: 3}}
+                        xs={{span: 24}}
+                      >
+                        <Button  
                             type="primary" 
                             icon={<PlusCircleOutlined />} 
                             className='w-50'
-                            onClick={handleShowForm} 
-                            size={'default'} >
+                            onClick={handleShowForm}
+                            size="large"
+                            block 
+                          >
                             Tambah Data
                           </Button>
-                        </Space>
                       </Col>
                 </Row>
-                <Row>
+                <Row gutter={[24,0]}>
                     <Col md={{span: 24}}>
                         <Table
                           size={'middle'}
@@ -202,6 +209,7 @@ const ProductList = () => {
                           pagination={tableParams.pagination}
                           loading={loading}
                           onChange={handleTableChange}  
+                          scroll={{x: 1300}}
                           className='ant-border-space'
                         />
                     </Col>
