@@ -228,125 +228,140 @@ const SettingSocialMedia = () => {
 
     
     return(
-        <>
-            <div className='setting-payment'>
-                <Row className='mb-2'>
-                  <Col md={{span: 6}}>
-                      <Input
-                        placeholder="Pencarian..."
-                      />  
-                  </Col>
-                  <Col className='px-2' md={{span: 6}}>
-                    <Select
-                      value={filterData.status}
-                      onChange={handleOnChangeStatus}
-                      options={statusModel}
-                      placeholder='Pilih Status'
+      <div className='setting-payment'>
+        <Row gutter={[24, 0]} className='mb-2'>
+          <Col 
+            md={{span: 6}}
+            xs={{span: 24}}
+          >
+              <Input
+                placeholder="Pencarian..."
+              />  
+          </Col>
+          <Col 
+            md={{span: 6}}
+            xs={{span: 24}}
+          >
+            <Select
+              value={filterData.status}
+              onChange={handleOnChangeStatus}
+              options={statusModel}
+              placeholder='Pilih Status'
+            />
+          </Col>
+          <Col
+            md={{span: 6}}
+            xs={{span: 24}}
+          ></Col>
+          <Col
+            md={{span: 3}}
+            xs={{span: 24}}
+          ></Col>
+          <Col 
+             md={{span: 3}}
+             xs={{span: 24}}
+          >
+             <Button
+                type='primary'
+                icon={<PlusCircleOutlined/>}
+                className='w-50'
+                onClick={handleShowForm}
+                size="large"
+                block
+              >
+                Tambah Data
+              </Button>
+          </Col>
+        </Row>
+        <row gutter={[24,0]}>
+            <Col xs={24} xl={24}>
+                <Table
+                    className='ant-border-space'
+                    size={'middle'}
+                    bordered={true}
+                    dataSource={dataTable}
+                    pagination={tableParams.pagination}
+                    columns={columnsSocialMedia}
+                    loading={loading}
+                    onChange={handleTableChange}
+                    scroll={{x: 1300}}
+                />
+            </Col>
+        </row>
+
+
+        <PnomModal
+          onOk={handleSubmit}
+          onCancel={handleCancelSubmit}
+          visible={isModalShow}
+          title={isTitleModal}
+          isAction={stepAction}
+          width={600}
+        >
+          <Content className='form-data'>
+            <Form>
+              <Row gutter={[24,0]}>
+              <Col md={{ span: 24 }}>
+                  <Form.Item
+                    className="username mb-0"
+                    label="Sosial Media"
+                    >
+                    <Input 
+                      value={formData.value}
+                      onChange={(e) => setFormData({...formData, value: e.target.value})}
+                      placeholder="Sosial Media" 
                     />
-                  </Col>
-                  <Col className='d-flex justify-end' md={{span: 12}}>
-                    <Space align='start'>
-                      <Button
-                        type='primary'
-                        icon={<PlusCircleOutlined/>}
-                        className='w-50'
-                        onClick={handleShowForm}
-                        size={'default'}
-                      >
-                        Tambah Data
-                      </Button>
-                    </Space>
-                  </Col>
-                </Row>
-                <row gutter={[24,0]}>
-                    <Col xs={24} xl={24}>
-                        <Table
-                            className='ant-border-space'
-                            size={'middle'}
-                            bordered={true}
-                            dataSource={dataTable}
-                            pagination={tableParams.pagination}
-                            columns={columnsSocialMedia}
-                            loading={loading}
-                            onChange={handleTableChange}
+                  </Form.Item>
+                </Col>
+                <Col md={{ span: 24 }}>
+                  <Form.Item
+                    className="username mb-0"
+                    label="Tipe"
+                    >
+                    <Input 
+                      value={formData.name}
+                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      placeholder="Tipe" 
+                    />
+                  </Form.Item>
+                </Col>
+                <Col md={{ span: 24}}>
+                  <Form.Item
+                    className="username mb-0"
+                    label="Status"
+                    >
+                      <Select
+                      value={formData.status}
+                      onSelect={(e) => setFormData(
+                        {
+                          ...formData,
+                          status: e
+                        }
+                      )} 
+                      placeholder="Status"
+                      options={statusModel}
+                      />
+                  </Form.Item>
+                </Col>
+                <Col md={{ span: 24 }}>
+                  <Form.Item
+                    className="username mb-2"
+                    label="Upload Banner"
+                    name="upload_banner"
+                    >
+                  
+                    <input type="file" id="file-upload" multiple onChange={handleUploadImage} accept="image/*" />
+                  </Form.Item>
+                  <Image
+                            width={550}
+                            src={formData.imageThumb}
                         />
-                    </Col>
-                </row>
-
-
-                <PnomModal
-                  onOk={handleSubmit}
-                  onCancel={handleCancelSubmit}
-                  visible={isModalShow}
-                  title={isTitleModal}
-                  isAction={stepAction}
-                  width={600}
-                >
-                  <Content className='form-data'>
-                    <Form>
-                      <Row gutter={[24,0]}>
-                      <Col md={{ span: 24 }}>
-                          <Form.Item
-                            className="username mb-0"
-                            label="Sosial Media"
-                            >
-                            <Input 
-                              value={formData.value}
-                              onChange={(e) => setFormData({...formData, value: e.target.value})}
-                              placeholder="Sosial Media" 
-                            />
-                          </Form.Item>
-                        </Col>
-                        <Col md={{ span: 24 }}>
-                          <Form.Item
-                            className="username mb-0"
-                            label="Tipe"
-                            >
-                            <Input 
-                              value={formData.name}
-                              onChange={(e) => setFormData({...formData, name: e.target.value})}
-                              placeholder="Tipe" 
-                            />
-                          </Form.Item>
-                        </Col>
-                        <Col md={{ span: 24}}>
-                          <Form.Item
-                            className="username mb-0"
-                            label="Status"
-                            >
-                              <Select
-                               value={formData.status}
-                               onSelect={(e) => setFormData(
-                                 {
-                                   ...formData,
-                                   status: e
-                                 }
-                               )} 
-                               placeholder="Status"
-                               options={statusModel}
-                              />
-                          </Form.Item>
-                        </Col>
-                        <Col md={{ span: 24 }}>
-                          <Form.Item
-                            className="username mb-2"
-                            label="Upload Banner"
-                            name="upload_banner"
-                            >
-                          
-                            <input type="file" id="file-upload" multiple onChange={handleUploadImage} accept="image/*" />
-                          </Form.Item>
-                          <Image
-                                    width={550}
-                                    src={formData.imageThumb}
-                                />
-                        </Col>
-                      </Row>
-                    </Form>
-                  </Content>
-                </PnomModal>
-            </div>
-        </>
+                </Col>
+              </Row>
+            </Form>
+          </Content>
+        </PnomModal>
+      </div>
     )
 }
 

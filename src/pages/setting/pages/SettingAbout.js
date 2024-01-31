@@ -95,42 +95,43 @@ const SettingAboutus = () => {
 
     
     return(
-        <>
-            <div className='setting-aboutus'>
-              <Row gutter={[24, 0]}>
-                  <Col md={{span: 24}}>
-                    <Form.Item
-                      className="username mb-2"
-                      label="Tentang PNOM"
-                      >
-                                
-                        <TextArea 
-                          value={dataAboutUs.value}
-                          onChange={(e) => setDataAboutUs({...dataAboutUs, value: e.target.value})}  
-                          rows={10} 
-                        />
-                    </Form.Item>
-                  </Col>
-              </Row>
-              <Row>
-                  <Col md={{span: 6}}/>
-                  <Col className='px-2' md={{span: 6}}/>
-                  <Col className='d-flex justify-end' md={{span: 12}}>
-                    <Space align='start'>
-                      <Button
-                        type='primary'
-                        className='w-50'
-                        icon={<PlusCircleOutlined/>}
-                        size={'default'}
-                        onClick={() => handleSubmit()}
-                      >
-                        Simpan Data
-                      </Button>
-                    </Space>
-                  </Col>
-              </Row>
-            </div>
-        </>
+      <div className='setting-aboutus'>
+        <Row gutter={[24, 0]} className='mb-2'>
+            <Col 
+               md={{ span: 24 }}
+               xs={{ span: 24 }}
+            >
+              
+                <TextArea 
+                    value={dataAboutUs.value}
+                    onChange={(e) => setDataAboutUs({...dataAboutUs, value: e.target.value})}  
+                    rows={10} 
+                  />
+            </Col>
+        </Row>
+        <Row gutter={[24, 0]}>
+            <Col 
+              md={{span: 21}}
+              xs={{ span: 24 }}
+            />
+            
+            <Col 
+              md={{span: 3}}
+              xs={{ span: 24 }}
+            >
+              <Button
+                  type='primary'
+                  className='w-100'
+                  icon={<PlusCircleOutlined/>}
+                  size="large"
+                  block
+                  onClick={() => handleSubmit()}
+                >
+                  Simpan Data
+                </Button>
+            </Col>
+        </Row>
+      </div>
     )
 }
 

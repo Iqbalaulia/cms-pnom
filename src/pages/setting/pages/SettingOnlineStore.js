@@ -232,13 +232,19 @@ const SettingOnlineStore = () => {
     return(
         <>
             <div className='setting-payment'>
-                <Row className='mb-2'>
-                  <Col md={{span: 6}}>
+                <Row gutter={[24,0]} className='mb-2'>
+                  <Col 
+                    md={{span: 6}}
+                    xs={{span: 24}}
+                  >
                       <Input
                         placeholder="Pencarian..."
                       />  
                   </Col>
-                  <Col className='px-2' md={{span: 6}}>
+                  <Col 
+                    md={{span: 6}}
+                    xs={{span: 24}}
+                  >
                     <Select
                       value={filterData.status}
                       onChange={handleOnChangeStatus}
@@ -246,18 +252,20 @@ const SettingOnlineStore = () => {
                       placeholder='Pilih Status'
                     />
                   </Col>
-                  <Col className='d-flex justify-end' md={{span: 12}}>
-                    <Space align='start'>
-                      <Button
+                  <Col 
+                    md={{span: 12}}
+                    xs={{span: 24}}
+                  >
+                    <Button
                         type='primary'
                         icon={<PlusCircleOutlined/>}
                         className='w-50'
                         onClick={handleShowForm}
-                        size={'default'}
+                        size="large"
+                        block
                       >
                         Tambah Data
                       </Button>
-                    </Space>
                   </Col>
                 </Row>
                 <row gutter={[24,0]}>
@@ -271,6 +279,7 @@ const SettingOnlineStore = () => {
                             columns={columnsOnlineStore}
                             loading={loading}
                             onChange={handleTableChange}
+                            scroll={{x: 1300}}
                         />
                     </Col>
                 </row>
@@ -287,7 +296,10 @@ const SettingOnlineStore = () => {
                   <Content className='form-data'>
                     <Form>
                       <Row gutter={[24,0]}>
-                      <Col md={{ span: 24 }}>
+                      <Col 
+                        md={{ span: 24 }}
+                        xs={{span: 24}}
+                      >
                           <Form.Item
                             className="username mb-0"
                             label="Toko Online"
@@ -299,7 +311,10 @@ const SettingOnlineStore = () => {
                             />
                           </Form.Item>
                         </Col>
-                      <Col md={{ span: 24 }}>
+                      <Col 
+                        md={{ span: 24 }}
+                        xs={{span: 24}}
+                      >
                           <Form.Item
                             className="username mb-0"
                             label="Link"
@@ -312,7 +327,10 @@ const SettingOnlineStore = () => {
                           </Form.Item>
                         </Col>
                         
-                        <Col md={{ span: 24}}>
+                        <Col 
+                          md={{ span: 24}}
+                          xs={{span: 24}}
+                        >
                           <Form.Item
                             className="username mb-0"
                             label="Status"
@@ -330,7 +348,10 @@ const SettingOnlineStore = () => {
                               />
                           </Form.Item>
                         </Col>
-                        <Col md={{ span: 24 }}>
+                        <Col 
+                          md={{ span: 24 }}
+                          xs={{span: 24}}
+                        >
                           <Form.Item
                             className="username mb-2"
                             label="Upload Banner"
@@ -340,7 +361,7 @@ const SettingOnlineStore = () => {
                             <input type="file" id="file-upload" multiple onChange={handleUploadImage} accept="image/*" />
                           </Form.Item>
                               <Image
-                                    width={550}
+                                    width={260}
                                     src={formData.imageThumb}
                                 />
                         </Col>
