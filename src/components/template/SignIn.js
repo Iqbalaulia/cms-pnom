@@ -82,99 +82,97 @@ const SignIn = () => {
   
   
   return (
-    <>
-      <Layout className="layout-default layout-signin">
-        <Content className="signin">
-          <Row gutter={[24, 0]} justify="space-around">
-            <Col
-              xs={{ span: 24, offset: 0 }}
-              lg={{ span: 6, offset: 2 }}
-              md={{ span: 12 }}
+    <Layout className="layout-default layout-signin">
+    <Content className="signin">
+      <Row gutter={[24, 0]} justify="space-around">
+        <Col
+          xs={{ span: 24, offset: 0 }}
+          lg={{ span: 6, offset: 2 }}
+          md={{ span: 12 }}
+        >
+          <Title className="">Internal PNOM</Title>
+          <Form
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            layout="vertical"
+            className="row-col"
+            form={form}
+          >
+            <Form.Item
+              className="username"
+              label="Usernname"
+              name="login"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your username!",
+                },
+              ]}
             >
-              <Title className="">Internal PNOM</Title>
-              <Form
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-                layout="vertical"
-                className="row-col"
-                form={form}
+              <Input
+                name="login"
+                value={formData.login}
+                placeholder="Username" 
+                onChange={handleChange}
+              />
+            </Form.Item>
+
+            <Form.Item
+              className="username"
+              label="Password"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your password!",
+                },
+              ]}
+            >
+              <Input.Password
+                name="password"
+                value={formData.password}
+                placeholder="Password"
+                type="password" 
+                onChange={handleChange}
+              />
+            </Form.Item>
+
+            {/* <Form.Item
+              name="remember"
+              className="aligin-center"
+              valuePropName="checked"
+            >
+              <Switch defaultChecked onChange={onChange} />
+              Remember me
+            </Form.Item> */}
+
+            <Form.Item>
+              <Button
+                className="button-large button-non-rounded button-login"
+                type="primary"
+                htmlType="submit"
+                loading={loading}
+                onClick={handleSubmit}
+                style={{ width: "100%" }}
               >
-                <Form.Item
-                  className="username"
-                  label="Usernname"
-                  name="login"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input your username!",
-                    },
-                  ]}
-                >
-                  <Input
-                    name="login"
-                    value={formData.login}
-                    placeholder="Username" 
-                    onChange={handleChange}
-                  />
-                </Form.Item>
-  
-                <Form.Item
-                  className="username"
-                  label="Password"
-                  name="password"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input your password!",
-                    },
-                  ]}
-                >
-                  <Input.Password
-                    name="password"
-                    value={formData.password}
-                    placeholder="Password"
-                    type="password" 
-                    onChange={handleChange}
-                  />
-                </Form.Item>
-  
-                {/* <Form.Item
-                  name="remember"
-                  className="aligin-center"
-                  valuePropName="checked"
-                >
-                  <Switch defaultChecked onChange={onChange} />
-                  Remember me
-                </Form.Item> */}
-  
-                <Form.Item>
-                  <Button
-                    className="button-large button-non-rounded button-login"
-                    type="primary"
-                    htmlType="submit"
-                    loading={loading}
-                    onClick={handleSubmit}
-                    style={{ width: "100%" }}
-                  >
-                    SIGN IN
-                  </Button>
-                </Form.Item>
-             
-              </Form>
-            </Col>
-            <Col
-              className="sign-img"
-              style={{ padding: 12 }}
-              xs={{ span: 24 }}
-              lg={{ span: 12 }}
-              md={{ span: 12 }}
-            >
-              <img src={signinbg} alt="" />
-            </Col>
-          </Row>
-        </Content>
-      </Layout>
-    </>
+                SIGN IN
+              </Button>
+            </Form.Item>
+         
+          </Form>
+        </Col>
+        <Col
+          className="sign-img"
+          style={{ padding: 12 }}
+          xs={{ span: 24 }}
+          lg={{ span: 12 }}
+          md={{ span: 12 }}
+        >
+          <img src={signinbg} alt="" />
+        </Col>
+      </Row>
+    </Content>
+  </Layout>
   );
 }
 

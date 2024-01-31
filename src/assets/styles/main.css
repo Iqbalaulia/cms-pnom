@@ -1348,10 +1348,6 @@ span.ismobile {
     padding: 0px 24px 0px 0px;
   }
 
-  main.ant-layout-content.content-ant {
-    padding-left: 0px !important;
-  }
-
   .ant-row {
     margin-left: -12px;
     margin-right: -12px;

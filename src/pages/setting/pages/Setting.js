@@ -23,8 +23,7 @@ const Setting = () => {
     }
     
     return(
-        <>
-            <div className='setting-page'>
+        <div className='setting-page'>
                 <row gutter={[24,0]}>
                     <Col xs={24} xl={24}>
                         <Card 
@@ -56,7 +55,6 @@ const Setting = () => {
                     </Col>
                 </row>
             </div>
-        </>
     )
 }
 
