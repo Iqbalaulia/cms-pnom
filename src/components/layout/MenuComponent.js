@@ -9,7 +9,7 @@ const MenuComponent = ({ enableMenuModel, setFormData }) => {
     >
       <Row gutter={[24, 0]}>
         {Object.entries(enableMenuModel).map(([menuKey]) => (
-          <Col key={menuKey} md={{ span: 8 }}>
+          <Col key={menuKey} md={{ span: 8 }} xs={{ span: 24 }}>
             <Checkbox.Group
               onChange={() => {
                 setFormData((prevData) => ({

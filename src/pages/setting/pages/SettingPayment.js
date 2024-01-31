@@ -274,7 +274,7 @@ const SettingPaymentMethod = () => {
               </Button>
           </Col>
         </Row>
-        <row gutter={[24,0]}>
+        <Row gutter={[24,0]}>
             <Col xs={24} xl={24}>
                 <Table
                     className='ant-border-space'
@@ -288,7 +288,7 @@ const SettingPaymentMethod = () => {
                     scroll={{x: 1300}}
                 />
             </Col>
-        </row>
+        </Row>
 
 
         <PnomModal

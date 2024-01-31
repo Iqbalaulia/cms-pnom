@@ -292,7 +292,7 @@ const EventBanner = () => {
     return(
         <>
          <div className='event-banner'>
-            <row gutter={[24,0]}>
+            <Row gutter={[24,0]}>
                 <Col xs={24} xl={24}>
                     <Card 
                         bordered={false}
@@ -300,12 +300,10 @@ const EventBanner = () => {
                     >
                         <h2 className='font-bold'>Banner Acara</h2>
                         <Row gutter={[24,0]}  className='mb-2'>
-                            <Col md={{span: 6}}>
-
-                                <Form.Item
-                                     className="username"
-                                     label="Pencarian"
-                                  >
+                            <Col 
+                              md={{span: 6}}
+                              xs={{span: 24}}
+                            >
                                     <Input
                                         placeholder="Pencarian..."
                                         value={filterData.search}
@@ -313,60 +311,61 @@ const EventBanner = () => {
                                           (event) => setFilterData({...filterData, search: event.target.value})
                                         }
                                     />
-                                  </Form.Item>
                             </Col>
-                            {/* <Col md={{span: 5}}>
-                              <DatePicker 
-                                placeholder='Tanggal Mulai' 
-                                onChange={handleFilterStartAt}
-                                />
-                            </Col>
-                            <Col md={{span: 5}}>
-                              <DatePicker 
-                                placeholder='Tanggal Akhir'  
-                                onChange={handleFilterEndAt} 
-                              />
-                            </Col> */}
-                            <Col md={{span: 4}}>
-                              <Form.Item
-                                  className="username"
-                                  label="Status"
-                                >
+                            <Col 
+                              md={{span: 6}}
+                              xs={{span: 24}}
+                            >
                                   <Select
                                       value={filterData.status}
                                       onChange={handleOnChangeStatus}
                                       options={statusModel}
                                       placeholder='Pilih Status'
                                   />
-                                </Form.Item>
                             </Col>
-                            <Col md={{span: 14}} className='d-flex justify-end'>
-                                <Space align='start'>
+                            <Col
+                              md={{span: 6}}
+                              xs={{span: 24}}
+                            ></Col>
+                            <Col
+                              md={{span: 3}}
+                              xs={{span: 24}}
+                            ></Col>
+                            <Col 
+                             md={{span: 3}}
+                             xs={{span: 24}}
+                            >
                                     <Button  
                                         type="primary" 
                                         icon={<PlusCircleOutlined />} 
                                         className='w-50'
                                         onClick={handleShowModalForm} 
-                                        size={'default'} >
+                                        size="large"
+                                        block >
                                         Tambah Data
                                     </Button>
-                                </Space>
                             </Col>
                         </Row>
-                        <Table 
-                             size={'middle'}
-                             className='ant-border-space'
-                             bordered={true}
-                             columns={columnsBanner}
-                             rowKey={(record) => record.id}
-                             dataSource={dataTable}
-                             loading={loading}
-                             onChange={handleTableChange}
-                             pagination={tableParams.pagination}
-                        />
+                        <Row gutter={[24,0]}>
+                            <Col xs={24} xl={24}>
+                              <Table 
+                                size={'middle'}
+                                className='ant-border-space'
+                                bordered={true}
+                                columns={columnsBanner}
+                                rowKey={(record) => record.id}
+                                dataSource={dataTable}
+                                loading={loading}
+                                onChange={handleTableChange}
+                                pagination={tableParams.pagination}
+                                scroll={{x: 1300}}
+                              />
+                            </Col>
+
+                        </Row>
                     </Card>
                 </Col>
-            </row>
+            </Row>
          </div> 
          <PnomModal 
             onOk={handleSubmit} 
@@ -379,7 +378,10 @@ const EventBanner = () => {
             <Content className="form-data">
               <Form>
                   <Row gutter={[24,0]}>
-                    <Col md={{ span: 24 }}>
+                    <Col 
+                      md={{ span: 24 }}
+                      xs={{ span: 24 }}
+                    >
                       <Form.Item
                         className="username mb-0"
                         label="Nama Event"
@@ -478,7 +480,10 @@ const EventBanner = () => {
                     </Col>
                   </Row>
                   <Row gutter={[24,0]}>
-                    <Col md={{ span: 24 }}>
+                    <Col 
+                      md={{ span: 24 }}
+                      xs={{ span: 24 }}
+                    >
                         <Form.Item
                           className="username mb-2"
                           label="Upload Banner"
@@ -488,7 +493,7 @@ const EventBanner = () => {
                           <input type="file" id="file-upload" multiple onChange={handleUploadImage} accept="image/*" />
                         </Form.Item>
                         <Image
-                                    width={550}
+                                    width={260}
                                     src={formData.imageThumb}
                                 />
                       </Col>

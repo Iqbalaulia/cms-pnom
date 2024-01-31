@@ -263,52 +263,54 @@ const RoleAdmin = () => {
         <>
           <div className='admin-table'>
             <Row gutter={[24,0]}  className='mb-2'>
-                              <Col md={{span: 6}}>
-                                  <Form.Item
-                                     className="username"
-                                     label="Pencarian"
-                                  >
-                                    <Input
+                              <Col 
+                                  md={{span: 6}}
+                                  xs={{ span: 24 }}
+                                >
+                                  <Input
                                         placeholder="Pencarian..."
                                         value={filterData.search}
                                         onChange={
                                           (event) => setFilterData({...filterData, search: event.target.value})
                                         }
                                     />
-                                  </Form.Item>
                               </Col>
-                              <Col md={{span: 5}}>
-                                <Form.Item
-                                  className="username"
-                                  label="Status"
-                                >
-                                  <Select
+                              <Col 
+                                md={{span: 6}}
+                                xs={{ span: 24 }}
+                              >
+                                 <Select
                                       value={filterData.status}
                                       onChange={handleOnChangeStatus}
                                       options={statusModel}
                                       placeholder='Pilih Status'
                                   />
-                                </Form.Item>
                               </Col>
-                              <Col md={{span: 5}}>
-                              </Col>
-                              <Col md={{span: 4}}>
-                                
-                              </Col>
-                              <Col md={{span: 4}} className='d-flex justify-end'>
-                                  <Space align='start'>
+                              <Col
+                                md={{span: 6}}
+                                xs={{span: 24}}
+                              ></Col>
+                              <Col
+                                md={{span: 3}}
+                                xs={{span: 24}}
+                              ></Col>
+                              <Col 
+                                md={{span: 3}}
+                                xs={{span: 24}}
+                              >
                                       <Button  
                                           type="primary" 
                                           icon={<PlusCircleOutlined />} 
                                           className='w-50'
                                           onClick={handleShowModalForm} 
-                                          size={'large'} >
+                                          size="large"
+                                          block
+                                      >
                                           Tambah Data
                                       </Button>
-                                  </Space>
                               </Col>
             </Row>
-            <Row>
+            <Row gutter={[24,0]}>
               <Col xs={24} xl={24}>
                 <Table 
                     size={'middle'}
@@ -320,6 +322,7 @@ const RoleAdmin = () => {
                     onChange={handleTableChange}
                     rowKey={(record) => record.id}
                     pagination={tableParams.pagination}
+                    scroll={{x: 1300}}
                 />
               </Col>
             </Row>           
@@ -341,7 +344,10 @@ const RoleAdmin = () => {
                  }}
                 >
                   <Row gutter={[24,0]}>
-                    <Col md={{ span: 24 }}>
+                    <Col 
+                      md={{ span: 24 }}
+                      xs={{ span: 24 }}
+                    >
                       <Form.Item
                         className="username mb-0"
                         label="Nama"
@@ -365,7 +371,10 @@ const RoleAdmin = () => {
                         />
                       </Form.Item>
                     </Col>
-                    <Col md={{ span: 24 }}>
+                    <Col 
+                      md={{ span: 24 }}
+                      xs={{ span: 24 }}
+                    >
                       <Form.Item
                         className="username"
                         label="Status"
@@ -390,7 +399,10 @@ const RoleAdmin = () => {
                         />
                       </Form.Item>
                     </Col>
-                    <Col md={{span: 24}}>
+                    <Col 
+                      md={{span: 24}}
+                      xs={{ span: 24 }}
+                    >
                       <MenuComponent
                         enableMenuModel={enableMenuModel}
                         setFormData={setFormData}
