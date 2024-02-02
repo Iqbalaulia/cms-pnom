@@ -386,8 +386,8 @@ const DataAdmin = () => {
             />
           </Col>
           <Col md={{ span: 6 }} xs={{ span: 24 }}></Col>
-          <Col md={{ span: 3 }} xs={{ span: 24 }}></Col>
-          <Col md={{ span: 3 }} xs={{ span: 24 }}>
+          <Col md={{ span: 1 }} xs={{ span: 24 }}></Col>
+          <Col md={{ span: 5 }} xs={{ span: 24 }}>
             <Button
               type="primary"
               icon={<PlusCircleOutlined />}

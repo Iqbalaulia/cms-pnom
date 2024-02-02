@@ -105,3 +105,8 @@
 .ant-tabs-nav-wrap{
     border-bottom: 1px solid #cccccc !important;
 }
+
+.menu_component {
+    font-size: 20px;
+    text-transform: capitalize;
+}
