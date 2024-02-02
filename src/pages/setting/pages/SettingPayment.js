@@ -89,7 +89,10 @@ const SettingPaymentMethod = () => {
     useEffect(() => {
       getDataPaymentMethod()
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [
+      filterData.search,
+      filterData.status
+    ])
 
     const handleShowForm = () => {
        setIsModalShow(true)
@@ -158,7 +161,6 @@ const SettingPaymentMethod = () => {
     };
     const handleOnChangeStatus = (event) => {
       setFilterData({...filterData, status:event})
-      getDataPaymentMethod()
     }
 
  
@@ -236,7 +238,11 @@ const SettingPaymentMethod = () => {
             xs={{span: 24}}
           >
               <Input
+                value={filterData.search}
                 placeholder="Pencarian..."
+                onChange={
+                  (event) => setFilterData({...filterData, search: event.target.value})
+                }
               />  
           </Col>
           <Col 
@@ -255,11 +261,11 @@ const SettingPaymentMethod = () => {
             xs={{span: 24}}
           ></Col>
           <Col
-            md={{span: 3}}
+            md={{span: 1}}
             xs={{span: 24}}
           ></Col>
           <Col
-            md={{span: 3}}
+            md={{span: 5}}
             xs={{span: 24}}
           >
               <Button

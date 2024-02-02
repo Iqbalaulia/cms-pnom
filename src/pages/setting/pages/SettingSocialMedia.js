@@ -254,11 +254,11 @@ const SettingSocialMedia = () => {
             xs={{span: 24}}
           ></Col>
           <Col
-            md={{span: 3}}
+            md={{span:1}}
             xs={{span: 24}}
           ></Col>
           <Col 
-             md={{span: 3}}
+             md={{span: 5}}
              xs={{span: 24}}
           >
              <Button
