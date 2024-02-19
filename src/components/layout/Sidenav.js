@@ -99,7 +99,10 @@ function Sidenav({ color }) {
     <>
       <div className="brand">
         <img src={logo} alt="" />
-        <span>PNOM Dashboard</span>
+        <div className="name_data">
+          <span>PNOM Dashboard</span>
+          <div className="username">{userData?.role?.name}</div>
+        </div>
       </div>
       <hr />
       <Menu theme="light" mode="inline">
