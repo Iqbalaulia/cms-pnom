@@ -107,3 +107,16 @@
     font-size: 20px;
     text-transform: capitalize;
 }
+
+.ant-table-cell .title_with_image {
+    display: flex;
+    align-items: center;
+}
+
+.ant-table-cell .title_with_image img {
+    width: 100px;
+    height: 100px;
+    object-fit: fill;
+    border-radius: 4px;
+    margin-right: 14px;
+}

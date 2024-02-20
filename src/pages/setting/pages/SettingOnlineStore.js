@@ -64,7 +64,12 @@ const SettingOnlineStore = () => {
     {
       title: "Nama Toko Online",
       sorter: true,
-      render: (item) => <label className="">{item.name}</label>,
+      render: (item) => (
+        <div className="title_with_image">
+          <img src={item.imageThumb} />
+          <label className="">{item.name}</label>
+        </div>
+      ),
     },
     {
       title: "Link Toko",
@@ -87,10 +92,6 @@ const SettingOnlineStore = () => {
           {item.status !== "0" ? "Aktif" : "Tidak Aktif"}
         </Tag>
       ),
-    },
-    {
-      title: "Gambar",
-      render: (item) => <Image width={80} src={item.imageThumb} />,
     },
     {
       title: "Actions",
@@ -249,7 +250,7 @@ const SettingOnlineStore = () => {
 
   return (
     <div className="setting-payment">
-      <Row gutter={[24, 0]} className="mb-2">
+      <Row gutter={[24, 0]} className="pnom-table-filter">
         <Col md={{ span: 6 }} xs={{ span: 24 }}>
           <Input placeholder="Pencarian..." />
         </Col>
@@ -276,12 +277,10 @@ const SettingOnlineStore = () => {
           </Button>
         </Col>
       </Row>
-      <row gutter={[24, 0]}>
+      <Row className="pnom-table" gutter={[24, 0]}>
         <Col xs={24} xl={24}>
           <Table
-            className="ant-border-space"
-            size={"middle"}
-            bordered={true}
+            bordered={false}
             dataSource={dataTable}
             pagination={tableParams.pagination}
             columns={columnsOnlineStore}
@@ -290,7 +289,7 @@ const SettingOnlineStore = () => {
             scroll={{ x: 1300 }}
           />
         </Col>
-      </row>
+      </Row>
 
       <PnomModal
         onOk={handleSubmit}

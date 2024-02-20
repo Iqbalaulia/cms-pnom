@@ -66,7 +66,7 @@ const SettingPaymentMethod = () => {
       title: "Nama Pembayaran",
       sorter: true,
       render: (item) => (
-        <div className="payment_name">
+        <div className="title_with_image">
           <img src={item.imageThumb} />
           <label className="">{item.value}</label>
         </div>
@@ -174,7 +174,6 @@ const SettingPaymentMethod = () => {
   const handleOnChangeStatus = (event) => {
     setFilterData({ ...filterData, status: event });
   };
-
   const getDataPaymentMethod = async () => {
     try {
       setLoading(true);

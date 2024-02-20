@@ -81,7 +81,6 @@ const SettingInternal = () => {
         <Space size={8}>
           <Button
             onClick={() => handleEditModalForm(item)}
-            type="primary"
             icon={<EditOutlined />}
             size={"large"}
           />
@@ -230,7 +229,7 @@ const SettingInternal = () => {
 
   return (
     <div className="setting-payment">
-      <Row gutter={[24, 0]} className="mb-2">
+      <Row gutter={[24, 0]} className="pnom-table-filter">
         <Col md={{ span: 6 }} xs={{ span: 24 }}>
           <Input
             placeholder="Pencarian..."
@@ -263,12 +262,10 @@ const SettingInternal = () => {
           </Button>
         </Col>
       </Row>
-      <row gutter={[24, 0]}>
+      <Row className="pnom-table" gutter={[24, 0]}>
         <Col xs={24} xl={24}>
           <Table
-            className="ant-border-space"
-            size={"middle"}
-            bordered={true}
+            bordered={false}
             dataSource={dataTable}
             pagination={tableParams.pagination}
             columns={columnsInternal}
@@ -277,7 +274,7 @@ const SettingInternal = () => {
             scroll={{ x: 1300 }}
           />
         </Col>
-      </row>
+      </Row>
 
       <PnomModal
         onOk={handleSubmit}

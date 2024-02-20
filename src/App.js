@@ -37,7 +37,6 @@ import './assets/styles/button.css';
 import './assets/styles/pages/login.css';
 import './assets/styles/pages/admin.css';
 import './assets/styles/pages/product.css';
-import './assets/styles/pages/settingPayment.css';
 
 import { getDataFromLocalStorage } from "utils/function";
 
