@@ -1590,13 +1590,13 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav
 }
 
 .ant-table-tbody > tr > td h5 {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: #141414;
   margin-bottom: 0px;
 }
 .ant-table-tbody > tr > td p {
-  font-size: 14px;
+  font-size: 16px;
   color: #8c8c8c;
   margin: 0px;
 }
@@ -1655,7 +1655,8 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav
   color: #8c8c8c;
   font-weight: 700;
   background-color: transparent;
-  font-size: 12px;
+  font-size: 18px;
+  background-color: #f5f6f8;
 }
 
 .ant-border-space th:before {
@@ -1932,7 +1933,7 @@ body {
 }
 .ant-input {
   height: 3.4rem;
-  border: 2px solid #cccccc;
+  border: 1px solid #cccccc;
 }
 .font-bold {
   font-weight: 700;
@@ -3087,6 +3088,23 @@ section.ant-layout.ant-layout-has-sider.layout-dashboard.layout-profile
 
 .ant-btn-icon-only.ant-btn-lg {
   border-radius: 6px;
+}
+
+.ant-table {
+  font-size: 16px !important;
+}
+
+.ant-tag {
+  font-size: 16px !important;
+  padding: 6px 30px !important;
+}
+
+.pnom-table {
+  margin-top: 40px !important;
+}
+
+.pnom-table-filter {
+  margin: 20px 0px 0px 0px;
 }
 
 .ant-table-pagination > * {
