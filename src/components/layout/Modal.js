@@ -1,9 +1,9 @@
-import React from 'react';
-import { Modal, Button } from 'antd';
+import React from "react";
+import { Modal, Button } from "antd";
 
 const PnomModal = (props) => {
-  const { title, width, children , visible, onOk, onCancel, isAction } = props;
-  
+  const { title, width, children, visible, onOk, onCancel, isAction } = props;
+
   return (
     <Modal
       title={title}
@@ -16,11 +16,15 @@ const PnomModal = (props) => {
           Cancel
         </Button>,
         <Button key="ok" type="primary" onClick={onOk}>
-          {isAction === 'save-data' ? 'Simpan Data': 'Ubah Data'}
+          {isAction === "save-data"
+            ? "Simpan Data"
+            : isAction === "detail-data"
+            ? "Close Detail"
+            : "Ubah Data"}
         </Button>,
       ]}
     >
-      { children }
+      {children}
     </Modal>
   );
 };

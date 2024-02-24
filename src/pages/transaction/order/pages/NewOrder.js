@@ -1,323 +1,406 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import moment from "moment";
 
-import { Upload, DatePicker, Select, Table, Col, Button, Space, Form, Input, Row, Layout } from 'antd';
-import { InboxOutlined, CloudDownloadOutlined, CloudUploadOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import {
+  Upload,
+  DatePicker,
+  Select,
+  Table,
+  Col,
+  Button,
+  Space,
+  Form,
+  Input,
+  Row,
+  Layout,
+} from "antd";
+import {
+  InboxOutlined,
+  CloudDownloadOutlined,
+  CloudUploadOutlined,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
 
-import { paginationModel } from 'composables/useSetting';
-import { mockDataNewOrder } from '../data/setting';
+import { ApiGetRequest } from "utils/api/config";
+import { paginationModel } from "composables/useSetting";
+import {
+  notificationError,
+  sourceOrder,
+  statusOrder,
+  paymentOder,
+} from "utils/general/general";
+import { orderModel } from "utils/models/OrderModels";
 
-import PnomConfirm from 'components/layout/ConfirmDialog';
-import PnomModal from 'components/layout/Modal';
-import PnomNotification from 'components/layout/Notification';
-
+import PnomModal from "components/layout/Modal";
+import PnomNotification from "components/layout/Notification";
 
 const NewOrder = () => {
-    const { Content } = Layout
-    const { RangePicker } = DatePicker
-    const { Dragger } = Upload
+  const { Content } = Layout;
+  const { RangePicker } = DatePicker;
+  const { Dragger } = Upload;
 
-    const [ dataTable, setDataTable ] = useState([])
-    const [ tableParams, setTableParams ] = useState(paginationModel)
-    const [ isModalCreate, setIsModalCreate ] = useState(false)
-    const [ isModalUpload, setIsModalUpload ] = useState(false)
-    const [ loading, setLoading ] = useState(false)
+  const [isTitleModal, setTitleModal] = useState("Detail Data");
+  const [stepAction, setStepAction] = useState("detail-data");
 
-    const columnsOrder = [
-        {
-            title: 'No',
-            width: '5%',
-            render: (text, record, index) => {
-              const current = tableParams.pagination.current; 
-              const pageSize = tableParams.pagination.pageSize; 
-              const calculatedIndex = (current - 1) * pageSize + index + 1; 
-              return calculatedIndex;
-            },
-        },
-        {
-            title:'No Resi',
-            dataIndex: 'no_resi'
-        },
-        {
-            title:'Pesanan',
-            dataIndex: 'order'
-        },
-        {
-            title:'Platform',
-            dataIndex: 'platform'
-        },
-        {
-            title:'Tanggal Pesanan',
-            dataIndex: 'create_at'
-        },
-        {
-            title:'Ekspedisi',
-            dataIndex: 'expedition'
-        },
-        {
-            title:'Status',
-            dataIndex: 'status'
-        },
-        {
-            title:'Actions',
-            width: '20%',
-            render: () => (
-                <Space size={8}>
-                    <Button type='primary' onClick={handleNextProcess} size={'large'}>
-                       Proses Selanjutnya
-                    </Button>
-                </Space>
-            )
-        }
-    ]
+  const [dataTable, setDataTable] = useState([]);
+  const [tableParams, setTableParams] = useState(paginationModel);
+  const [formData, setFormData] = useState(orderModel);
+  const [isModalDetail, setIsModalDetail] = useState(false);
+  const [isModalUpload, setIsModalUpload] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [filterData, setFilterData] = useState({
+    search: "",
+    status: null,
+  });
 
-    useEffect(() => {
-        getFetchData()
-    }, []);
+  const columnsOrder = [
+    {
+      title: "No",
+      fixed: "left",
+      render: (text, record, index) => {
+        const pageNum = tableParams.pagination.pageNum;
+        const pageSize = tableParams.pagination.pageSize;
+        const calculatedIndex = (pageNum - 1) * pageSize + index + 1;
+        return calculatedIndex;
+      },
+      width: "5%",
+    },
+    {
+      title: "No Order",
+      sorter: true,
+      render: (item) => (
+        <label className="text-capitalize">{item.number}</label>
+      ),
+    },
+    {
+      title: "No Pengiriman",
+      width: "16%",
+      render: (item) => (
+        <label className="text-capitalize">{item.delivery.receiptNumber}</label>
+      ),
+    },
+    {
+      title: "Pemesanan",
+      render: (item) => sourceOrder(item.source),
+    },
+    {
+      title: "Status",
+      render: (item) => statusOrder(item.status),
+    },
+    {
+      title: "Pembayaran",
+      render: (item) => (
+        <label className="text-capitalize">
+          {paymentOder(item.payment.type)}
+        </label>
+      ),
+    },
+    {
+      title: "Total",
+      render: (item) => <label className="text-capitalize">{item.total}</label>,
+    },
+    {
+      title: "Actions",
+      width: "20%",
+      render: (item) => (
+        <Space size={8}>
+          <Button onClick={() => handleEditModalForm(item)} size={"large"}>
+            Detail
+          </Button>
+        </Space>
+      ),
+    },
+  ];
 
+  const columnsTransaction = [
+    {
+      title: "SKU",
+      sorter: true,
+      render: (item) => <label className="text-capitalize">{item.sku}</label>,
+    },
+    {
+      title: "Nama",
+      sorter: true,
+      render: (item) => (
+        <label className="text-capitalize">
+          {item.name.substring(0, 20) + "..."}
+        </label>
+      ),
+    },
+    {
+      title: "Material",
+      sorter: true,
+      render: (item) => (
+        <label className="text-capitalize">{item.material}</label>
+      ),
+    },
+    {
+      title: "Motif",
+      sorter: true,
+      render: (item) => <label className="text-capitalize">{item.motif}</label>,
+    },
+    {
+      title: "Variasi",
+      sorter: true,
+      render: (item) => (
+        <label className="text-capitalize">{item.variant}</label>
+      ),
+    },
+    {
+      title: "Qty",
+      sorter: true,
+      render: (item) => <label className="text-capitalize">{item.qty}</label>,
+    },
+    {
+      title: "Harga",
+      sorter: true,
+      render: (item) => <label className="text-capitalize">{item.price}</label>,
+    },
+    {
+      title: "Total",
+      sorter: true,
+      render: (item) => <label className="text-capitalize">{item.total}</label>,
+    },
+  ];
 
-    const handleShowCreate = () => {
-        setIsModalCreate(true)
-    }
-    const handleSubmitCreate = () => {
-        setIsModalCreate(false)
-        setLoading(true)
-        PnomNotification({
-            type: 'success',
-            message: 'Notification Title',
-            description:
-            'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-        })
-    }
-    const handleCancelSubmitCreate = () => {
-        setIsModalCreate(false)
-    }
-    const handleNextProcess = () => {
-        PnomConfirm({
-            onOkConfirm: handleOkNextProcess,
-            onCancelConfirm: handleCancelNextProcess,
-            content:'Apakah yakin akan memproses pesanan ini?'
-        })
-    }
-    const handleOkNextProcess = () => {
-    }
-    const handleCancelNextProcess = () => {
-    }
-    const handleDownloadData = () => {
-        PnomNotification({
-            type: 'success',
-            message: 'Notification Title',
-            description:
-            'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-        })
-    }
-    const handleShowUpload = () => {
-        setIsModalUpload(true)
-    }
-    const handleCancelUpload = () => {
-        setIsModalUpload(false)
-    }
-    const handleSubmitUpload = () => {
-        setIsModalUpload(false)
-        setLoading(true)
-        PnomNotification({
-            type: 'success',
-            message: 'Notification Title',
-            description:
-            'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-        })
-    }
-    const handleTableChange = (pagination, filters, sorter) => {
-        setTableParams({
-            pagination,
-            filters,
+  useEffect(() => {
+    getFetchData();
+  }, []);
 
-            ...sorter
-        })
+  const handleShowCreate = () => {
+    setIsModalDetail(true);
+  };
+  const handleSubmitCreate = () => {
+    setIsModalDetail(false);
+  };
+  const handleCancelDetail = () => {
+    setIsModalDetail(false);
+  };
+  const handleEditModalForm = (item) => {
+    setFormData({
+      ...formData,
+      date: moment(item.date),
+      delivery: item.delivery,
+      deliveryAmount: item.deliveryAmount,
+      description: item.description,
+      detailOrder: item.details,
+      discountAmount: item.discountAmount,
+      numberTransaction: item.number,
+      payment: item.payment,
+      source: item.source,
+      status: item.status,
+      total: item.total,
+      user: item.user,
+    });
 
-        if (pagination.pageSize !== tableParams.pagination?.pageSize) setDataTable([])
+    setIsModalDetail(true);
+    setTitleModal("Detail Data");
+    setStepAction("detail-data");
+  };
+  const handleDownloadData = () => {
+    PnomNotification({
+      type: "success",
+      message: "Notification Title",
+      description:
+        "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
+    });
+  };
+  const handleShowUpload = () => {
+    setIsModalUpload(true);
+  };
+  const handleCancelUpload = () => {
+    setIsModalUpload(false);
+  };
+  const handleSubmitUpload = () => {
+    setIsModalUpload(false);
+    setLoading(true);
+    PnomNotification({
+      type: "success",
+      message: "Notification Title",
+      description:
+        "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
+    });
+  };
+  const handleTableChange = (pagination, filters, sorter) => {
+    setTableParams({
+      pagination,
+      filters,
+      ...sorter,
+    });
+
+    if (pagination.pageSize !== tableParams.pagination?.pageSize)
+      setDataTable([]);
+  };
+
+  const getFetchData = async () => {
+    try {
+      setLoading(true);
+      let params = {
+        name: "order",
+        search: filterData.search,
+        status: filterData.status,
+      };
+      const response = await ApiGetRequest(`order`, params);
+      setDataTable(response.data.data);
+    } catch (error) {
+      notificationError(error);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const getFetchData = () => {
-        try {
-            setLoading(true)
-            setDataTable(mockDataNewOrder)
-            setLoading(false)
-        } catch (error) {
-            PnomNotification({
-                type: 'error',
-                message: 'Maaf terjadi kesalahan!',
-                description:error
-            })
-        } finally {
-            setLoading(false)
-        }
-    }
-    
-    
-
-    return(
-        <>
-            <div className='new-order'>
-                <Row gutter={[24,0]} className='mb-2'>
-                    <Col md={20}/>
-                    <Col md={4}>
-                        <Button
-                            onClick={handleDownloadData}
-                            type="primary" 
-                            icon={<CloudDownloadOutlined />} 
-                            block={true}
-                            size={'default'} >
-                            Download
-                        </Button>
-                    </Col>
-                </Row>
-                <Row gutter={[24,0]} className='mb-2'>
-                    <Col md={6}>
-                        <Input placeholder='Pencarian...' />
-                    </Col>
-                    <Col md={6}>
-                        <RangePicker />
-                    </Col>
-                    <Col md={4}>
-                        <Select placeholder="Status"/>
-                    </Col>
-                    <Col md={4}>
-                        <Button  
-                            type="primary" 
-                            onClick={handleShowUpload}
-                            icon={<CloudUploadOutlined />} 
-                            block={true}
-                            size={'default'} >
-                            Upload Excel
-                        </Button>
-                    </Col>
-                    <Col md={4}>
-                        <Button 
-                            onClick={handleShowCreate} 
-                            type="primary" 
-                            icon={<PlusCircleOutlined />} 
-                            block={true}
-                            size={'default'} >
-                            Tambah Pesanan
-                        </Button>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={24} xl={24}>
-                        <Table
-                            className='ant-border-space'
-                            size={'middle'}
-                            bordered={true}
-                            pagination={tableParams.pagination}
-                            columns={columnsOrder}
-                            loading={loading}
-                            onChange={handleTableChange}
-                            dataSource={dataTable}
-                            scroll={{
-                                x: 1000,
-                                y: 1000,
-                              }}
-                        />
-                    </Col>
-                </Row>
-            </div>
-
-            <PnomModal
-                visible={isModalCreate}
-                onCancel={handleCancelSubmitCreate}
-                onOk={handleSubmitCreate}
-                width={600}
+  return (
+    <>
+      <div className="new-order">
+        {/* <Row gutter={[24, 0]} className="pnom-table-filter">
+          <Col md={20} />
+          <Col md={4}>
+            <Button
+              onClick={handleDownloadData}
+              type="primary"
+              icon={<CloudDownloadOutlined />}
+              block={true}
+              size={"default"}
             >
-                <Content className='form-data'>
-                    <Form>
-                        <Row gutter={[24, 0]}>
-                            <Col md={{span: 24}}>
-                                <Form.Item
-                                    className='username mb-0'
-                                    label="No Resi"
-                                    name="resi"
-                                >
-                                    <Input 
-                                        placeholder='No Resi'
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col md={{span: 24}}>
-                                <Form.Item
-                                    className='username mb-0'
-                                    label="Pesanan"
-                                    name="order"
-                                >
-                                    <Input 
-                                        placeholder='Pesanan'
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <Row gutter={[24, 0]}>
-                            <Col md={{span: 12}}>
-                                <Form.Item
-                                    className='username mb-0'
-                                    label="Platform"
-                                    name="resi"
-                                >
-                                    <Input 
-                                        placeholder='No Resi'
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col md={{span: 12}}>
-                                <Form.Item
-                                    className='username mb-0'
-                                    label="Tanggal Pesanan"
-                                    name="order_date"
-                                >
-                                    <DatePicker 
-                                        placeholder='Taggal Pesanan'
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <Row gutter={[24, 0]}>
-                            <Col md={{span: 24}}>
-                                <Form.Item
-                                    className='username mb-0'
-                                    label="Ekspedisi"
-                                    name="expedition"
-                                >
-                                    <Input 
-                                        placeholder='Ekspedisi'
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                    </Form>
-                </Content>
-            </PnomModal>
-
-            <PnomModal
-                visible={isModalUpload}
-                onCancel={handleCancelUpload}
-                onOk={handleSubmitUpload}
-                width={600}
+              Download
+            </Button>
+          </Col>
+        </Row> */}
+        <Row gutter={[24, 0]} className="pnom-table-filter">
+          <Col md={6}>
+            <Input placeholder="Pencarian..." />
+          </Col>
+          <Col md={6}>
+            <RangePicker />
+          </Col>
+          <Col md={4}>
+            <Select placeholder="Status" />
+          </Col>
+          <Col md={4}></Col>
+          <Col md={4}>
+            <Button
+              type="primary"
+              onClick={handleShowUpload}
+              icon={<CloudUploadOutlined />}
+              block={true}
+              size={"default"}
             >
-              <Row gutter={[24,0]}>
-                <Col md={24}>
-                    <Dragger>
-                        <p className="ant-upload-drag-icon">
-                              <InboxOutlined />
-                            </p>
-                            <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                            <p className="ant-upload-hint">
-                              Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-                              band files
-                            </p>
-                    </Dragger>           
-                </Col>
-              </Row>
-            </PnomModal>
-        </>
-    )
-}
+              Upload Excel
+            </Button>
+          </Col>
+        </Row>
+        <Row className="pnom-table" gutter={[24, 0]}>
+          <Col xs={24} xl={24}>
+            <Table
+              bordered={false}
+              pagination={tableParams.pagination}
+              columns={columnsOrder}
+              loading={loading}
+              onChange={handleTableChange}
+              dataSource={dataTable}
+              scroll={{
+                x: 1300,
+              }}
+            />
+          </Col>
+        </Row>
+      </div>
 
-export default NewOrder
+      <PnomModal
+        visible={isModalDetail}
+        onCancel={handleCancelDetail}
+        onOk={handleSubmitCreate}
+        title={isTitleModal}
+        isAction={stepAction}
+        width={1400}
+      >
+        <Content className="form-data">
+          <Form>
+            <Row gutter={[24, 0]}>
+              <Col md={{ span: 6 }}>
+                <Form.Item className="username mb-0" label="No Order">
+                  <Input value={formData.numberTransaction} disabled />
+                </Form.Item>
+              </Col>
+              <Col md={{ span: 6 }}>
+                <Form.Item className="username mb-0" label="Tanggal Pesanan">
+                  <DatePicker value={formData.date} disabled />
+                </Form.Item>
+              </Col>
+              <Col md={{ span: 6 }}>
+                <Form.Item className="username mb-0" label="No Pengiriman">
+                  <Input value={formData?.delivery?.receiptNumber} disabled />
+                </Form.Item>
+              </Col>
+              <Col md={{ span: 6 }}>
+                <Form.Item className="username mb-0" label="Pemesanan">
+                  <Input value={sourceOrder(formData?.source)} disabled />
+                </Form.Item>
+              </Col>
+              <Col md={{ span: 6 }}>
+                <Form.Item className="username mb-0" label="Status">
+                  <Input value={statusOrder(formData?.status)} disabled />
+                </Form.Item>
+              </Col>
+              <Col md={{ span: 6 }}>
+                <Form.Item className="username mb-0" label="Pembayaran">
+                  <Input
+                    value={paymentOder(formData?.payment?.type)}
+                    disabled
+                  />
+                </Form.Item>
+              </Col>
+              <Col md={{ span: 6 }}>
+                <Form.Item className="username mb-0" label="Nama Pembeli">
+                  <Input value={formData?.user?.name} disabled />
+                </Form.Item>
+              </Col>
+              <Col md={{ span: 6 }}>
+                <Form.Item className="username mb-0" label="Email">
+                  <Input value={formData?.user?.email} disabled />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={[24, 0]}>
+              <Col xs={24} xl={24}>
+                <h3 className="font-weight-bold">Barang</h3>
+              </Col>
+              <Col xs={24} xl={24}>
+                <Table
+                  columns={columnsTransaction}
+                  dataSource={formData.detailOrder}
+                />
+              </Col>
+            </Row>
+          </Form>
+        </Content>
+      </PnomModal>
+
+      <PnomModal
+        visible={isModalUpload}
+        onCancel={handleCancelUpload}
+        onOk={handleSubmitUpload}
+        width={600}
+      >
+        <Row gutter={[24, 0]}>
+          <Col md={24}>
+            <Dragger>
+              <p className="ant-upload-drag-icon">
+                <InboxOutlined />
+              </p>
+              <p className="ant-upload-text">
+                Click or drag file to this area to upload
+              </p>
+              <p className="ant-upload-hint">
+                Support for a single or bulk upload. Strictly prohibit from
+                uploading company data or other band files
+              </p>
+            </Dragger>
+          </Col>
+        </Row>
+      </PnomModal>
+    </>
+  );
+};
+
+export default NewOrder;

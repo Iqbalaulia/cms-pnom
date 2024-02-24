@@ -39,12 +39,12 @@ function Sidenav({ color }) {
         //   routerLink:'/transaction',
         //   name:'transaction'
         // },
-        // {
-        //   id:'3',
-        //   icons: icons.iconOrder,
-        //   routerLink:'/order',
-        //   name:'order'
-        // },
+        {
+          id:'3',
+          icons: icons.iconOrder,
+          routerLink:'/order',
+          name:'order'
+        },
         // {
         //   id:'4',
         //   icons: icons.iconCustomer,
