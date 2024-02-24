@@ -87,7 +87,6 @@ const RoleAdmin = () => {
         <Space size={8}>
           <Button
             onClick={() => handleEditModalForm(item)}
-            type="primary"
             icon={<EditOutlined />}
             size={"large"}
           />
@@ -96,6 +95,7 @@ const RoleAdmin = () => {
               <Button
                 onClick={() => handleUpdateStatus(item)}
                 type="danger"
+                ghost
                 icon={<InfoCircleOutlined />}
                 size={"large"}
               />
@@ -278,7 +278,7 @@ const RoleAdmin = () => {
   return (
     <>
       <div className="admin-table">
-        <Row gutter={[24, 0]} className="mb-2">
+        <Row gutter={[24, 0]} className="pnom-table-filter">
           <Col md={{ span: 6 }} xs={{ span: 24 }}>
             <Input
               placeholder="Pencarian..."
@@ -311,12 +311,10 @@ const RoleAdmin = () => {
             </Button>
           </Col>
         </Row>
-        <Row gutter={[24, 0]}>
+        <Row className="pnom-table" gutter={[24, 0]}>
           <Col xs={24} xl={24}>
             <Table
-              size={"middle"}
-              className="ant-border-space"
-              bordered={true}
+              bordered={false}
               columns={columnsRoleAdmin}
               dataSource={dataTable}
               loading={loading}

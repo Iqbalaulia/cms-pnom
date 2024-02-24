@@ -96,7 +96,6 @@ const DataAdmin = () => {
           <Tooltip placement="topLeft" title="Edit Data">
             <Button
               onClick={() => handleEditModalForm(item)}
-              type="primary"
               icon={<EditOutlined />}
               size={"large"}
             />
@@ -106,6 +105,7 @@ const DataAdmin = () => {
               <Button
                 onClick={() => handleUpdateStatusUser(item)}
                 type="danger"
+                ghost
                 icon={<InfoCircleOutlined />}
                 size={"large"}
               />
@@ -367,7 +367,7 @@ const DataAdmin = () => {
   return (
     <>
       <div className="admin-table">
-        <Row gutter={[24, 0]} className="mb-2">
+        <Row gutter={[24, 0]} className="pnom-table-filter">
           <Col md={{ span: 6 }} xs={{ span: 24 }}>
             <Input
               placeholder="Pencarian..."
@@ -400,11 +400,10 @@ const DataAdmin = () => {
             </Button>
           </Col>
         </Row>
-        <Row gutter={[24, 0]}>
+        <Row className="pnom-table" gutter={[24, 0]}>
           <Col xs={24} xl={24}>
             <Table
-              size={"middle"}
-              bordered={true}
+              bordered={false}
               columns={columnsDataAdmin}
               rowKey={(record) => record.id}
               dataSource={dataTable}

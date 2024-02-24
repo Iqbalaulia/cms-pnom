@@ -83,7 +83,6 @@ const ProductCategory = () => {
         <Space size={8}>
           <Button
             onClick={() => handleEditModalForm(item)}
-            type="primary"
             icon={<EditOutlined />}
             size={"large"}
           />
@@ -233,7 +232,7 @@ const ProductCategory = () => {
 
   return (
     <div className="admin-table">
-      <Row gutter={[24, 0]}>
+      <Row gutter={[24, 0]} className="pnom-table-filter">
         <Col xs="24" xl={24}>
           <Row gutter={[24, 0]} className="mb-2">
             <Col md={{ span: 6 }} xs={{ span: 24 }}>
@@ -261,11 +260,10 @@ const ProductCategory = () => {
               </Button>
             </Col>
           </Row>
-          <Row gutter={[24, 0]}>
+          <Row className="pnom-table" gutter={[24, 0]}>
             <Col md={{ span: 24 }} xl={24}>
               <Table
-                size={"middle"}
-                bordered={true}
+                bordered={false}
                 columns={columnsProductCategory}
                 rowKey={(record) => record.id}
                 dataSource={dataTable}

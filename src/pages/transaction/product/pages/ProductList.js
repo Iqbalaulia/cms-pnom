@@ -72,7 +72,6 @@ const ProductList = () => {
         <Space size={8}>
           <Button
             onClick={() => handleEditForm(item)}
-            type="primary"
             icon={<EditOutlined />}
             size={"large"}
           />
@@ -162,7 +161,7 @@ const ProductList = () => {
         />
       ) : (
         <div>
-          <Row gutter={[24, 0]} className="mb-2">
+          <Row gutter={[24, 0]} className="pnom-table-filter">
             <Col md={{ span: 6 }} xs={{ span: 24 }}>
               <Input
                 value={filterData.search}
@@ -196,18 +195,16 @@ const ProductList = () => {
               </Button>
             </Col>
           </Row>
-          <Row gutter={[24, 0]}>
+          <Row className="pnom-table" gutter={[24, 0]}>
             <Col md={{ span: 24 }}>
               <Table
-                size={"middle"}
-                bordered={true}
+                bordered={false}
                 columns={columnsProductList}
                 dataSource={data}
                 pagination={tableParams.pagination}
                 loading={loading}
                 onChange={handleTableChange}
                 scroll={{ x: 1300 }}
-                className="ant-border-space"
               />
             </Col>
           </Row>
