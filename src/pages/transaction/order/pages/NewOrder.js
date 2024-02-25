@@ -20,7 +20,11 @@ import {
   CloudUploadOutlined,
 } from "@ant-design/icons";
 
-import { ApiGetRequest } from "utils/api/config";
+import {
+  ApiGetRequest,
+  ApiPostMultipart,
+  ApiPostRequest,
+} from "utils/api/config";
 import { paginationModel } from "composables/useSetting";
 import {
   notificationError,
@@ -28,7 +32,7 @@ import {
   statusOrder,
   paymentOder,
 } from "utils/general/general";
-import { orderModel } from "utils/models/OrderModels";
+import { orderModel, uploadOrder } from "utils/models/OrderModels";
 
 import PnomModal from "components/layout/Modal";
 import PnomNotification from "components/layout/Notification";
@@ -43,6 +47,7 @@ const NewOrder = () => {
   const [dataTable, setDataTable] = useState([]);
   const [tableParams, setTableParams] = useState(paginationModel);
   const [formData, setFormData] = useState(orderModel);
+  const [formDataUpload, setFormDataUpload] = useState(uploadOrder);
   const [isModalDetail, setIsModalDetail] = useState(false);
   const [isModalUpload, setIsModalUpload] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -200,21 +205,44 @@ const NewOrder = () => {
     link.click();
     document.body.removeChild(link);
   };
+  const handleUploadFile = async (event) => {
+    try {
+      const formDataUpload = new FormData();
+      const selectedFile = event.target.files[0];
+      formDataUpload.append("file", selectedFile, selectedFile.name);
+      const response = await ApiPostMultipart(`file-upload`, formDataUpload);
+
+      setFormDataUpload({
+        ...formDataUpload,
+        fileName: response.data.data.filename,
+      });
+    } catch (error) {
+      PnomNotification({
+        type: "error",
+        message: "Maaf terjadi kesalahan!",
+        description:
+          "Mohon periksa kembali jaringan anda. Atau menghubungi call center",
+      });
+    }
+  };
+
   const handleShowUpload = () => {
+    setTitleModal('Upload Excel')
+    setStepAction("save-data");
     setIsModalUpload(true);
   };
   const handleCancelUpload = () => {
     setIsModalUpload(false);
   };
-  const handleSubmitUpload = () => {
-    setIsModalUpload(false);
-    setLoading(true);
-    PnomNotification({
-      type: "success",
-      message: "Notification Title",
-      description:
-        "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
-    });
+  const handleSubmitUpload   = async () => {
+    try {
+      let formDataOrder = {
+        file: formDataUpload.fileName,
+      };
+      await ApiPostRequest(`order/upload`, formDataOrder);
+      setIsModalUpload(false);
+      setLoading(true);
+    } catch (error) {}
   };
   const handleTableChange = (pagination, filters, sorter) => {
     setTableParams({
@@ -384,22 +412,24 @@ const NewOrder = () => {
         visible={isModalUpload}
         onCancel={handleCancelUpload}
         onOk={handleSubmitUpload}
+        title={isTitleModal}
+        isAction={stepAction}
         width={600}
       >
         <Row gutter={[24, 0]}>
           <Col md={24}>
-            <Dragger>
-              <p className="ant-upload-drag-icon">
-                <InboxOutlined />
-              </p>
-              <p className="ant-upload-text">
-                Click or drag file to this area to upload
-              </p>
-              <p className="ant-upload-hint">
-                Support for a single or bulk upload. Strictly prohibit from
-                uploading company data or other band files
-              </p>
-            </Dragger>
+            <Form.Item
+              className="username mb-2"
+              label="Upload File"
+              name="upload_banner"
+            >
+              <input
+                type="file"
+                id="file-upload"
+                multiple
+                onChange={handleUploadFile}
+              />
+            </Form.Item>
           </Col>
         </Row>
       </PnomModal>

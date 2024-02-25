@@ -13,4 +13,8 @@ const orderModel = {
   user: null,
 };
 
-export { orderModel };
+const uploadOrder = {
+  fileName: "",
+};
+
+export { orderModel, uploadOrder };
