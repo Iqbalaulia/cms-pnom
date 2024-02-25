@@ -18,7 +18,6 @@ import {
   InboxOutlined,
   CloudDownloadOutlined,
   CloudUploadOutlined,
-  PlusCircleOutlined,
 } from "@ant-design/icons";
 
 import { ApiGetRequest } from "utils/api/config";
@@ -36,7 +35,6 @@ import PnomNotification from "components/layout/Notification";
 
 const NewOrder = () => {
   const { Content } = Layout;
-  const { RangePicker } = DatePicker;
   const { Dragger } = Upload;
 
   const [isTitleModal, setTitleModal] = useState("Detail Data");
@@ -166,10 +164,6 @@ const NewOrder = () => {
   useEffect(() => {
     getFetchData();
   }, []);
-
-  const handleShowCreate = () => {
-    setIsModalDetail(true);
-  };
   const handleSubmitCreate = () => {
     setIsModalDetail(false);
   };
@@ -197,13 +191,14 @@ const NewOrder = () => {
     setTitleModal("Detail Data");
     setStepAction("detail-data");
   };
-  const handleDownloadData = () => {
-    PnomNotification({
-      type: "success",
-      message: "Notification Title",
-      description:
-        "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
-    });
+  const handleDownloadTemplate = async () => {
+    const fileUrl = process.env.REACT_APP_TEMPLATE_EXCEL;
+    const link = document.createElement("a");
+
+    link.href = fileUrl;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
   const handleShowUpload = () => {
     setIsModalUpload(true);
@@ -256,7 +251,7 @@ const NewOrder = () => {
           <Col md={20} />
           <Col md={4}>
             <Button
-              onClick={handleDownloadData}
+              onClick={handleDownloadTemplate}
               type="primary"
               icon={<CloudDownloadOutlined />}
               block={true}
@@ -270,13 +265,10 @@ const NewOrder = () => {
           <Col md={6}>
             <Input placeholder="Pencarian..." />
           </Col>
-          <Col md={6}>
-            <RangePicker />
-          </Col>
           <Col md={4}>
             <Select placeholder="Status" />
           </Col>
-          <Col md={4}></Col>
+          <Col md={6}></Col>
           <Col md={4}>
             <Button
               type="primary"
@@ -286,6 +278,18 @@ const NewOrder = () => {
               size={"default"}
             >
               Upload Excel
+            </Button>
+          </Col>
+          <Col md={4}>
+            <Button
+              onClick={() => handleDownloadTemplate()}
+              type="primary"
+              icon={<CloudDownloadOutlined />}
+              block={true}
+              id="downloadLink"
+              size={"default"}
+            >
+              Download Template
             </Button>
           </Col>
         </Row>
