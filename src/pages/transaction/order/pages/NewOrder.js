@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 
 import {
-  Upload,
   DatePicker,
   Select,
   Table,
@@ -13,12 +12,9 @@ import {
   Input,
   Row,
   Layout,
+  Tag,
 } from "antd";
-import {
-  InboxOutlined,
-  CloudDownloadOutlined,
-  CloudUploadOutlined,
-} from "@ant-design/icons";
+import { CloudDownloadOutlined, CloudUploadOutlined } from "@ant-design/icons";
 
 import {
   ApiGetRequest,
@@ -32,14 +28,17 @@ import {
   statusOrder,
   paymentOder,
 } from "utils/general/general";
-import { orderModel, uploadOrder } from "utils/models/OrderModels";
+import {
+  orderModel,
+  uploadOrder,
+  statusOrderModel,
+} from "utils/models/OrderModels";
 
 import PnomModal from "components/layout/Modal";
 import PnomNotification from "components/layout/Notification";
 
 const NewOrder = () => {
   const { Content } = Layout;
-  const { Dragger } = Upload;
 
   const [isTitleModal, setTitleModal] = useState("Detail Data");
   const [stepAction, setStepAction] = useState("detail-data");
@@ -84,11 +83,19 @@ const NewOrder = () => {
     },
     {
       title: "Pemesanan",
-      render: (item) => sourceOrder(item.source),
+      render: (item) => (
+        <Tag color={sourceOrder(item.source).color}>
+          {sourceOrder(item.source).name}
+        </Tag>
+      ),
     },
     {
       title: "Status",
-      render: (item) => statusOrder(item.status),
+      render: (item) => (
+        <Tag color={statusOrder(item.status).color}>
+          {statusOrder(item.status).name}
+        </Tag>
+      ),
     },
     {
       title: "Pembayaran",
@@ -168,7 +175,8 @@ const NewOrder = () => {
 
   useEffect(() => {
     getFetchData();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterData.search, filterData.status]);
   const handleSubmitCreate = () => {
     setIsModalDetail(false);
   };
@@ -225,16 +233,19 @@ const NewOrder = () => {
       });
     }
   };
+  const handleOnChangeStatus = (event) => {
+    setFilterData({ ...filterData, status: event });
+  };
 
   const handleShowUpload = () => {
-    setTitleModal('Upload Excel')
+    setTitleModal("Upload Excel");
     setStepAction("save-data");
     setIsModalUpload(true);
   };
   const handleCancelUpload = () => {
     setIsModalUpload(false);
   };
-  const handleSubmitUpload   = async () => {
+  const handleSubmitUpload = async () => {
     try {
       let formDataOrder = {
         file: formDataUpload.fileName,
@@ -291,10 +302,21 @@ const NewOrder = () => {
         </Row> */}
         <Row gutter={[24, 0]} className="pnom-table-filter">
           <Col md={6}>
-            <Input placeholder="Pencarian..." />
+            <Input
+              value={filterData.search}
+              onChange={(event) =>
+                setFilterData({ ...filterData, search: event.target.value })
+              }
+              placeholder="Pencarian..."
+            />
           </Col>
           <Col md={4}>
-            <Select placeholder="Status" />
+            <Select
+              placeholder="Status"
+              onChange={handleOnChangeStatus}
+              options={statusOrderModel}
+              value={filterData.status}
+            />
           </Col>
           <Col md={6}></Col>
           <Col md={4}>

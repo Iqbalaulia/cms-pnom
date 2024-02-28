@@ -67,7 +67,7 @@ const SettingPaymentMethod = () => {
       sorter: true,
       render: (item) => (
         <div className="title_with_image">
-          <img src={item.imageThumb} />
+          <img src={item.imageThumb} alt="imageThumb"/>
           <label className="">{item.value}</label>
         </div>
       ),

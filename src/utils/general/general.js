@@ -1,4 +1,5 @@
 import { notification } from "antd";
+import { platform, statusOrderData } from "./contant";
 
 const notificationSuccess = (message) => {
   notification.success({
@@ -27,20 +28,20 @@ const notificationError = (message) => {
 };
 
 const sourceOrder = (code) => {
-  if (code === "1") return "Order from Web";
-  if (code === "2") return "Shoppe";
-  if (code === "3") return "Tokopedia";
-  if (code === "4") return "Offline";
+  if (code === "1") return platform.web;
+  if (code === "2") return platform.shoppe;
+  if (code === "3") return platform.tokopedia;
+  if (code === "4") return platform.offline;
 };
 
 const statusOrder = (code) => {
-  if (code === "1") return "Created";
-  if (code === "2") return "Printing";
-  if (code === "3") return "Cutting";
-  if (code === "4") return "Shipping";
-  if (code === "5") return "Delivered";
-  if (code === "6") return "Done";
-  if (code === "7") return "Refund";
+  if (code === "1") return statusOrderData.created;
+  if (code === "2") return statusOrderData.printing;
+  if (code === "3") return statusOrderData.cutting;
+  if (code === "4") return statusOrderData.shipping;
+  if (code === "5") return statusOrderData.delivered;
+  if (code === "6") return statusOrderData.done;
+  if (code === "7") return statusOrderData.refund;
 };
 
 const paymentOder = (code) => {
