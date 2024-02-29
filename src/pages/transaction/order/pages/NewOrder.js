@@ -27,6 +27,7 @@ import {
   sourceOrder,
   statusOrder,
   paymentOder,
+  convertToRupiah,
 } from "utils/general/general";
 import {
   orderModel,
@@ -107,7 +108,7 @@ const NewOrder = () => {
     },
     {
       title: "Total",
-      render: (item) => <label className="text-capitalize">{item.total}</label>,
+      render: (item) => <label className="text-capitalize">{convertToRupiah(item.total)}</label>,
     },
     {
       title: "Actions",
@@ -164,12 +165,12 @@ const NewOrder = () => {
     {
       title: "Harga",
       sorter: true,
-      render: (item) => <label className="text-capitalize">{item.price}</label>,
+      render: (item) => <label className="text-capitalize">{convertToRupiah(item.price)}</label>,
     },
     {
       title: "Total",
       sorter: true,
-      render: (item) => <label className="text-capitalize">{item.total}</label>,
+      render: (item) => <label className="text-capitalize">{convertToRupiah(item.total)}</label>,
     },
   ];
 
@@ -388,12 +389,12 @@ const NewOrder = () => {
               </Col>
               <Col md={{ span: 6 }}>
                 <Form.Item className="username mb-0" label="Pemesanan">
-                  <Input value={sourceOrder(formData?.source)} disabled />
+                  <Input value={sourceOrder(formData?.source).name} disabled />
                 </Form.Item>
               </Col>
               <Col md={{ span: 6 }}>
                 <Form.Item className="username mb-0" label="Status">
-                  <Input value={statusOrder(formData?.status)} disabled />
+                  <Input value={statusOrder(formData?.status).name} disabled />
                 </Form.Item>
               </Col>
               <Col md={{ span: 6 }}>

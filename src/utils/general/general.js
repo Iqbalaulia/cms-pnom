@@ -45,15 +45,26 @@ const statusOrder = (code) => {
 };
 
 const paymentOder = (code) => {
-  if (code === 'payment_in_marketplace') return "Marketplace"
-  if (code === 'cod') return "COD"
-}
+  if (code === "payment_in_marketplace") return "Marketplace";
+  if (code === "cod") return "COD";
+};
 
+const convertToRupiah = (amount) => {
+  const rupiahFormatter = new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    minimumFractionDigits: 0,
+  });
+
+  const rupiah = rupiahFormatter.format(amount);
+  return rupiah;
+};
 
 export {
   notificationSuccess,
   notificationError,
   sourceOrder,
   statusOrder,
-  paymentOder
+  paymentOder,
+  convertToRupiah,
 };
