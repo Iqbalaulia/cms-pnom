@@ -13,13 +13,19 @@ import {
   Row,
   Layout,
   Tag,
+  Tooltip,
 } from "antd";
-import { CloudDownloadOutlined, CloudUploadOutlined } from "@ant-design/icons";
+import {
+  CloudDownloadOutlined,
+  CloudUploadOutlined,
+  InfoCircleOutlined,
+} from "@ant-design/icons";
 
 import {
   ApiGetRequest,
   ApiPostMultipart,
   ApiPostRequest,
+  ApiPutRequest,
 } from "utils/api/config";
 import { paginationModel } from "composables/useSetting";
 import {
@@ -108,16 +114,39 @@ const NewOrder = () => {
     },
     {
       title: "Total",
-      render: (item) => <label className="text-capitalize">{convertToRupiah(item.total)}</label>,
+      render: (item) => (
+        <label className="text-capitalize">{convertToRupiah(item.total)}</label>
+      ),
+    },
+    {
+      title: "Ubah Status",
+      width: "12%",
+      render: (item) => (
+        <Space size={10}>
+          <Tooltip placement="topLeft" title="Ubah Status">
+            <Button
+              onClick={() => handleChangeStatus(item)}
+              size={"large"}
+              type="primary"
+              ghost
+              icon={<InfoCircleOutlined />}
+            >
+              {statusOrder(item.status).name}
+            </Button>
+          </Tooltip>
+        </Space>
+      ),
     },
     {
       title: "Actions",
-      width: "20%",
+      width: "10%",
       render: (item) => (
         <Space size={8}>
-          <Button onClick={() => handleEditModalForm(item)} size={"large"}>
-            Detail
-          </Button>
+          <Tooltip placement="topLeft" title="Detail Data">
+            <Button onClick={() => handleEditModalForm(item)} size={"large"}>
+              Detail
+            </Button>
+          </Tooltip>
         </Space>
       ),
     },
@@ -165,12 +194,16 @@ const NewOrder = () => {
     {
       title: "Harga",
       sorter: true,
-      render: (item) => <label className="text-capitalize">{convertToRupiah(item.price)}</label>,
+      render: (item) => (
+        <label className="text-capitalize">{convertToRupiah(item.price)}</label>
+      ),
     },
     {
       title: "Total",
       sorter: true,
-      render: (item) => <label className="text-capitalize">{convertToRupiah(item.total)}</label>,
+      render: (item) => (
+        <label className="text-capitalize">{convertToRupiah(item.total)}</label>
+      ),
     },
   ];
 
@@ -265,6 +298,56 @@ const NewOrder = () => {
 
     if (pagination.pageSize !== tableParams.pagination?.pageSize)
       setDataTable([]);
+  };
+  const handleChangeStatus = async (item) => {
+    try {
+      setLoading(true);
+      let formData = {};
+
+      if (item.status === "1") {
+        formData = {
+          status: 2,
+        };
+      }
+
+      if (item.status === "2") {
+        formData = {
+          status: 5,
+          receiptNumber: item.delivery.receiptNumber,
+          shippingDate: item.delivery.date,
+          shippingMethod: item.delivery.method,
+          shippingName: item.delivery.shipping,
+        };
+      }
+
+      if (item.status === "3") {
+        formData = {
+          status: 6,
+          receivedDate: item.delivery.receivedDate,
+          receivedName: item.delivery.receivedName,
+        };
+      }
+
+      if (item.status === "5") {
+        formData = {
+          status: 7,
+          referenceNumber: item.payment.referenceNumber,
+          paymentDate: item.payment.date,
+        };
+      }
+
+      await ApiPutRequest(`order/${item.uuid}/update-status`, formData);
+      PnomNotification({
+        type: "success",
+        message: "Status Berhasil Diubah!",
+        description: "Status Berhasil Diubah!",
+      });
+    } catch (error) {
+      notificationError(error);
+    } finally {
+      await getFetchData();
+      setLoading(false);
+    }
   };
 
   const getFetchData = async () => {
@@ -389,12 +472,12 @@ const NewOrder = () => {
               </Col>
               <Col md={{ span: 6 }}>
                 <Form.Item className="username mb-0" label="Pemesanan">
-                  <Input value={sourceOrder(formData?.source).name} disabled />
+                  <Input value={sourceOrder(formData?.source)?.name} disabled />
                 </Form.Item>
               </Col>
               <Col md={{ span: 6 }}>
                 <Form.Item className="username mb-0" label="Status">
-                  <Input value={statusOrder(formData?.status).name} disabled />
+                  <Input value={statusOrder(formData?.status)?.name} disabled />
                 </Form.Item>
               </Col>
               <Col md={{ span: 6 }}>
