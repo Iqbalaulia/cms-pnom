@@ -35,18 +35,18 @@ const SettingAboutus = () => {
 
         const response = await ApiGetRequest(`setting`, params)
         setDataAboutUs({
-          name: response.data.data.child[0].name,
-          value: response.data.data.child[0].value,
+          name: response?.data?.data?.child[0]?.name,
+          value: response?.data?.data?.child[0]?.value,
         })
 
-        if(response.data.data.child.length > 0) {
+        if(response?.data?.data?.child?.length > 0) {
           setStepAction('update-data')
         } else {
           setStepAction('save-data')
         }
 
-        setParentUuid(response.data.data.uuid)
-        setUuid(response.data.data.uuid)
+        setParentUuid(response?.data?.data?.uuid)
+        setUuid(response?.data?.data?.uuid)
       } catch (error) {
         notificationError(error)
       }
