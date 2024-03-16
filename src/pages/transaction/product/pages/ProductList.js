@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from "react";
-
-import { Table, Col, Button, Space, Input, Row, Tag, Select } from "antd";
 import { EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
-
+import { Table, Col, Button, Space, Input, Row, Tag, Select } from "antd";
 import { paginationModel } from "composables/useSetting";
-
-import CreateProduct from "./action/ProductAction";
-
+import React, { useEffect, useState } from "react";
 import { ApiGetRequest } from "utils/api/config";
 import { subStringText } from "utils/function";
 import { notificationError } from "utils/general/general";
+
+import CreateProduct from "./action/ProductAction";
 
 const ProductList = () => {
   const [data, setData] = useState([]);
@@ -141,7 +138,7 @@ const ProductList = () => {
         response.data.data.map((element) => ({
           value: element.uuid,
           label: element.name,
-        }))
+        })),
       );
     } catch (error) {
       notificationError(error);
