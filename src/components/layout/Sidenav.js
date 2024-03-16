@@ -108,11 +108,11 @@ function Sidenav({ color }) {
       <Menu theme="light" mode="inline">
         {dataDashboard.map((item, indexDashboard) => {
           return (
-            <Menu.Item className="menu-item-header" key={indexDashboard}>
+            <Menu.Item className="menu-item-header" key={indexDashboard + 1}>
               <label>{item.pages}</label>
               {item.data.map((itemSub, indexSub) => {
                 return (
-                  <Menu.Item key={indexSub}>
+                  <Menu.Item key={indexSub + 1}>
                     <NavLink to={itemSub.routerLink}>
                       <span
                         className="icon"
@@ -140,7 +140,7 @@ function Sidenav({ color }) {
           });
           return (
             hasVisibleMenu && (
-              <Menu.Item className="menu-item-header" key={indexMenu}>
+              <Menu.Item className="menu-item-header" key={indexMenu + 1}>
                 <label>{item.pages}</label>
                 {item.data.map((itemSub, indexSubMenu) => {
                   const menuKey = itemSub.name.replace("/", "");
@@ -148,7 +148,7 @@ function Sidenav({ color }) {
 
                   return (
                     hasPermissionMenu && (
-                      <Menu.Item key={indexSubMenu}>
+                      <Menu.Item key={indexSubMenu + 1}>
                         <NavLink to={itemSub.routerLink}>
                           <span
                             className="icon"

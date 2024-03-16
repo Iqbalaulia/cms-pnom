@@ -1,13 +1,12 @@
 import { Typography } from "antd";
-import { useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 
 import lineChart from "./configs/lineChart";
 
 function LineChart(props) {
-  const { users = {} } = props; 
-  const categories = users?.categories || []; 
-  const series = users?.series || []; 
+  const { users = {} } = props;
+  const categories = users?.categories || [];
+  const series = users?.series || [];
   const chartOptions = {
     ...lineChart.options,
     xaxis: {

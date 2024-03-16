@@ -1,12 +1,15 @@
-import { Row, Col, Card, Typography, DatePicker } from "antd";
+import { Row, Col, Card, Typography, DatePicker, Table } from "antd";
 import Echart from "components/chart/EChart";
 import LineChart from "components/chart/LineChart";
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { ApiGetRequest } from "utils/api/config";
 import { notificationError } from "utils/general/general";
-
-import { mockDataProductBestSeller } from "../data/setting";
+import {
+  summaryDataModel,
+  summaryChartModel,
+  summaryListModel,
+} from "utils/models/DashboardModels";
 
 const Dashboard = () => {
   const { Title } = Typography;
@@ -15,25 +18,32 @@ const Dashboard = () => {
     startDate: dayjs().subtract(2, "month").startOf("month"),
     endDate: dayjs().subtract(0, "month").endOf("month").startOf("month"),
   });
-  const [summaryData, setSummaryData] = useState({
-    order: 0,
-    orderAmount: 0,
-    orderCutting: 0,
-    orderPrinting: 0,
-    orderPacking: 0,
-    orderShipping: 0,
-    orderDelivered: 0,
-    user: 0,
-  });
-  const [summaryChart, setSummaryChart] = useState({
-    order: [],
-    orderAmount: [],
-    user: null,
-  });
-  const [summaryList, setSummaryList] = useState({
-    productBestSeller: [],
-  });
+  const [summaryData, setSummaryData] = useState(summaryDataModel);
+  const [summaryChart, setSummaryChart] = useState(summaryChartModel);
+  const [summaryList, setSummaryList] = useState(summaryListModel);
 
+  const columnDataList = [
+    {
+      title: "Produk",
+      sorter: true,
+      render: (item) => `${item.name}`,
+    },
+    {
+      title: "Kategori",
+      sorter: true,
+      render: (item) => `${item.name}`,
+    },
+    {
+      title: "Motif",
+      sorter: true,
+      render: (item) => `${item.name}`,
+    },
+    {
+      title: "Variant",
+      sorter: true,
+      render: (item) => `${item.name}`,
+    },
+  ];
   useEffect(() => {
     fetchDataSummary();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -45,7 +55,7 @@ const Dashboard = () => {
 
   const fetchDataSummary = async () => {
     try {
-      let params = {
+      const params = {
         startDate: dayjs(filterParams.startDate).format("YYYY-MM-DD"),
         endDate: dayjs(filterParams.endDate).format("YYYY-MM-DD"),
       };
@@ -56,13 +66,12 @@ const Dashboard = () => {
       });
     } catch (error) {
       notificationError(error);
-    } finally {
     }
   };
 
   const fetchDataList = async () => {
     try {
-      let params = {
+      const params = {
         startDate: dayjs(filterParams.startDate).format("YYYY-MM-DD"),
         endDate: dayjs(filterParams.endDate).format("YYYY-MM-DD"),
       };
@@ -73,13 +82,12 @@ const Dashboard = () => {
       });
     } catch (error) {
       notificationError(error);
-    } finally {
     }
   };
 
   const fetchDataChart = async () => {
     try {
-      let params = {
+      const params = {
         startDate: dayjs(filterParams.startDate).format("YYYY-MM-DD"),
         endDate: dayjs(filterParams.endDate).format("YYYY-MM-DD"),
       };
@@ -128,8 +136,6 @@ const Dashboard = () => {
           categories: dataLabelUser,
         },
       });
-
-      console.log("sum---", summaryChart.orderAmount);
     } catch (error) {
       notificationError(error);
     }
@@ -254,36 +260,13 @@ const Dashboard = () => {
               <Row gutter={[24, 0]}>
                 <Col md={24}>
                   <div className="ant-list-box table-responsive">
-                    <table className="width-100">
-                      <thead>
-                        <tr>
-                          <th>Produk</th>
-                          <th>Kategori</th>
-                          <th>Motif</th>
-                          <th>Variant</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {summaryList?.productBestSeller.map((d, index) => (
-                          <tr key={index}>
-                            <td>
-                              <h6>{d?.name}</h6>
-                            </td>
-                            <td>{d?.category?.name}</td>
-                            <td>
-                              <span className="text-xs font-weight-bold">
-                                {d?.detail[0]?.motif}{" "}
-                              </span>
-                            </td>
-                            <td>
-                              <span className="text-xs font-weight-bold">
-                                {d?.detail[0]?.variant}{" "}
-                              </span>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                    <Table
+                      bordered={false}
+                      columns={columnDataList}
+                      className="ant-border-space"
+                      dataSource={summaryList.productBestSeller}
+                      scroll={{ x: 1300 }}
+                    />
                   </div>
                 </Col>
               </Row>
